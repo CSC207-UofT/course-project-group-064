@@ -1,0 +1,44 @@
+Chess:
+
+Login:
+	Takes user to main menu.
+Main Menu:
+Play vs Human
+    Prompts opponent to log in
+Play vs AI
+(Later) Different Game modes
+
+User Class
+    Holds login info
+    stores elo
+
+Elo Calculator:
+    Called at the end of each game. Calculates elo change taking both players' current elo and result as input
+
+Game:
+	Default setup(gamemode) load board image and load pieces
+	Get information from board after each move and update display
+	Move input
+Board Class:
+	Checks Move Legality
+	Takes Player Input
+	Take AI input
+Abstract Piece:
+	Move (unimplemented)
+	tuple(int, int) position
+Each piece extends piece
+King:
+	Move
+Queen:
+	Move
+Rook:
+	Move
+Bishop:
+	Move
+Knight:
+	Move +-1x +-2y or +-2x +-1y
+
+Pawn:
+	Move
+		Either move one or two forward or diagonally.
+	Promote
