@@ -18,6 +18,11 @@ public class Pawn extends Piece{
     }
 
     @Override
+    public int getPos() {
+        return super.getPos();
+    }
+
+    @Override
     public boolean getColor() {
         return super.getColor();
     }

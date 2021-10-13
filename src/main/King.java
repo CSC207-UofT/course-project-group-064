@@ -17,6 +17,11 @@ public class King extends Piece{
         return super.getFile();
     }
 
+    @Override
+    public int getPos() {
+        return super.getPos();
+    }
+
     public boolean getColor(){
         return super.getColor();
     }
