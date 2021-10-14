@@ -1,6 +1,6 @@
 public abstract class Piece {
-    private int rank;
-    private int file;
+    private int rank; //The y coordinate of the piece on the board
+    private int file; //The x coordinate of the piece on the board
     private boolean color;
 
     public Piece(boolean color, int file, int rank){
@@ -16,6 +16,9 @@ public abstract class Piece {
     public int getFile(){
         return file;
     }
+
+    //Translates rank, file notation to a 0-63 single integer representation of each square
+    public int getPos() { return rank * 8 + file; }
 
     public boolean getColor(){
         return color;
