@@ -32,6 +32,7 @@ public class Board {
         if (piecePositions.containsKey(origin)){
             piecePositions.remove(destination);
             piecePositions.put(destination, piecePositions.remove(origin));
+            piecePositions.get(destination).updatePosition(destination);
         }
     }
 

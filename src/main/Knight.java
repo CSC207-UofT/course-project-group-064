@@ -29,4 +29,9 @@ public class Knight extends Piece{
         //TODO Knight moves are rank +-1 file +-2 or rank +=2 file +=1
         return null;
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }
