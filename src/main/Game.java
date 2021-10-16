@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class Game {
     private String game_mode;
@@ -8,6 +9,7 @@ public class Game {
     private String textBoardDisplay; //Temporary board display in text
     private Board board;
     private Scanner console;
+    private boolean turn = true;
 
     public Game(String game_mode){
         this.game_mode = game_mode;
@@ -25,14 +27,14 @@ public class Game {
 
     public void updateDisplay(String move){
         //TODO parse move and update display based on new board state.
+        board.makePlayerMove(move, turn);
+        turn = !turn;
+        String boardString = toDisplayString();
+        System.out.println(boardString);
     }
 
     public void calculateElo(boolean game_result, User white, User black){
         //TODO update user elos based on game result
-    }
-
-    public String getMove(){
-        return console.nextLine();
     }
 
     //Initializes display for a classic game of chess.
@@ -40,6 +42,13 @@ public class Game {
         String boardString = toDisplayString();
         System.out.println(boardString);
     }
+
+    //Move String Parsing Helper methods
+    public String getMove(){
+        return console.nextLine();
+    }
+
+
 
     //BELOW THIS LINE EXIST TEMPORARY METHODS TO FACILITATE PRINTING AN ASCII CHESSBOARD IN LIEU OF GRAPHICAL DISPLAY
     private String toDisplayString(){
@@ -61,6 +70,7 @@ public class Game {
        return builder.toString();
     }
 
+    //converts piece type to string
     private String typeToString(Piece piece){
         if (piece instanceof Pawn){
             return piece.getColor() ? "P" : "p";

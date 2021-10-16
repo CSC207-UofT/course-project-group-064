@@ -18,7 +18,7 @@ public abstract class Piece {
     }
 
     //Translates rank, file notation to a 0-63 single integer representation of each square
-    public int getPos() { return rank * 8 + file; }
+    public int getPos() { return (7 - rank) * 8 + file; }
 
     public boolean getColor(){
         return color;
@@ -27,5 +27,10 @@ public abstract class Piece {
     public int[][] getValidMoves(){
         //Always ensure that rank and file remain less than 8
         return null;
+    }
+
+    public void updatePosition(int move){
+        file = move % 8;
+        rank = (move - file) / 8;
     }
 }

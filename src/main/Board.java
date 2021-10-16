@@ -22,6 +22,17 @@ public class Board {
     public void makePlayerMove(String move, boolean color){
         //TODO Once the player inputs a move through the CLI and it's determined legal,
         // adjust piece position and prompt game to update position
+
+        //Parse CLI move input
+        String [] orDest = move.split(",");
+        int origin = algebraicToInt(orDest[0]);
+        int destination = algebraicToInt(orDest[1]);
+
+        //Check that the origin is occupied
+        if (piecePositions.containsKey(origin)){
+            piecePositions.remove(destination);
+            piecePositions.put(destination, piecePositions.remove(origin));
+        }
     }
 
     public Map<Integer, Piece> getPiecePositions(){
@@ -54,6 +65,24 @@ public class Board {
         //Black Pawns
         for (int i = 8; i < 16; i++){
             piecePositions.put(i, new Pawn(false, i - 40, 0));
+        }
+    }
+
+    //Helper method that converts a string in algebraic notation to an integer location on the board
+    public int algebraicToInt(String move){
+        int file = Character.toUpperCase(move.charAt(0)) - 65;
+        if (move.length() == 2 && 0 <= file && file < 8){
+            int rank = Character.getNumericValue(move.charAt(1));
+            int inMove = (8-rank) * 8 + file;
+            if (inMove < 64 && inMove >= 0){
+                return inMove;
+            }
+            else {
+                throw new RuntimeException("Move is Invalid");
+            }
+        }
+        else {
+            throw new RuntimeException("Moves must be entered in algebraic notation");
         }
     }
 }
