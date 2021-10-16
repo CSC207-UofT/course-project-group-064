@@ -29,4 +29,9 @@ public class Queen extends Piece{
         //TODO calculate valid queen moves. Should be same basic premise as king but extended.
         return null;
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }

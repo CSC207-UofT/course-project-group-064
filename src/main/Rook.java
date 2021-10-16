@@ -29,4 +29,9 @@ public class Rook extends Piece{
         //TODO valid rook moves involve just adding/subtracting from rank and file
         return null;
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }

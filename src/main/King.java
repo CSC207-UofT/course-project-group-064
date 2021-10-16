@@ -31,4 +31,9 @@ public class King extends Piece{
         //TODO calculate valid king moves
         return null;
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }

@@ -28,4 +28,9 @@ public class Bishop extends Piece{
         //TODO biship moves are rank +1 file +1 or rank-1 file -1
         return null;
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }

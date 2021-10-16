@@ -32,4 +32,9 @@ public class Pawn extends Piece{
         //TODO pawns can double move on first move and single move after with diagonal capture and en passant
         return super.getValidMoves();
     }
+
+    @Override
+    public void updatePosition(int move) {
+        super.updatePosition(move);
+    }
 }

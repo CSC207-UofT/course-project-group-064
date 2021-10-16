@@ -31,6 +31,6 @@ public abstract class Piece {
 
     public void updatePosition(int move){
         file = move % 8;
-        rank = (move - file) / 8;
+        rank = 7 - ((move - file) / 8);
     }
 }
