@@ -25,7 +25,6 @@ public abstract class Piece {
     }
 
     public int[][] getValidMoves(){
-        //Always ensure that rank and file remain less than 8
         return null;
     }
 
