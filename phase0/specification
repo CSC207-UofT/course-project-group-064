@@ -1,44 +1,21 @@
-Chess:
+Running the application prompts the user to input their login information (a username and password) in a login window or
+sign up. Once the user log in the main menu is displayed.
+The sign up window looks like the login window. The user inputs a username and password, the program stores this login
+information and then displays the main menu.
 
-Login:
-	Takes user to main menu.
-Main Menu:
-Play vs Human
-    Prompts opponent to log in
-Play vs AI
-(Later) Different Game modes
+In the main menu, the user is able to choose whether they would like to play against a computer or another player. The
+user is also able to see their Elo score from the main menu.
+If the user chooses to play against another player, a login screen is displayed for the other player to input their
+login information or signup.
+If the user chooses to play against a computer, the game automatically begins.
+If different game modes are implemented in the future, they will be available in the main menu.
 
-User Class
-    Holds login info
-    stores elo
+The game contains the pieces (kings, queen, bishop, knight, rook, pawn) and rules of standard chess.
+A user is able to input their move by clicking on a piece and moving it to the desired location. The board checks if
+this move is legal, and then updates the board to show the move having been made if it is.
 
-Elo Calculator:
-    Called at the end of each game. Calculates elo change taking both players' current elo and result as input
-
-Game:
-	Default setup(gamemode) load board image and load pieces
-	Get information from board after each move and update display
-	Move input
-Board Class:
-	Checks Move Legality
-	Takes Player Input
-	Take AI input
-Abstract Piece:
-	Move (unimplemented)
-	tuple(int, int) position
-Each piece extends piece
-King:
-	Move
-Queen:
-	Move
-Rook:
-	Move
-Bishop:
-	Move
-Knight:
-	Move +-1x +-2y or +-2x +-1y
-
-Pawn:
-	Move
-		Either move one or two forward or diagonally.
-	Promote
+If the board is in a win or draw state, the match ends and the program displays the result. In a win state, the program
+would display which player won. In a draw state, the program would display that the match ended in a draw.
+If the match was against another player, the program then recalculates each player’s Elo rating to reflect the results
+of the match.
+The user is brought back to the main menu.
