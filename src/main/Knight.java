@@ -2,6 +2,7 @@ public class Knight extends Piece{
     private int rank;
     private int file;
     private boolean color;
+    private int pos;
 
     public Knight(boolean color, int file, int rank){
         super(color, file, rank);
@@ -25,7 +26,7 @@ public class Knight extends Piece{
     }
 
     @Override
-    public int[][] getValidMoves(){
+    public int[] getValidMoves(){
         //TODO Knight moves are rank +-1 file +-2 or rank +=2 file +=1
         return null;
     }

@@ -2,6 +2,7 @@ public class Queen extends Piece{
     private int rank;
     private int file;
     private boolean color;
+    private int pos;
 
     public Queen(boolean color, int file, int rank){
         super(color, file, rank);
@@ -25,7 +26,7 @@ public class Queen extends Piece{
     }
 
     @Override
-    public int[][] getValidMoves(){
+    public int[] getValidMoves(){
         //TODO calculate valid queen moves. Should be same basic premise as king but extended.
         return null;
     }
