@@ -1,8 +1,12 @@
+import java.util.ArrayList;
+
 public class Rook extends Piece{
     private int rank;
     private int file;
     private boolean color;
     private int pos;
+    private final int[] offsets = {-8,-1, 1, 8};
+    private final int[] checkSquares = {1, 3, 4, 6};
 
     public Rook(boolean color, int file, int rank){
         super(color, file, rank);
@@ -28,7 +32,13 @@ public class Rook extends Piece{
     @Override
     public int[] getValidMoves(){
         //TODO valid rook moves involve just adding/subtracting from rank and file
-        return null;
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        for (int i = 0; i < 4; i++){
+            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
+                temp.add(getPos() + offsets[i] * (j + 1));
+            }
+        }
+        return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override

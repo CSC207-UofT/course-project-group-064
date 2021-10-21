@@ -1,8 +1,11 @@
+import java.util.ArrayList;
+
 public class Queen extends Piece{
     private int rank;
     private int file;
     private boolean color;
     private int pos;
+    private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public Queen(boolean color, int file, int rank){
         super(color, file, rank);
@@ -27,8 +30,13 @@ public class Queen extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        //TODO calculate valid queen moves. Should be same basic premise as king but extended.
-        return null;
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++){
+                temp.add(getPos() + offsets[i] * (j + 1));
+            }
+        }
+        return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
