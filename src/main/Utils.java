@@ -1,4 +1,6 @@
 import java.lang.Math.*;
+import java.util.HashMap;
+
 public class Utils {
     public static final int[][] NUMSQUARESTOEDGE = fillNumSquares();
 

@@ -31,7 +31,6 @@ public class Rook extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        //TODO valid rook moves involve just adding/subtracting from rank and file
         ArrayList<Integer> temp = new ArrayList<Integer>();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){

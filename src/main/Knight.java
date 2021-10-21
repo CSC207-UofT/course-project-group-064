@@ -1,8 +1,15 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Knight extends Piece{
     private int rank;
     private int file;
     private boolean color;
     private int pos;
+    private final int[] offsets = {-17, -15, -10, -6, 6, 10, 15, 17};
+    private final int[][] knightMoves = {{1, 2}, {1, 2}, {2, 1}, {2, 1}, {2, 1}, {2, 1}, {1, 2}, {1, 2}};
+    private final int[][] checkSquares = {{3, 1}, {4, 1}, {3, 1}, {4, 1}, {3, 6}, {4, 6}, {3, 6}, {4, 6}};
+
 
     public Knight(boolean color, int file, int rank){
         super(color, file, rank);
@@ -27,8 +34,14 @@ public class Knight extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        //TODO Knight moves are rank +-1 file +-2 or rank +=2 file +=1
-        return null;
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+        for (int i = 0; i < 8; i++){
+            if (Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][0]] >= knightMoves[i][0] &&
+                    Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][1]] >= knightMoves[i][1]){
+                temp.add(getPos() + offsets[i]);
+            }
+        }
+        return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override

@@ -1,4 +1,7 @@
 import org.junit.*;
+
+import javax.swing.*;
+
 import static org.junit.Assert.*;
 
 public class PieceTest {
@@ -52,5 +55,21 @@ public class PieceTest {
         assertArrayEquals(new int[]{2, 1, 0, 4, 5, 6, 7, 11, 19, 27, 35, 43, 51, 59}, rook.getValidMoves());
         rook.updatePosition(35);
         assertArrayEquals(new int[]{27, 19, 11, 3, 34, 33, 32, 36, 37, 38, 39, 43, 51, 59}, rook.getValidMoves());
+    }
+
+    @Test(timeout = 50)
+    public void TestBishopValidMoves(){
+        Piece bishop = new Bishop(true, 2, 0);
+        assertArrayEquals(new int[]{49, 40, 51, 44, 37, 30, 23}, bishop.getValidMoves());
+        bishop.updatePosition(44);
+        assertArrayEquals(new int[]{35, 26, 17, 8, 37, 30, 23, 51, 58, 53, 62}, bishop.getValidMoves());
+    }
+
+    @Test(timeout = 50)
+    public void TestKnightValidMoves(){
+        Piece knight = new Knight(true, 1, 0);
+        assertArrayEquals(new int[]{40, 42, 51}, knight.getValidMoves());
+        knight.updatePosition(42);
+        assertArrayEquals(new int[]{25, 27, 32, 36, 48, 52, 57, 59}, knight.getValidMoves());
     }
 }
