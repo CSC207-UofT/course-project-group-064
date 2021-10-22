@@ -72,4 +72,12 @@ public class PieceTest {
         knight.updatePosition(42);
         assertArrayEquals(new int[]{25, 27, 32, 36, 48, 52, 57, 59}, knight.getValidMoves());
     }
+
+    @Test(timeout = 50)
+    public void TestPawnValidMoves(){
+        Piece wPawn = new Pawn(true, 1, 1);
+        Piece bPawn = new Pawn(false, 2, 6);
+        assertArrayEquals(new int[]{40, 41, 42, 33}, wPawn.getValidMoves());
+        assertArrayEquals(new int[]{17, 18, 19, 26}, bPawn.getValidMoves());
+    }
 }
