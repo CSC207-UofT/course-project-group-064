@@ -1,5 +1,7 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TransferQueue;
 
 public class Board {
     private Map<Integer, Piece> piecePositions;
@@ -15,8 +17,21 @@ public class Board {
         //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
     }
 
-    public void checkMoveLegal(String move){
+    public boolean checkMoveLegal(int origin, int destination){
         //TODO alternate to getLegalMoves, checks a specific input move.
+        Piece originPiece = piecePositions.get(origin);
+        if (!Arrays.asList(originPiece.getValidMoves()).contains(destination)){
+            return false;
+        }
+        if(piecePositions.containsKey(destination)){
+            if (piecePositions.get(origin).getColor() == piecePositions.get(destination).getColor()){
+                return false;
+            }
+        }
+        if (piecePositions.get(origin) instanceof Knight){
+            return true;
+        }
+        return false;
     }
 
     public void makePlayerMove(String move, boolean color){

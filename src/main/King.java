@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class King extends Piece{
     private boolean not_moved;
     private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9, -2, 2};
@@ -30,20 +32,17 @@ public class King extends Piece{
         int castle_square = getColor() ? 60 : 4;
         boolean can_castle = not_moved && castle_square == getPos();
         int offsetLen = can_castle ? 10 : 8;
-        int[] ret = new int[offsetLen];
+        ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 8; i++){
             if(Utils.NUMSQUARESTOEDGE[getPos()][i] > 0) {
-                ret[i] = getPos() + offsets[i];
-            }
-            else {
-                ret[i] = -1;
+                temp.add(getPos() + offsets[i]);
             }
         }
         if (can_castle){
-            ret[8] = getPos() + offsets[8];
-            ret[9] = getPos() + offsets[9];
+            temp.add (getPos() + offsets[8]);
+            temp.add (getPos() + offsets[9]);
         }
-        return ret;
+        return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
