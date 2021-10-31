@@ -12,6 +12,11 @@ public class UserInfoDB {
 
     }
 
+    /**
+     * Connects to the database with the name of DATABASE_NAME
+     *
+     * @return the connection object
+     */
     private Connection connect(){
         String url = "jdbc:sqlite:C:/sqlite/" + DATABASE_NAME;
         Connection conn = null;
@@ -25,7 +30,9 @@ public class UserInfoDB {
         return conn;
     }
 
-    /** should creating a database and adding a table be in the same method or no? */
+    /**
+     * Creates a SQLite database and table with the names of DATABASE_NAME and TABLE_NAME respectively
+     */
     public void createNewDatabase() {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
@@ -42,9 +49,16 @@ public class UserInfoDB {
         }
     }
 
+    /**
+     * Adds the specified user's information into the SQLite database and table
+     *
+     * @param user The user whose information is being inserted
+     * @param password The user's password
+     */
     public void addUserInfo(User user, String password) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
+            //TODO: check if user is already in table
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
                     "VALUES (" + user.getName() + ", " + password + ", " + user.getElo() + " );";
             /** "VALUES (" + user.getName(); + ", " + password + ", " + user.getElo(); + " );"; */
