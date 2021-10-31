@@ -61,7 +61,6 @@ public class UserInfoDB {
             //TODO: check if user is already in table
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
                     "VALUES (" + user.getName() + ", " + password + ", " + user.getElo() + " );";
-            /** "VALUES (" + user.getName(); + ", " + password + ", " + user.getElo(); + " );"; */
             statement.executeUpdate(sql);
             conn.commit();
         }
