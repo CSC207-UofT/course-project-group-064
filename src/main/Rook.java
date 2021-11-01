@@ -31,7 +31,7 @@ public class Rook extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
                 temp.add(getPos() + offsets[i] * (j + 1));
