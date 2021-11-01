@@ -16,5 +16,15 @@ public class BoardTest {
         board.makePlayerMove("g8,f6", false);
         board.makePlayerMove("f3,e5", true);
         assertEquals(28, board.getPiecePositions().get(28).getPos());
+        System.out.println(board.getPiecePositions().get(1).getColor());
+//        System.out.println(board.getPiecePositions().get(1));
     }
+
+//    @Test(timeout = 50)
+//    public void TestInCheck(){
+//        board.makePlayerMove("e2, e4", false);
+//        board.makePlayerMove("f7, f5", true);
+//        board.makePlayerMove("d1, h5", false);
+//        assertEquals("black", board.inCheck());
+//    }
 }

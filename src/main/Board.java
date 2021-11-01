@@ -1,5 +1,8 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.Arrays;
 
 public class Board {
     private Map<Integer, Piece> piecePositions;
@@ -85,5 +88,102 @@ public class Board {
         else {
             throw new RuntimeException("Moves must be entered in algebraic notation");
         }
+    }
+
+
+
+    public String inCheck(Map board){
+        for (Piece piece : piecePositions.values()) {
+            if (piece instanceof King) {
+                int[] king_moves = piece.getValidMoves();
+                int king_pos = piece.getPos();
+                if (!piece.getColor()){
+                    for (int move : king_moves){
+                        if (move == (piece.getPos() - 9) || move == (piece.getPos() - 7)) {
+                            if (piecePositions.get(move) instanceof Pawn){
+                                return "white";
+                            }
+                        }
+                    }
+                    Knight temp = new Knight(true, posToFileRank(king_pos)[0], posToFileRank(king_pos)[1]);
+                    for (int i : temp.getValidMoves()){
+                        if (piecePositions.get(i) instanceof Knight && piecePositions.get(i).getColor()){
+                            return "white";
+                        }
+                    }
+
+
+                    for ()
+
+
+                }
+                else{
+                    for (int move : king_moves){
+                        if (move == (piece.getPos() + 9) || move == (piece.getPos() + 7)) {
+                            if (piecePositions.get(move) instanceof Pawn){
+                                return "white";
+                            }
+                        }
+                    }
+
+                }
+
+
+
+            }
+        }
+    }
+
+//    public String inCheck(){
+//        return inCheck(this.piecePositions);
+//    }
+    //helper method that converts a position integer to file rank format
+    public int[] posToFileRank(int pos){
+        int[] fin = {0, 0};
+        if (pos <= 7) {
+            fin[0] = pos;
+            fin[1] = 7;
+        }
+        if (pos <= 15) {
+            fin[0] = pos - 8;
+            fin[1] = 6;
+        }
+        if (pos <= 23) {
+            fin[0] = pos - 16;
+            fin[1] = 5;
+        }
+        if (pos <= 31) {
+            fin[0] = pos - 24;
+            fin[1] = 4;
+        }
+        if (pos <= 7) {
+            fin[0] = pos - 32;
+            fin[1] = 3;
+        }
+        if (pos <= 15) {
+            fin[0] = pos - 40;
+            fin[1] = 2;
+        }
+        if (pos <= 23) {
+            fin[0] = pos - 48;
+            fin[1] = 1;
+        }
+        if (pos <= 31) {
+            fin[0] = pos - 56;
+            fin[1] = 0;
+        }
+        return fin;
+    }
+
+    //helper method that returns the valid moves after removing the moves that are blocked by other pieces
+    public int[] delInTheWay(Piece piece){
+        int[] valid_moves = piece.getValidMoves().clone();
+        if (!(piece instanceof Pawn)){
+
+        }
+        if (!(piece instanceof Knight)){
+
+        }
+        return valid_moves;
     }
 }
