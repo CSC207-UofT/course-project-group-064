@@ -2,10 +2,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Knight extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
     private final int[] offsets = {-17, -15, -10, -6, 6, 10, 15, 17};
     private final int[][] knightMoves = {{1, 2}, {1, 2}, {2, 1}, {2, 1}, {2, 1}, {2, 1}, {1, 2}, {1, 2}};
     private final int[][] checkSquares = {{3, 1}, {4, 1}, {3, 1}, {4, 1}, {3, 6}, {4, 6}, {3, 6}, {4, 6}};

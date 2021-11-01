@@ -6,8 +6,10 @@ import java.util.concurrent.TransferQueue;
 
 public class Board {
     private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
-    private final int[] rookOffsets = {-8, -1, 1, 8};
-    private final int[] bishopOffsets = {-9, -7, 7, 9};
+    private final int[] queenIndecies = {0, 1, 2, 3, 4, 5, 6, 7};
+    private final int[] rookIndecies = {1, 3, 4, 6};
+    private final int[] bishopIndecies = {0, 2, 5, 7};
+
     private Map<Integer, Piece> piecePositions;
     public Board(String gameMode){
         this.piecePositions = new HashMap<>();
@@ -44,7 +46,8 @@ public class Board {
         return false;
     }
 
-    public int[] getKnightMoves(int origin, Piece piece){
+    public int[] getKnightMoves(int origin){
+        Piece piece = piecePositions.get(origin);
         ArrayList<Integer> moves = new ArrayList<>();
         for(int move : piece.getValidMoves()){
             if (piecePositions.get(move) == null || piecePositions.get(move).getColor() != piece.getColor()){
@@ -53,12 +56,13 @@ public class Board {
         }
         return moves.stream().mapToInt(i -> i).toArray();
     }
-    public int[] getSlidingMoves(int origin, Piece piece){
-        int[] offsets = (piece instanceof Queen) ? queenOffsets : (piece instanceof Rook) ? rookOffsets : bishopOffsets;
+    public int[] getSlidingMoves(int origin){
+        Piece piece = getPiecePositions().get(origin);
+        int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
         ArrayList<Integer> moves = new ArrayList<>();
         for (int i = 0; i < offsets.length; i++){
-            for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][i]; j++){
-                int move = origin + offsets[i] * j;
+            for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offsets[i]]; j++){
+                int move = origin + queenOffsets[offsets[i]] * j;
                 if (piecePositions.containsKey(move)){
                     if (piecePositions.get(move).getColor() != piece.getColor()) {
                         moves.add(move);
