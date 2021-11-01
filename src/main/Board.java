@@ -1,9 +1,13 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TransferQueue;
 
 public class Board {
+    private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
+    private final int[] rookOffsets = {-8, -1, 1, 8};
+    private final int[] bishopOffsets = {-9, -7, 7, 9};
     private Map<Integer, Piece> piecePositions;
     public Board(String gameMode){
         this.piecePositions = new HashMap<>();
@@ -15,6 +19,7 @@ public class Board {
 
     public void getLegalMoves(){
         //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
+
     }
 
     public boolean checkMoveLegal(int origin, int destination){
@@ -24,14 +29,48 @@ public class Board {
             return false;
         }
         if(piecePositions.containsKey(destination)){
-            if (piecePositions.get(origin).getColor() == piecePositions.get(destination).getColor()){
+            if (originPiece.getColor() == piecePositions.get(destination).getColor()){
                 return false;
             }
         }
-        if (piecePositions.get(origin) instanceof Knight){
+        if (originPiece instanceof Knight){
+            //Don't need to check collisions for knight as long as it isn't landing on an allied piece
             return true;
         }
+        if (originPiece instanceof Pawn){
+            return destination == origin + 1 || destination == origin - 1 || piecePositions.containsKey(destination);
+        }
+        //TODO check if squares between current and destination are occupied. Necessary for king, bishop, rook, and queen
         return false;
+    }
+
+    public int[] getKnightMoves(int origin, Piece piece){
+        ArrayList<Integer> moves = new ArrayList<>();
+        for(int move : piece.getValidMoves()){
+            if (piecePositions.get(move) == null || piecePositions.get(move).getColor() != piece.getColor()){
+                moves.add(move);
+            }
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
+    }
+    public int[] getSlidingMoves(int origin, Piece piece){
+        int[] offsets = (piece instanceof Queen) ? queenOffsets : (piece instanceof Rook) ? rookOffsets : bishopOffsets;
+        ArrayList<Integer> moves = new ArrayList<>();
+        for (int i = 0; i < offsets.length; i++){
+            for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][i]; j++){
+                int move = origin + offsets[i] * j;
+                if (piecePositions.containsKey(move)){
+                    if (piecePositions.get(move).getColor() != piece.getColor()) {
+                        moves.add(move);
+                    }
+                    break;
+                }
+                else {
+                    moves.add(move);
+                }
+            }
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
     }
 
     public void makePlayerMove(String move, boolean color){
