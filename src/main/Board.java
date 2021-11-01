@@ -7,7 +7,7 @@ public class Board {
         this.piecePositions = new HashMap<>();
         //TODO implement constructor
         if (gameMode.equals("Standard")){
-            standardPieceArangement();
+            standardPieceArrangement();
         }
     }
 
@@ -40,7 +40,7 @@ public class Board {
         return piecePositions;
     }
 
-    private void standardPieceArangement(){
+    private void standardPieceArrangement(){
         //White back rank
         piecePositions.put(56, new Rook(true, 0, 7));
         piecePositions.put(57, new Knight(true, 1, 7));

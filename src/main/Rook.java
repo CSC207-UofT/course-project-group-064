@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
 public class Rook extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
+    // TODO: can we omit attributes of rank, file, color, and pos?
+//    private int rank;
+//    private int file;
+//    private boolean color;
+//    private int pos;
+    // TODO: is -1 valid if Rook is on the edge?
     private final int[] offsets = {-8,-1, 1, 8};
     private final int[] checkSquares = {1, 3, 4, 6};
 
