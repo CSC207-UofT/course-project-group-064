@@ -111,11 +111,6 @@ public class Board {
                             return "white";
                         }
                     }
-
-
-                    for ()
-
-
                 }
                 else{
                     for (int move : king_moves){
@@ -127,8 +122,6 @@ public class Board {
                     }
 
                 }
-
-
 
             }
         }
