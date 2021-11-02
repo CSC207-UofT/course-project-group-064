@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 
 public class Pawn extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
     private boolean not_moved;
     private final int[] offsets = {-9, -8, -7, -16};
     private int[] indecies = new int[3];
@@ -23,12 +19,12 @@ public class Pawn extends Piece{
 
     @Override
     public int getRank() {
-        return rank;
+        return super.getRank();
     }
 
     @Override
     public int getFile() {
-        return file;
+        return super.getFile();
     }
 
     @Override

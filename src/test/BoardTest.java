@@ -46,5 +46,13 @@ public class BoardTest {
     public void TestKnightMove(){
         int [] moves = board.getKnightMoves(62);
         assertArrayEquals(new int[]{45, 47}, moves);
+        board.makePlayerMove("g1,f3", false);
+        moves = board.getKnightMoves(45);
+        assertArrayEquals(new int[]{28, 30, 35, 39, 62}, moves);
+        board.makePlayerMove("f7,f6", true);
+        board.makePlayerMove("e2,e4", false);
+        board.makePlayerMove("h7,h6", true);
+        moves = board.getKnightMoves(6);
+        assertArrayEquals(new int[]{}, moves);
     }
 }

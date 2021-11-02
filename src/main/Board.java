@@ -45,7 +45,7 @@ public class Board {
         //TODO check if squares between current and destination are occupied. Necessary for king, bishop, rook, and queen
         return false;
     }
-
+    //TODO make private once inside bigger method
     public int[] getKnightMoves(int origin){
         Piece piece = piecePositions.get(origin);
         ArrayList<Integer> moves = new ArrayList<>();
@@ -100,23 +100,23 @@ public class Board {
 
     private void standardPieceArangement(){
         //White back rank
-        piecePositions.put(56, new Rook(true, 0, 7));
-        piecePositions.put(57, new Knight(true, 1, 7));
-        piecePositions.put(58, new Bishop(true, 2, 7));
-        piecePositions.put(59, new Queen(true, 3, 7));
-        piecePositions.put(60, new King(true, 4, 7));
-        piecePositions.put(61, new Bishop(true, 5, 7));
-        piecePositions.put(62, new Knight(true, 6, 7));
-        piecePositions.put(63, new Rook(true, 7, 7));
+        piecePositions.put(56, new Rook(true, 0, 0));
+        piecePositions.put(57, new Knight(true, 1, 0));
+        piecePositions.put(58, new Bishop(true, 2, 0));
+        piecePositions.put(59, new Queen(true, 3, 0));
+        piecePositions.put(60, new King(true, 4, 0));
+        piecePositions.put(61, new Bishop(true, 5, 0));
+        piecePositions.put(62, new Knight(true, 6, 0));
+        piecePositions.put(63, new Rook(true, 7, 0));
         //Black back rank
-        piecePositions.put(0, new Rook(false, 0, 0));
-        piecePositions.put(1, new Knight(false, 1, 0));
-        piecePositions.put(2, new Bishop(false, 2, 0));
-        piecePositions.put(3, new Queen(false,3,0));
-        piecePositions.put(4, new King(false, 4,0));
-        piecePositions.put(5, new Bishop(false, 5, 0));
-        piecePositions.put(6, new Knight(false, 6,0));
-        piecePositions.put(7, new Rook(false, 7, 0));
+        piecePositions.put(0, new Rook(false, 0, 7));
+        piecePositions.put(1, new Knight(false, 1, 7));
+        piecePositions.put(2, new Bishop(false, 2, 7));
+        piecePositions.put(3, new Queen(false,3,7));
+        piecePositions.put(4, new King(false, 4,7));
+        piecePositions.put(5, new Bishop(false, 5, 7));
+        piecePositions.put(6, new Knight(false, 6,7));
+        piecePositions.put(7, new Rook(false, 7, 7));
         //White Pawns
         for (int i = 48; i < 56; i++){
             piecePositions.put(i, new Pawn(true, i - 8, 6));
