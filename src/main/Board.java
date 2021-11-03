@@ -9,6 +9,9 @@ public class Board {
     private final int[] queenIndecies = {0, 1, 2, 3, 4, 5, 6, 7};
     private final int[] rookIndecies = {1, 3, 4, 6};
     private final int[] bishopIndecies = {0, 2, 5, 7};
+    private final int[] whitePawnOffsets = {-7, -8, -9};
+    private final int[] blackPawnOffsets = {7, 8, 9};
+    private int[] lastMove = {0, 0};
 
     private Map<Integer, Piece> piecePositions;
     public Board(String gameMode){
@@ -46,6 +49,43 @@ public class Board {
         return false;
     }
     //TODO make private once inside bigger method
+    public int[] getPawnMoves(int origin){
+        Piece piece = piecePositions.get(origin);
+        int[] offsets = piece.getColor() ? whitePawnOffsets : blackPawnOffsets;
+        ArrayList<Integer> moves = new ArrayList<>();
+        int destination;
+        if(Utils.NUMSQUARESTOEDGE[origin][3] > 0){
+            destination = origin + offsets[0];
+            if(piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor() || canEnPassant(origin, true)){
+                moves.add(destination);
+            }
+        }
+        destination = origin + offsets[1];
+        if (!piecePositions.containsKey(destination)){
+            moves.add(destination);
+        }
+        if (piece.getNotMoved()){
+            destination = origin + 2 * offsets[1];
+            if (!piecePositions.containsKey(destination)){
+                moves.add(destination);
+            }
+        }
+        if (Utils.NUMSQUARESTOEDGE[origin][4] > 0){
+            destination = origin + offsets[2];
+            if((piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor()) || canEnPassant(origin, false)){
+                moves.add(destination);
+            }
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
+    }
+
+    private boolean canEnPassant(int origin, boolean left_right) {
+        int target = left_right ? origin - 1 : origin + 1; //Is the target piece to the left or the right of origin
+        Piece targetPiece = piecePositions.get(target);
+        return (targetPiece instanceof Pawn && targetPiece.getColor() != piecePositions.get(origin).getColor() &&
+                lastMove[1] == target && (lastMove[0] == target +16 || lastMove[0] == target - 16));
+    }
+
     public int[] getKnightMoves(int origin){
         Piece piece = piecePositions.get(origin);
         ArrayList<Integer> moves = new ArrayList<>();
@@ -92,6 +132,8 @@ public class Board {
             piecePositions.put(destination, piecePositions.remove(origin));
             piecePositions.get(destination).updatePosition(destination);
         }
+        lastMove[0] = origin;
+        lastMove[1] = destination;
     }
 
     public Map<Integer, Piece> getPiecePositions(){

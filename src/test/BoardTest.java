@@ -55,4 +55,33 @@ public class BoardTest {
         moves = board.getKnightMoves(6);
         assertArrayEquals(new int[]{}, moves);
     }
+
+    @Test(timeout = 50)
+    public void TestPawnMove(){
+        int [] moves = board.getPawnMoves(52);
+        assertArrayEquals(new int[]{44, 36}, moves);
+        board.makePlayerMove("e2,e4", false);
+        moves = board.getPawnMoves(12);
+        assertArrayEquals(new int[] {20, 28}, moves);
+        board.makePlayerMove("e7,e5", true);
+        moves = board.getPawnMoves(36);
+        assertArrayEquals(new int []{}, moves);
+        board.makePlayerMove("f2,f4", false);
+        moves = board.getPawnMoves(28);
+        assertArrayEquals(new int[]{37}, moves);
+        board.makePlayerMove("e5,f4", true);
+        board.makePlayerMove("g2,g4", false);
+        moves = board.getPawnMoves(37);
+        assertArrayEquals(new int[]{45, 46}, moves);
+        moves = board.getPawnMoves(55);
+        assertArrayEquals(new int[]{47, 39}, moves);
+        moves = board.getPawnMoves(15);
+        assertArrayEquals(new int[]{23, 31}, moves);
+        board.makePlayerMove("h7,h5", true);
+        board.makePlayerMove("e1,e2", false);
+        board.makePlayerMove("h5,h4", true);
+        board.makePlayerMove("a2,a4", false);
+        moves = board.getPawnMoves(39);
+        assertArrayEquals(new int[]{47}, moves);
+    }
 }

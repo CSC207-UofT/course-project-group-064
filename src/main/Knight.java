@@ -19,6 +19,10 @@ public class Knight extends Piece{
         return super.getFile();
     }
 
+    public boolean getNotMoved(){
+        return super.getNotMoved();
+    }
+
     @Override
     public int getPos() {
         return super.getPos();
