@@ -84,4 +84,17 @@ public class BoardTest {
         moves = board.getPawnMoves(39);
         assertArrayEquals(new int[]{47}, moves);
     }
+
+    @Test(timeout = 50)
+    public void TestKingMoves(){
+        int [] moves = board.getKingMoves(60);
+        assertArrayEquals(new int[]{}, moves);
+        board.makePlayerMove("e2,e4", false);
+        board.makePlayerMove("e7,e5", true);
+        moves = board.getKingMoves(60);
+        assertArrayEquals(new int[]{52}, moves);
+        board.makePlayerMove("e1,e2", false);
+        moves = board.getKingMoves(52);
+        assertArrayEquals(new int[]{43, 44, 45, 60}, moves);
+    }
 }

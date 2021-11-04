@@ -49,6 +49,16 @@ public class Board {
         return false;
     }
     //TODO make private once inside bigger method
+    public int[] getKingMoves(int origin){
+        Piece piece = piecePositions.get(origin);
+        ArrayList<Integer> moves = new ArrayList<>();
+        for(int move : piece.getValidMoves()){
+            if(!piecePositions.containsKey(move) || piecePositions.get(move).getColor() != piece.getColor()){
+                moves.add(move);
+            }
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
+    }
     public int[] getPawnMoves(int origin){
         Piece piece = piecePositions.get(origin);
         int[] offsets = piece.getColor() ? whitePawnOffsets : blackPawnOffsets;
@@ -100,16 +110,15 @@ public class Board {
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
         ArrayList<Integer> moves = new ArrayList<>();
-        for (int i = 0; i < offsets.length; i++){
-            for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offsets[i]]; j++){
-                int move = origin + queenOffsets[offsets[i]] * j;
-                if (piecePositions.containsKey(move)){
+        for (int offset : offsets) {
+            for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offset]; j++) {
+                int move = origin + queenOffsets[offset] * j;
+                if (piecePositions.containsKey(move)) {
                     if (piecePositions.get(move).getColor() != piece.getColor()) {
                         moves.add(move);
                     }
                     break;
-                }
-                else {
+                } else {
                     moves.add(move);
                 }
             }
