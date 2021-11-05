@@ -3,6 +3,7 @@ public abstract class Piece {
     private int file; //The x coordinate of the piece on the board
     private int pos;
     private boolean color;
+    private boolean not_moved;
     private int[] offsets;
 
 
@@ -11,8 +12,12 @@ public abstract class Piece {
         this.rank = rank;
         this.file = file;
         this.pos = 8 * (7-rank) + file;
+        this.not_moved = true;
     }
 
+    public boolean getNotMoved(){
+        return not_moved;
+    }
     public int getRank(){
         return rank;
     }
@@ -36,5 +41,6 @@ public abstract class Piece {
         file = move % 8;
         rank = 7 - ((move - file) / 8);
         pos = move;
+        not_moved = false;
     }
 }

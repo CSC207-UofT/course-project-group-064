@@ -1,11 +1,6 @@
 import java.util.ArrayList;
 
 public class Pawn extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
-    private boolean not_moved;
     private final int[] offsets = {-9, -8, -7, -16};
     private int[] indecies = new int[3];
 
@@ -18,17 +13,20 @@ public class Pawn extends Piece{
             offsets[3] = 16;
         }
         this.indecies = color ? new int[]{0, 1, 2} : new int[]{5, 6, 7};
-        this.not_moved = true;
     }
 
     @Override
+    public boolean getNotMoved(){
+        return super.getNotMoved();
+    }
+    @Override
     public int getRank() {
-        return rank;
+        return super.getRank();
     }
 
     @Override
     public int getFile() {
-        return file;
+        return super.getFile();
     }
 
     @Override
@@ -49,13 +47,12 @@ public class Pawn extends Piece{
                 temp.add(getPos() + offsets[i]);
             }
         }
-        if (not_moved){temp.add(getPos() + offsets[3]);}
+        if (getNotMoved()){temp.add(getPos() + offsets[3]);}
         return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
-        not_moved = false;
     }
 }
