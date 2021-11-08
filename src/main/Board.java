@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TransferQueue;
 
 public class Board {
@@ -22,31 +19,28 @@ public class Board {
         }
     }
 
-    public void getLegalMoves(){
+    public void getLegalMoves(boolean turn){
         //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
-
+        //for piece in piecePositions, if color matches turn (maybe hold pieces of different
+        //colors in different arrays
+        //get legal moves for piece's type, check that each move doesn't lead to
+        //check for turn player
     }
 
     public boolean checkMoveLegal(int origin, int destination){
-        //TODO alternate to getLegalMoves, checks a specific input move.
-        Piece originPiece = piecePositions.get(origin);
-        if (!Arrays.asList(originPiece.getValidMoves()).contains(destination)){
-            return false;
+        Piece piece = piecePositions.get(origin);
+        if (piece instanceof King){
+            return Utils.contains(getKingMoves(origin), destination);
         }
-        if(piecePositions.containsKey(destination)){
-            if (originPiece.getColor() == piecePositions.get(destination).getColor()){
-                return false;
-            }
+        if (piece instanceof Pawn){
+            return Utils.contains(getPawnMoves(origin), destination);
         }
-        if (originPiece instanceof Knight){
-            //Don't need to check collisions for knight as long as it isn't landing on an allied piece
-            return true;
+        if (piece instanceof Knight){
+            return Utils.contains(getKnightMoves(origin), destination);
         }
-        if (originPiece instanceof Pawn){
-            return destination == origin + 1 || destination == origin - 1 || piecePositions.containsKey(destination);
+        else {
+            return Utils.contains(getSlidingMoves(origin), destination);
         }
-        //TODO check if squares between current and destination are occupied. Necessary for king, bishop, rook, and queen
-        return false;
     }
     //TODO make private once inside bigger method
     public int[] getKingMoves(int origin){
@@ -64,12 +58,14 @@ public class Board {
         int[] offsets = piece.getColor() ? whitePawnOffsets : blackPawnOffsets;
         ArrayList<Integer> moves = new ArrayList<>();
         int destination;
+        //Check capture diagonally left
         if(Utils.NUMSQUARESTOEDGE[origin][3] > 0){
             destination = origin + offsets[0];
             if(piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor() || canEnPassant(origin, true)){
                 moves.add(destination);
             }
         }
+        //Check move forward
         destination = origin + offsets[1];
         if (!piecePositions.containsKey(destination)){
             moves.add(destination);
@@ -80,6 +76,7 @@ public class Board {
                 moves.add(destination);
             }
         }
+        //Check capture diagonally right
         if (Utils.NUMSQUARESTOEDGE[origin][4] > 0){
             destination = origin + offsets[2];
             if((piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor()) || canEnPassant(origin, false)){
@@ -107,6 +104,7 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
     public int[] getSlidingMoves(int origin){
+        //Gets moves for long range sliding pieces: Queen, Rook, Bishop
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
         ArrayList<Integer> moves = new ArrayList<>();
@@ -126,23 +124,26 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    public void makePlayerMove(String move, boolean color){
+    public boolean makePlayerMove(String move, boolean color){
         //TODO Once the player inputs a move through the CLI and it's determined legal,
         // adjust piece position and prompt game to update position
 
         //Parse CLI move input
+        boolean move_valid = false;
         String [] orDest = move.split(",");
         int origin = algebraicToInt(orDest[0]);
         int destination = algebraicToInt(orDest[1]);
 
         //Check that the origin is occupied
-        if (piecePositions.containsKey(origin)){
+        if (checkMoveLegal(origin, destination)){
             piecePositions.remove(destination);
             piecePositions.put(destination, piecePositions.remove(origin));
             piecePositions.get(destination).updatePosition(destination);
+            lastMove[0] = origin;
+            lastMove[1] = destination;
+            move_valid = true;
         }
-        lastMove[0] = origin;
-        lastMove[1] = destination;
+        return move_valid;
     }
 
     public Map<Integer, Piece> getPiecePositions(){
