@@ -1,6 +1,6 @@
 package LogInUserCase;
 
-import database.UserInfoDB;
+import database.UserInfoDB2;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,6 +45,10 @@ public class LoginGUI implements ActionListener{
     public void run(){
         // set frame to be visible
         this.frame.setVisible(true);
+    }
+
+    public void close(){
+        this.frame.setVisible(false);
     }
 
 //    public static void main(String[] args) {
@@ -113,29 +117,39 @@ public class LoginGUI implements ActionListener{
         String password = "";
         for (int i = 0; i < count; i++){
             Component c = this.jPanel.getComponent(i);
-            if (c instanceof JTextField) {
-                username = ((JTextField) c).getText();
-            }else if(c instanceof JPasswordField){
-                password = ((JPasswordField) c).getPassword().toString();
+            if (c instanceof JPasswordField) {
+                password = new String(((JPasswordField) c).getPassword());
+                // System.out.println("我是密码" + password);
+            }else if(c instanceof JTextField){
+                username = new String(((JTextField) c).getText());
+                // System.out.println("我是姓名" + username);
             }
         }
 
-        String res = logIn(username, password).toString();
+        LoginUseCase.LoginResult res = logIn(username, password);
 
-        // create a JLabel for the login_info
-        JLabel resultLabel = new JLabel(res);
-        resultLabel.setBounds(70,70,80,25);
+        // check if there is a resultLabel in the jPanel
+        try {
+            Component x = jPanel.getComponent(5);
+            // a. there is an existing JLabel
+            ((JLabel) x).setText(res.toString());
+        }catch (IndexOutOfBoundsException ee) {
+            // b. not exists -> create a JLabel for the login_info
+            JLabel resultLabel = new JLabel(res.toString());
+            resultLabel.setBounds(70,150,150,25);
 
-        jPanel.add(resultLabel);
+            jPanel.add(resultLabel, 5);
+        };
 
         // display the updated Jframe
+        this.close();
         this.run();
 
     }
 
     public LoginUseCase.LoginResult logIn(String username, String password) {
-        UserInfoDB userInFoDB = new UserInfoDB();
-        int res = userInFoDB.readUserInfo(username, password);
+        UserInfoDB2 userInFoDB2 = new UserInfoDB2();
+        int res = userInFoDB2.readUserInfo(username, password);
 
         LoginUseCase.LoginResult result = null;
 

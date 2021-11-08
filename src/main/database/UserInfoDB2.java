@@ -134,14 +134,14 @@ public class UserInfoDB2 implements Database{
     @Override
     public int readUserInfo(String username, String password) {
 
-        int res = -1;
+        int res = 0;
 
         MongoCollection mongoCollection = getCollection();
 
         Document found = (Document) mongoCollection.find(new Document("name", username)).first();
 
         if (found == null) {
-            res = -1;           // no matched user info.
+            res = 0;           // no matched user info.
         }else {
             if (found.get("password").equals(password)){
                 res = 2;        // the password not match
