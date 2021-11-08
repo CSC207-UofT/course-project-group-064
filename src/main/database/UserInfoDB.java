@@ -147,6 +147,7 @@ public class UserInfoDB {
             preparedStatement.setString(1, newPassword);
             preparedStatement.setString(2, user.getName());
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
