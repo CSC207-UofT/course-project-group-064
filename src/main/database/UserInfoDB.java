@@ -1,10 +1,13 @@
 package database;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 
-public class UserInfoDB {
+import java.sql.*;
+
+import LogInUserCase.LoginUseCase;
+import entity.User;
+
+import LogInUserCase.LoginUseCase.*;
+
+public class UserInfoDB implements Database{
     public static final String DATABASE_NAME = "userinfodatabase.db";
     public static final String TABLE_NAME = "userinformation";
 
@@ -33,6 +36,7 @@ public class UserInfoDB {
     /**
      * Creates a SQLite database and table with the names of DATABASE_NAME and TABLE_NAME respectively
      */
+    @Override
     public void createNewDatabase() {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
@@ -55,6 +59,7 @@ public class UserInfoDB {
      * @param user The user whose information is being inserted
      * @param password The user's password
      */
+    @Override
     public void addUserInfo(User user, String password) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
@@ -67,5 +72,41 @@ public class UserInfoDB {
         catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    /**
+     * returns if the user with <username><password> exists in the database
+     * @param username
+     * @param password
+     * @return true if the user exists and false if not
+     */
+    @Override
+    public int readUserInfo(String username, String password) {
+
+        int res = -1;
+
+        try(Connection conn = this.connect();) {
+            Statement statement = conn.createStatement();
+            String readQuery1 = "SELECT * FROM " + TABLE_NAME + " WHERE (username = " + username + ")";
+            String readQuery2 = "SELECT * FROM " + TABLE_NAME + " WHERE (username = " + username +
+            " AND password = " + password + ")";
+
+            ResultSet resultSet1 = statement.executeQuery(readQuery2);     // execute readQuery1
+            ResultSet resultSet2 = statement.executeQuery(readQuery2);     // execute readQuery2
+
+            if (resultSet1.wasNull()) {
+                res =  0;
+            }else if(resultSet2.wasNull()){
+                res = 1;
+            }else {
+                res = 2;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res; // if res ==0, then there is either an error or the username has not been found
+
     }
 }

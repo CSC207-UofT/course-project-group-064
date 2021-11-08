@@ -1,14 +1,14 @@
 Running the application prompts the user to input their login information (a username and password) in a login window or
-sign up. Once the user log in the main menu is displayed.
+sign up. Once the user log in the entity menu is displayed.
 The sign up window looks like the login window. The user inputs a username and password, the program stores this login
-information and then displays the main menu.
+information and then displays the entity menu.
 
-In the main menu, the user is able to choose whether they would like to play against a computer or another player. The
-user is also able to see their Elo score from the main menu.
+In the entity menu, the user is able to choose whether they would like to play against a computer or another player. The
+user is also able to see their Elo score from the entity menu.
 If the user chooses to play against another player, a login screen is displayed for the other player to input their
 login information or signup.
 If the user chooses to play against a computer, the game automatically begins.
-If different game modes are implemented in the future, they will be available in the main menu.
+If different game modes are implemented in the future, they will be available in the entity menu.
 
 The game contains the pieces (kings, queen, bishop, knight, rook, pawn) and rules of standard chess.
 A user is able to input their move by clicking on a piece and moving it to the desired location. The board checks if
@@ -18,4 +18,4 @@ If the board is in a win or draw state, the match ends and the program displays 
 would display which player won. In a draw state, the program would display that the match ended in a draw.
 If the match was against another player, the program then recalculates each player’s Elo rating to reflect the results
 of the match.
-The user is brought back to the main menu.
+The user is brought back to the entity menu.

@@ -1,5 +1,5 @@
-import java.io.*;
-import java.util.List;
+import LogInUserCase.LoginUseCase;
+import LogInUserCase.LoginGUI;
 
 /**
  * Controls the process of user logging in
@@ -9,13 +9,20 @@ import java.util.List;
 public class LoginController {
 
     private LoginUseCase loginUseCase;
+    private LoginGUI loginGUI;
 
     // Constructor
-    public LoginController(LoginUseCase loginUseCase) {
+    public LoginController(LoginUseCase loginUseCase, LoginGUI loginGUI) {
         this.loginUseCase = loginUseCase;
+        this.loginGUI = loginGUI;
     }
 
     public void runLogin(String username, String password) {
+
+        // display login window
+        this.loginGUI.run();
+
+        // action on the logInResult
         LoginUseCase.LoginResult res = this.loginUseCase.logIn(username, password);
 
         switch (res) {

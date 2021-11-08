@@ -1,7 +1,7 @@
+package ReadWriter;
+
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ReadWriterImpl1 implements ReadWriter{
 
