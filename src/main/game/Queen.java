@@ -1,17 +1,15 @@
-import java.util.ArrayList;
-import java.util.HashMap;
+package game;
 
-public class Knight extends Piece{
+import java.util.ArrayList;
+
+public class Queen extends Piece{
     private int rank;
     private int file;
     private boolean color;
     private int pos;
-    private final int[] offsets = {-17, -15, -10, -6, 6, 10, 15, 17};
-    private final int[][] knightMoves = {{1, 2}, {1, 2}, {2, 1}, {2, 1}, {2, 1}, {2, 1}, {1, 2}, {1, 2}};
-    private final int[][] checkSquares = {{3, 1}, {4, 1}, {3, 1}, {4, 1}, {3, 6}, {4, 6}, {3, 6}, {4, 6}};
+    private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-
-    public Knight(boolean color, int file, int rank){
+    public Queen(boolean color, int file, int rank){
         super(color, file, rank);
     }
 
@@ -28,7 +26,7 @@ public class Knight extends Piece{
         return super.getPos();
     }
 
-    public boolean getColor(){
+    public boolean getColor() {
         return super.getColor();
     }
 
@@ -36,9 +34,8 @@ public class Knight extends Piece{
     public int[] getValidMoves(){
         ArrayList<Integer> temp = new ArrayList<Integer>();
         for (int i = 0; i < 8; i++){
-            if (Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][0]] >= knightMoves[i][0] &&
-                    Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][1]] >= knightMoves[i][1]){
-                temp.add(getPos() + offsets[i]);
+            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++){
+                temp.add(getPos() + offsets[i] * (j + 1));
             }
         }
         return temp.stream().mapToInt(i -> i).toArray();

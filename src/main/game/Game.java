@@ -1,7 +1,7 @@
-import java.util.HashMap;
+package game;
+
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 public class Game {
     private String game_mode;

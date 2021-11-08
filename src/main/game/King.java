@@ -1,3 +1,5 @@
+package game;
+
 public class King extends Piece{
     private boolean not_moved;
     private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9, -2, 2};

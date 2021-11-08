@@ -1,3 +1,5 @@
+package game;
+
 import java.lang.Math.*;
 import java.util.HashMap;
 

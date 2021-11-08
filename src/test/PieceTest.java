@@ -1,6 +1,5 @@
+import game.*;
 import org.junit.*;
-
-import javax.swing.*;
 
 import static org.junit.Assert.*;
 
