@@ -97,4 +97,21 @@ public class BoardTest {
         moves = board.getKingMoves(52);
         assertArrayEquals(new int[]{43, 44, 45, 60}, moves);
     }
+
+    @Test(timeout = 110)
+    public void TestInCheck(){
+        board.makePlayerMove("f2,f4", false);
+        board.makePlayerMove("f7,f5", true);
+        board.makePlayerMove("e2,e3", false);
+        board.makePlayerMove("b8,a6", true);
+        board.makePlayerMove("f1,d3", false);
+        board.makePlayerMove("a6,b4", true);
+        board.makePlayerMove("d3,f5", false);
+//        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("b4,a6", true);
+        board.makePlayerMove("f5,d7", false);
+//        assertEquals("white", board.inCheck(board));
+        assertEquals("black", board.inCheck(board));
+
+    }
 }
