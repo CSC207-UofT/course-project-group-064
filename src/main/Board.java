@@ -137,7 +137,6 @@ public class Board {
                 int king_file = posToFileRank(king_pos)[0];
                 int king_rank = posToFileRank(king_pos)[1];
                 boolean king_color = piece.getColor();
-                System.out.println(king_color);
                 Bishop bishop = new Bishop(king_color, king_file, king_rank);
                 Rook rook = new Rook(king_color, king_file, king_rank);
                 Queen queen = new Queen(king_color, king_file, king_rank);
@@ -157,7 +156,6 @@ public class Board {
                 if (checkSliding(king_color, king_pos, bishop) || checkSliding(king_color, king_pos, rook) ||
                         checkSliding(king_color, king_pos, queen) || checkKnights(king_color, king_file, king_rank) ||
                         checkKing(king_color, piece)) {
-                    System.out.println(king_color + returnResult(king_color));
                     return returnResult(king_color);
                 }
 
@@ -326,10 +324,10 @@ public class Board {
     }
     public String returnResult(boolean color) {
         if (!color){
-            return "white";
+            return "black";
         }
         else {
-            return "black";
+            return "white";
         }
     }
 }
