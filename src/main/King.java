@@ -29,18 +29,11 @@ public class King extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        int castle_square = getColor() ? 60 : 4;
-        boolean can_castle = not_moved && castle_square == getPos();
-        int offsetLen = can_castle ? 10 : 8;
         ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 8; i++){
             if(Utils.NUMSQUARESTOEDGE[getPos()][i] > 0) {
                 temp.add(getPos() + offsets[i]);
             }
-        }
-        if (can_castle){
-            temp.add (getPos() + offsets[8]);
-            temp.add (getPos() + offsets[9]);
         }
         return temp.stream().mapToInt(i -> i).toArray();
     }

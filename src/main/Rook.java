@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 
 public class Rook extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
     private final int[] offsets = {-8,-1, 1, 8};
     private final int[] checkSquares = {1, 3, 4, 6};
 
