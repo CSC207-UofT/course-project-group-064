@@ -132,7 +132,6 @@ public class Board {
         for (Piece piece : board.piecePositions.values()) {
             if (piece instanceof King) {
                 //declarations for easy access
-                int[] king_moves = piece.getValidMoves();
                 int king_pos = piece.getPos();
                 int king_file = posToFileRank(king_pos)[0];
                 int king_rank = posToFileRank(king_pos)[1];
@@ -140,16 +139,15 @@ public class Board {
                 Bishop bishop = new Bishop(king_color, king_file, king_rank);
                 Rook rook = new Rook(king_color, king_file, king_rank);
                 Queen queen = new Queen(king_color, king_file, king_rank);
-
                 //check pawns
-                for (int move : king_moves) {
-                    if (!king_color && (move == king_pos - 9 || move == king_pos - 7) && (piecePositions.get(move)
-                            instanceof Pawn && !piecePositions.get(move).getColor())) {
-                        return returnResult(false);
-                    }
-                    if (king_color && (move == king_pos + 9 || move == king_pos + 7) && (piecePositions.get(move)
-                            instanceof Pawn && piecePositions.get(move).getColor())) {
+                for (int move : piece.getValidMoves()) {
+                    if (king_color && (piecePositions.get(move) instanceof Pawn && (move == (king_pos - 9) ||
+                            move == (king_pos - 7)) && !piecePositions.get(move).getColor())) {
                         return returnResult(true);
+                    }
+                    if (!king_color && (piecePositions.get(move) instanceof Pawn &&(move == (king_pos + 9) ||
+                            move == (king_pos + 7)) &&  piecePositions.get(move).getColor())) {
+                        return returnResult(false);
                     }
                 }
                 //check for bishop, rook, queen, knight, king
@@ -257,11 +255,9 @@ public class Board {
 
     public boolean checkSliding(boolean color, int king_pos, Piece piece) {
         for (int move : inCheckSlidingMoves(king_pos, piece)){
-            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() == piece.getClass().getName() &&
-                    piecePositions.get(move).getColor() != color) {
-                if (!color){
-                    return true;
-                }
+            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() ==
+                    piece.getClass().getName() && piecePositions.get(move).getColor() != color) {
+                return true;
             }
         }
         return false;
