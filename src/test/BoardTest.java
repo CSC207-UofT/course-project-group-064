@@ -97,4 +97,122 @@ public class BoardTest {
         moves = board.getKingMoves(52);
         assertArrayEquals(new int[]{43, 44, 45, 60}, moves);
     }
+
+    @Test(timeout = 50)
+    public void TestInCheckBQueenDiag(){
+        board.makePlayerMove("f2,f4", true);
+        board.makePlayerMove("e7,e5", false);
+        board.makePlayerMove("d2,d4", true);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("d8,h4", false);
+        int [] moves = board.getSlidingMoves(39);
+        assertEquals("white", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckBbishop(){
+        board.makePlayerMove("d2,d4", true);
+        board.makePlayerMove("e7,e5", false);
+        board.makePlayerMove("e2,e3", true);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("f8,b4", false);
+        assertEquals("white", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckBRook(){
+        board.makePlayerMove("e2,e4", true);
+        board.makePlayerMove("h7,h5", false);
+        board.makePlayerMove("e4,e5", true);
+        board.makePlayerMove("h8,h6", false);
+        board.makePlayerMove("e5,e6", true);
+//        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("h6,e6", false);
+        assertEquals("white", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckBknight(){
+        board.makePlayerMove("d2,d4", true);
+        board.makePlayerMove("b8,a6", false);
+        board.makePlayerMove("e2,e3", true);
+        board.makePlayerMove("a6,b4", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("e3,e4", true);
+        board.makePlayerMove("b4,c2", false);
+        assertEquals("white", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckWQueenDiag(){
+        board.makePlayerMove("e2,e4", true);
+        board.makePlayerMove("f7,f5", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("d1,h5", true);
+        assertEquals("black", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckWPawn(){
+        board.makePlayerMove("e2,e4", true);
+        board.makePlayerMove("f7,f5", false);
+        board.makePlayerMove("e4,f5", true);
+        board.makePlayerMove("h7,h6", false);
+        board.makePlayerMove("f5,f6", true);
+        board.makePlayerMove("h6,h5", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("f6,f7", true);
+        assertEquals("black", board.inCheck(board));
+    }
+
+    //TODO remove King checks when checkMoveLegal is implemented
+    @Test(timeout = 50)
+    public void TestInCheckBPawnKing(){
+        board.makePlayerMove("d2,d4", true);
+        board.makePlayerMove("e7,e5", false);
+        board.makePlayerMove("e1,d2", true);
+        board.makePlayerMove("e8,e7", false);
+        board.makePlayerMove("d2,e3", true);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("e5,d4", false);
+        assertEquals("white", board.inCheck(board));
+        board.makePlayerMove("e3,d4", false);
+        board.makePlayerMove("e7,e6", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("d4,d5", false);
+        //black in check because it checks for the black king first
+        assertEquals("black", board.inCheck(board));
+        //check side by side kings
+        board.makePlayerMove("e6,d6", false);
+        assertEquals("black", board.inCheck(board));
+    }
+
+    @Test(timeout = 50)
+    public void TestInCheckWhiteRNB(){
+        board.makePlayerMove("a2,a4", true);
+        board.makePlayerMove("e7,e5", false);
+        board.makePlayerMove("a1,a3", true);
+        board.makePlayerMove("e5,e4", false);
+        board.makePlayerMove("a4,a5", true);
+        board.makePlayerMove("e4,e3", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("a3,e3", true);
+        assertEquals("black", board.inCheck(board));
+        board.makePlayerMove("d8,e7", false);
+        board.makePlayerMove("e3,h3", true);
+        board.makePlayerMove("d7,d6", false);
+        board.makePlayerMove("e2,e3", true);
+        board.makePlayerMove("h7,h6", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("f1,b5", true);
+        assertEquals("black", board.inCheck(board));
+        board.makePlayerMove("c7,c6", false);
+        board.makePlayerMove("b1,c3", true);
+        board.makePlayerMove("h6,h5", false);
+        board.makePlayerMove("c3,d5", true);
+        board.makePlayerMove("h5,h4", false);
+        assertEquals("", board.inCheck(board));
+        board.makePlayerMove("d5,c7", true);
+        assertEquals("black", board.inCheck(board));
+    }
 }
