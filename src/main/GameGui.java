@@ -40,26 +40,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                 square.setBackground(i % 2 == 0 ? Color.white : Color.GRAY);
         }
 
-        /*for (int i = 0; i < 16; i++) {
-            JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-            JPanel panel = (JPanel)board.getComponent(i);
-            panel.add(piece);
-        }
-
-        for (int i = 48; i < 64; i++) {
-            JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-            JPanel panel = (JPanel)board.getComponent(i);
-            panel.add(piece);
-        }*/
-
-        /*for(int i = 0; i < 64; i++) {
-            Map currentBoard = game.board.getPiecePositions();
-            if (currentBoard.containsKey(i)) {
-                JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-                JPanel panel = (JPanel)board.getComponent(i);
-                panel.add(piece);
-            }*/
-
     }
 
    public static void updateGui(Game game, GameGui gui) {
