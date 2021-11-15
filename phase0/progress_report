@@ -1,0 +1,39 @@
+Brief summary
+The specification was originally written during our first meeting with our TA. As we continued to work through Phase 0
+and received feedback, we updated the specification to reflect changes we made to our application design. The feedback
+we received asked us to make the specification more high-level, so we followed the JShell specification example in class
+more closely while updating our specification. Our CRC model was modelled after our specification and did not need any
+major changes as we continued our work. The scenario we decided on for our scenario walk through is the creation of a
+board and a player making a move. We chose this as our scenario because we felt that this scenario would make the most
+sense as what we would implement in our skeleton code. The scenario represents a core function of the program, and when
+coded in our skeleton code, is a good starting point for the rest of our coding. Our skeleton code is currently able to
+display an ASCII character representation of a chess board, and is able to take a move input typed by the user and then
+update the board to reflect this move. The move function does not currently check if a move is legal, however it does
+check if the origin and destination positions input by the user are actually on the board. The ASCII character board is
+not meant to be the fully completed interpretation of the chess board, and we are planning on implementing a graphic
+display soon.
+
+Questions
+One element of our program we have been discussing is how we want to have the user interact with the board. As stated
+before, we are planning to update the ASCII character board to a graphic display. We are currently debating how we would
+like to implement the user’s ability to make a move. Presently, the user types in the position of the piece they would
+like to move, and the position they would like to move the piece to. We would like to have the user be able to actually
+click the piece and move it to their desired destination, but we are unsure if we have the time to implement this.
+Another question we’ve been pondering is how secure our log-in system is meant to be. We know that applications that
+require log-in information encrypt and store this information securely, but we don't know what level of security is
+expected from us.
+
+What has worked so far
+So far, our design has worked well in implementing the playing aspect of the project. The skeleton code works as a good
+base for us to build the rest of the project off of. We have not coded anything related to the user class so we need to
+continue working before coming to any conclusions on whether our design for this aspect of the project is good.
+
+Roles
+We have been working collaboratively on each part of Phase 0 rather than dividing the tasks between members. The
+specification was completed as a group during our first meeting with our TA, and then we updated it after receiving
+feedback from our TA. The CRC model was worked on by all members at once during a meeting we had planned, and then
+edited and updated afterwards as needed. After discussing the scenario walk through as a group and deciding what we
+wanted to write about and include, David wrote it on a shared document. It was later updated by Nathaniel to better
+match the skeleton code after that had been completed. The skeleton code and tests were written by Nathaniel. Omar wrote
+the majority of this progress report, with some edits made by other members. Moving forward, we will meet to discuss how
+we can break down the program into several different tasks, and then delegating different members to complete each task.
