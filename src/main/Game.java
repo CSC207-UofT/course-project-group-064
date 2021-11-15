@@ -4,8 +4,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Game {
-    private String game_mode;
-    public boolean isWhitesTurn;
+    private String game_mode; //To be used later
     private String textBoardDisplay; //Temporary board display in text
     private Board board;
     private Scanner console;

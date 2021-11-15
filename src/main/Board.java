@@ -30,6 +30,7 @@ public class Board {
 
     public boolean checkMoveLegal(int origin, int destination) {
         Piece piece = piecePositions.get(origin);
+        Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
         if (piece instanceof King) {
             return Utils.contains(getKingMoves(origin), destination);
         }
