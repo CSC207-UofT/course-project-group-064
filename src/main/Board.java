@@ -9,6 +9,7 @@ public class Board {
     private final int[] whitePawnOffsets = {-7, -8, -9};
     private final int[] blackPawnOffsets = {7, 8, 9};
     private int[] lastMove = {0, 0};
+    private boolean turn = true;
 
     private Map<Integer, Piece> piecePositions;
 
@@ -29,8 +30,11 @@ public class Board {
     }
 
     public boolean checkMoveLegal(int origin, int destination) {
+        if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
+            return false;
+        }
         Piece piece = piecePositions.get(origin);
-        Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
+        //Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
         if (piece instanceof King) {
             return Utils.contains(getKingMoves(origin), destination);
         }
@@ -181,6 +185,7 @@ public class Board {
             lastMove[0] = origin;
             lastMove[1] = destination;
             move_valid = true;
+            turn = !turn;
         }
         return move_valid;
     }
