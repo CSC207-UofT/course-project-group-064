@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Map;
 
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
@@ -34,12 +35,12 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
             int row = (i / 8) % 2;
             if (row == 0)
-                square.setBackground(i % 2 == 0 ? Color.black : Color.white);
+                square.setBackground(i % 2 == 0 ? Color.gray : Color.white);
             else
-                square.setBackground(i % 2 == 0 ? Color.white : Color.black);
+                square.setBackground(i % 2 == 0 ? Color.white : Color.GRAY);
         }
 
-        for (int i = 0; i < 16; i++) {
+        /*for (int i = 0; i < 16; i++) {
             JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
             JPanel panel = (JPanel)board.getComponent(i);
             panel.add(piece);
@@ -49,8 +50,29 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
             JPanel panel = (JPanel)board.getComponent(i);
             panel.add(piece);
-        }
+        }*/
 
+        /*for(int i = 0; i < 64; i++) {
+            Map currentBoard = game.board.getPiecePositions();
+            if (currentBoard.containsKey(i)) {
+                JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+                JPanel panel = (JPanel)board.getComponent(i);
+                panel.add(piece);
+            }*/
+
+    }
+
+   public static void updateGui(Game game, GameGui gui) {
+        Map currentBoard = game.board.getPiecePositions();
+        //gui.board = new JPanel();
+        for (int i = 0; i < 64; i++) {
+            if (currentBoard.containsKey(i)) {
+                String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + ".png";
+                JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
+                JPanel panel = (JPanel)gui.board.getComponent(i);
+                panel.add(piece);
+            }
+        }
     }
 
     public void mousePressed(MouseEvent e){
@@ -117,12 +139,33 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public static void main(String[] args) {
-        JFrame frame = new GameGui();
+        Game game = new Game("Standard");
+
+        GameGui frame = new GameGui();
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo( null );
+        updateGui(game, frame);
         frame.setVisible(true);
+
+        game.standardDisplay();
+        String move = game.getMove();
+        while (!move.equals("end")){
+            frame.dispose();
+            game.updateDisplay(move);
+
+            GameGui frame1 = new GameGui();
+            frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+            frame1.pack();
+            frame1.setResizable(false);
+            //frame1.setLocationRelativeTo( null );
+            updateGui(game, frame1);
+            frame1.setVisible(true);
+
+            move = game.getMove();
+            frame1.dispose();
+        }
     }
 }
 

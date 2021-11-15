@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -7,7 +8,7 @@ public class Game {
     private String game_mode;
     public boolean isWhitesTurn;
     private String textBoardDisplay; //Temporary board display in text
-    private Board board;
+    public Board board;
     private Scanner console;
     private boolean turn = true;
 
@@ -38,7 +39,7 @@ public class Game {
     }
 
     //Initializes display for a classic game of chess.
-    private void standardDisplay(){
+    public void standardDisplay(){
         String boardString = toDisplayString();
         System.out.println(boardString);
     }
