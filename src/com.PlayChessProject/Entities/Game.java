@@ -1,8 +1,8 @@
-import java.util.HashMap;
+package Entities;
+
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
-import entity.User;
+import Entities.Board;
 
 public class Game {
     private String game_mode;

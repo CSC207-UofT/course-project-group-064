@@ -1,6 +1,7 @@
-package LogInUserCase;
+package UseCases.RegisterLogin;
 
-import database.UserInfoDB2;
+import Database.*;
+import Entities.User;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,8 +12,6 @@ import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.EventListener;
-
 
 public class LoginGUI implements ActionListener{
 
@@ -22,7 +21,7 @@ public class LoginGUI implements ActionListener{
     public LoginGUI(){
 
         // creat an JFrame object: frame
-        this.frame = new JFrame("Welcome to the Chess Game");
+        this.frame = new JFrame("Welcome to the Chess Entities.Game");
         // Setting the width and height of frame
         frame.setSize(500, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,7 +52,7 @@ public class LoginGUI implements ActionListener{
 
 //    public static void main(String[] args) {
 //        // creat an JFrame object: frame
-//        JFrame frame = new JFrame("Welcome to the Chess Game");
+//        JFrame frame = new JFrame("Welcome to the Chess Entities.Game");
 //        // Setting the width and height of frame
 //        frame.setSize(500, 300);
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,25 +147,25 @@ public class LoginGUI implements ActionListener{
     }
 
     public LoginUseCase.LoginResult logIn(String username, String password) {
-        UserInfoDB2 userInFoDB2 = new UserInfoDB2();
-        int res = userInFoDB2.readUserInfo(username, password);
+        Database database  = new UserInfoDB();
+        boolean res = database.checkUserExistence(username);
 
-        LoginUseCase.LoginResult result = null;
+        boolean res2 = database.checkUserPassword(username, password);
 
-        switch(res){
-            case 0: {
-                result =  LoginUseCase.LoginResult.NO_SUCH_USER;
-                break;
-            } case 1: {
-                result = LoginUseCase.LoginResult.PASSWORD_WRONG;
-                break;
-            } case 2: {
-                result = LoginUseCase.LoginResult.SUCCESS;
-                break;
-            }
+        if (res) {
+            // a. the password matches
+            if (res2){
+                return LoginUseCase.LoginResult.SUCCESS;
+            }else {
+            // b. the password does not match
+            return LoginUseCase.LoginResult.PASSWORD_WRONG;}
+
+        }else{
+            // c. the user does not exist
+            return LoginUseCase.LoginResult.NO_SUCH_USER;
+
         }
 
-        return result;
     }
 
     public static void main(String[] args){

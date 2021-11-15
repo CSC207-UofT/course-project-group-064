@@ -1,16 +1,8 @@
-package LogInUserCase;
+package UseCases.RegisterLogin;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
-import database.UserInfoDB;
-import entity.User;
+import Database.UserInfoDB;
 
 import ReadWriter.ReadWriter;
-import ReadWriter.ReadWriterImpl1;
 
 public class LoginUseCase {
 
@@ -85,26 +77,26 @@ public class LoginUseCase {
      * @return 0 if the username does not exist, 1 if the username exists but the password does not match, 2 if
      *         both username and password match, or null if we have a connection to the database issue.
      */
-    public LoginResult logIn(String username, String password) {
-        UserInfoDB userInFoDB = new UserInfoDB();
-        int res = userInFoDB.readUserInfo(username, password);
-
-        LoginResult result = null;
-
-        switch(res){
-            case 0: {
-                result =  LoginResult.NO_SUCH_USER;
-                break;
-            } case 1: {
-                result = LoginResult.PASSWORD_WRONG;
-                break;
-            } case 2: {
-                result = LoginResult.SUCCESS;
-                break;
-            }
-        }
-
-        return result;
-    }
+//    public LoginResult logIn(String username, String password) {
+//        UserInfoDB userInFoDB = new UserInfoDB();
+//        int res = userInFoDB.readUserInfo(username, password);
+//
+//        LoginResult result = null;
+//
+//        switch(res){
+//            case 0: {
+//                result =  LoginResult.NO_SUCH_USER;
+//                break;
+//            } case 1: {
+//                result = LoginResult.PASSWORD_WRONG;
+//                break;
+//            } case 2: {
+//                result = LoginResult.SUCCESS;
+//                break;
+//            }
+//        }
+//
+//        return result;
+//    }
 
 }

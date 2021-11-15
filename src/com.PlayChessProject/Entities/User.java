@@ -1,4 +1,4 @@
-package entity;
+package Entities;
 public class User{
     private String name;
     private int elo;

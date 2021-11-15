@@ -1,3 +1,6 @@
+package Entities;
+import Entities.Piece;
+
 import java.util.*;
 import java.util.concurrent.TransferQueue;
 
@@ -318,6 +321,7 @@ public class Board {
         }
         return fin;
     }
+
     public String returnResult(boolean color) {
         if (!color){
             return "black";
