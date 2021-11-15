@@ -30,4 +30,13 @@ public class Utils {
         }
         return ret;
     }
+    public static boolean contains(int[] array, int num)
+    {
+        for (int token : array){
+            if (token == num){
+                return true;
+            }
+        }
+        return false;
+    }
 }

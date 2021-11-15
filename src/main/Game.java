@@ -1,15 +1,15 @@
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Game {
-    private String game_mode;
-    public boolean isWhitesTurn;
+    private String game_mode; //To be used later
     private String textBoardDisplay; //Temporary board display in text
-    private Board board;
+    public Board board;
     private Scanner console;
-    private boolean turn = true;
+    private boolean turn = true; //White = true, Black = false throughout the program
 
     public Game(String game_mode){
         this.game_mode = game_mode;
@@ -27,10 +27,15 @@ public class Game {
 
     public void updateDisplay(String move){
         //TODO parse move and update display based on new board state.
-        board.makePlayerMove(move, turn);
-        turn = !turn;
-        String boardString = toDisplayString();
-        System.out.println(boardString);
+        boolean valid = board.makePlayerMove(move, turn);
+        if(valid) {
+            turn = !turn;
+            String boardString = toDisplayString();
+            System.out.println(boardString);
+        }
+        else {
+            System.out.println("Illegal move, please input a legal move");
+        }
     }
 
     public void calculateElo(boolean game_result, User white, User black){
@@ -38,7 +43,7 @@ public class Game {
     }
 
     //Initializes display for a classic game of chess.
-    private void standardDisplay(){
+    public void standardDisplay(){
         String boardString = toDisplayString();
         System.out.println(boardString);
     }

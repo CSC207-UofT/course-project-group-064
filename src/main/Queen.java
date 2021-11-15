@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 
 public class Queen extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
     private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
 
     public Queen(boolean color, int file, int rank){

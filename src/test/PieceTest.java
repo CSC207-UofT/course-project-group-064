@@ -23,13 +23,13 @@ public class PieceTest {
     @Test(timeout = 50)
     public void TestKingValidMoves(){
         Piece king = new King(true, 4, 0);
-        assertArrayEquals(new int[]{51, 52, 53, 59, 61, -1, -1, -1, 58, 62}, king.getValidMoves());
+        assertArrayEquals(new int[]{51, 52, 53, 59, 61, 58, 62}, king.getValidMoves());
         king.updatePosition(62);
-        assertArrayEquals(new int[]{53, 54, 55, 61, 63, -1, -1, -1}, king.getValidMoves());
+        assertArrayEquals(new int[]{53, 54, 55, 61, 63}, king.getValidMoves());
         king.updatePosition(63);
-        assertArrayEquals(new int[]{54, 55, -1, 62, -1, -1, -1, -1}, king.getValidMoves());
+        assertArrayEquals(new int[]{54, 55, 62}, king.getValidMoves());
         king.updatePosition(55);
-        assertArrayEquals(new int[]{46, 47, -1, 54, -1, 62, 63, -1}, king.getValidMoves());
+        assertArrayEquals(new int[]{46, 47, 54, 62, 63}, king.getValidMoves());
     }
 
     @Test(timeout = 50)
