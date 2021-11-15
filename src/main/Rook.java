@@ -1,12 +1,6 @@
 import java.util.ArrayList;
 
 public class Rook extends Piece{
-    // TODO: can we omit attributes of rank, file, color, and pos?
-//    private int rank;
-//    private int file;
-//    private boolean color;
-//    private int pos;
-    // TODO: is -1 valid if Rook is on the edge?
     private final int[] offsets = {-8,-1, 1, 8};
     private final int[] checkSquares = {1, 3, 4, 6};
 
@@ -33,7 +27,7 @@ public class Rook extends Piece{
 
     @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
                 temp.add(getPos() + offsets[i] * (j + 1));

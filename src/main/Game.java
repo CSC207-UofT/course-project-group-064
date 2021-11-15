@@ -28,10 +28,15 @@ public class Game {
 
     public void updateDisplay(String move){
         //TODO parse move and update display based on new board state.
-        board.makePlayerMove(move, turn);
-        turn = !turn;
-        String boardString = toDisplayString();
-        System.out.println(boardString);
+        boolean valid = board.makePlayerMove(move, turn);
+        if(valid) {
+            turn = !turn;
+            String boardString = toDisplayString();
+            System.out.println(boardString);
+        }
+        else {
+            System.out.println("Illegal move, please input a legal move");
+        }
     }
 
     public void calculateElo(boolean game_result, User white, User black){
