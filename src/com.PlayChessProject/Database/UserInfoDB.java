@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 
 import Entities.User;
+import Entities.PlayerUser;
 
 public class UserInfoDB implements Database{
     public static final String DATABASE_NAME = "userinfodatabase.db";
@@ -54,12 +55,12 @@ public class UserInfoDB implements Database{
     }
 
     /**
-     * Adds the specified user's information into the SQLite database and table.
+     * Adds the specified player user's information into the SQLite database and table.
      *
      * @param user The user whose information is being inserted
      * @param password The user's password
      */
-    public void addUserInfo(User user, String password) {
+    public void addUserInfo(PlayerUser user, String password) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
@@ -73,11 +74,11 @@ public class UserInfoDB implements Database{
     }
 
     /**
-     * Deletes the specified user from the SQLite database and table.
+     * Deletes the specified player user from the SQLite database and table.
      *
      * @param user The user who is being deleted from the SQLite database and table
      */
-    public void deleteUserInfo(User user) {
+    public void deleteUserInfo(PlayerUser user) {
         String sql = "DELETE FROM" + TABLE_NAME +  "WHERE username = ?";
 
         try (Connection conn = this.connect();
@@ -94,7 +95,7 @@ public class UserInfoDB implements Database{
     }
 
     /**
-     * Checks if the specified user is already in the SQLite database and table.
+     * Checks if the specified player user is already in the SQLite database and table.
      *
      * @param username The user whose existence is being checked
      *
@@ -133,12 +134,12 @@ public class UserInfoDB implements Database{
     }
 
     /**
-     * Updates the specified user's password to the specified new password.
+     * Updates the specified player user's password to the specified new password.
      *
      * @param user The user whose password is being updated
      * @param newPassword The new password
      */
-    public void updateUserPassword(User user, String newPassword) {
+    public void updateUserPassword(PlayerUser user, String newPassword) {
         String sql = "UPDATE " + TABLE_NAME + " SET password = ? "
                 + "WHERE username = ?";
 
@@ -155,12 +156,12 @@ public class UserInfoDB implements Database{
     }
 
     /**
-     * Updates the specified user's elo rating to the specified new elo rating.
+     * Updates the specified player user's elo rating to the specified new elo rating.
      *
      * @param user The user whose elo rationg is being updated
      * @param newElo The new elo rating
      */
-    public void updateUserElo(User user, Integer newElo) {
+    public void updateUserElo(PlayerUser user, Integer newElo) {
         String sql = "UPDATE " + TABLE_NAME + " SET elo = ? "
                 + "WHERE username = ?";
 
