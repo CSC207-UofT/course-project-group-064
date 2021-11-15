@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 
 public class Bishop extends Piece{
-    private int rank;
-    private int file;
-    private boolean color;
-    private int pos;
     private final int[] offsets = {-9, -7, 7, 9};
     private final int[] checkSquares = {0, 2, 5, 7};
 
