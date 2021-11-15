@@ -133,8 +133,8 @@ public class Board {
             if (piece instanceof King) {
                 //declarations for easy access
                 int king_pos = piece.getPos();
-                int king_file = posToFileRank(king_pos)[0];
-                int king_rank = posToFileRank(king_pos)[1];
+                int king_file = piece.getFile();
+                int king_rank = piece.getRank();
                 boolean king_color = piece.getColor();
                 Bishop bishop = new Bishop(king_color, king_file, king_rank);
                 Rook rook = new Rook(king_color, king_file, king_rank);
@@ -282,42 +282,6 @@ public class Board {
         return false;
     }
 
-    public int[] posToFileRank(int pos){
-        int[] fin = {0, 0};
-        if (pos <= 7) {
-            fin[0] = pos;
-            fin[1] = 7;
-        }
-        if (pos <= 15) {
-            fin[0] = pos - 8;
-            fin[1] = 6;
-        }
-        if (pos <= 23) {
-            fin[0] = pos - 16;
-            fin[1] = 5;
-        }
-        if (pos <= 31) {
-            fin[0] = pos - 24;
-            fin[1] = 4;
-        }
-        if (pos <= 7) {
-            fin[0] = pos - 32;
-            fin[1] = 3;
-        }
-        if (pos <= 15) {
-            fin[0] = pos - 40;
-            fin[1] = 2;
-        }
-        if (pos <= 23) {
-            fin[0] = pos - 48;
-            fin[1] = 1;
-        }
-        if (pos <= 31) {
-            fin[0] = pos - 56;
-            fin[1] = 0;
-        }
-        return fin;
-    }
     public String returnResult(boolean color) {
         if (!color){
             return "black";

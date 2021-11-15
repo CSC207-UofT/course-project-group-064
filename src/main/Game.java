@@ -9,7 +9,7 @@ public class Game {
     private String textBoardDisplay; //Temporary board display in text
     private Board board;
     private Scanner console;
-    private boolean turn = true;
+    private boolean turn = true; //White = true, Black = false throughout the program
 
     public Game(String game_mode){
         this.game_mode = game_mode;
