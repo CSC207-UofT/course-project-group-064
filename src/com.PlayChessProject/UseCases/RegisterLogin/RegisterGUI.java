@@ -1,5 +1,7 @@
 package UseCases.RegisterLogin;
 
+import Entities.PlayerUser;
+import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import Database.Database;
 import Database.UserInfoDB2;
@@ -13,8 +15,6 @@ import javax.swing.JTextField;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import Entities.Users.User;
 
 
 public class RegisterGUI implements ActionListener{
@@ -99,7 +99,7 @@ public class RegisterGUI implements ActionListener{
         Database database = new UserInfoDB2();
         String msg = "";
         try {
-            database.addUserInfo(new User(username, "0"), password);
+            database.addUserInfo(new PlayerUser(username, 0), password);
             msg = "The User Successfully Registered!";
 
         } catch (UserAlreadyExistsException ex) {

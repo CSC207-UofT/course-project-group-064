@@ -1,13 +1,12 @@
 package Database;
 
+import Entities.PlayerUser;
+import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import Entities.Users.User;
-import com.mongodb.client.MongoIterable;
 import org.bson.Document;
 
 public class UserInfoDB2 implements Database{
@@ -101,7 +100,7 @@ public class UserInfoDB2 implements Database{
     }
 
     @Override
-    public void addUserInfo(User user, String password) throws UserAlreadyExistsException {
+    public void addUserInfo(PlayerUser user, String password) throws UserAlreadyExistsException {
 
         MongoCollection mongoCollection = getCollection();
 
@@ -131,7 +130,7 @@ public class UserInfoDB2 implements Database{
     }
 
     @Override
-    public void deleteUserInfo(User user) {
+    public void deleteUserInfo(PlayerUser user) {
 
     }
 
@@ -157,12 +156,12 @@ public class UserInfoDB2 implements Database{
     }
 
     @Override
-    public void updateUserPassword(User user, String newPassword) {
+    public void updateUserPassword(PlayerUser user, String newPassword) {
 
     }
 
     @Override
-    public void updateUserElo(User user, Integer newElo) {
+    public void updateUserElo(PlayerUser user, Integer newElo) {
 
     }
 
