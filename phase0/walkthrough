@@ -1,9 +1,9 @@
 Scenario Walkthrough
 The initial board is set up by placing pieces in a hash map associating them with the squares they occupy.
-Game.standardDisplay() prints an ascii board by getting the positions of each piece from Board.getPiecePositions().
+Entities.Game.standardDisplay() prints an ascii board by getting the positions of each piece from Entities.Board.getPiecePositions().
 The console prompts the user for their first move. To make a move during their turn, a player must type the origin and
 destination positions separated by a comma. The move will then be passed to the board which will determine if the move
 contains valid squares on the board. If the move passes these checks, the piece will update its position and will move
-to a different key in piecePositions. Game will call updateDisplay, which uses getPiecePositions to update the displayed
+to a different key in piecePositions. Entities.Game will call updateDisplay, which uses getPiecePositions to update the displayed
  position on the ascii board. The turn will change. This will continue until a player types “end” instead of entering a
  move.

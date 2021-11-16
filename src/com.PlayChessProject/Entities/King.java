@@ -1,11 +1,15 @@
+package Entities;
+
 import java.util.ArrayList;
 
-public class Rook extends Piece{
-    private final int[] offsets = {-8,-1, 1, 8};
-    private final int[] checkSquares = {1, 3, 4, 6};
+public class King extends Piece{
+    private boolean not_moved;
+    private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9, -2, 2};
 
-    public Rook(boolean color, int file, int rank){
+    public King(boolean color, int file, int rank){
         super(color, file, rank);
+
+        this.not_moved = true;
     }
 
     public int getRank(){
@@ -28,9 +32,9 @@ public class Rook extends Piece{
     @Override
     public int[] getValidMoves(){
         ArrayList<Integer> temp = new ArrayList<>();
-        for (int i = 0; i < 4; i++){
-            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
-                temp.add(getPos() + offsets[i] * (j + 1));
+        for (int i = 0; i < 8; i++){
+            if(Utils.NUMSQUARESTOEDGE[getPos()][i] > 0) {
+                temp.add(getPos() + offsets[i]);
             }
         }
         return temp.stream().mapToInt(i -> i).toArray();
@@ -39,5 +43,6 @@ public class Rook extends Piece{
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
+        not_moved = false;
     }
 }

@@ -1,13 +1,12 @@
+package Entities;
+
 import java.util.ArrayList;
 
-public class King extends Piece{
-    private boolean not_moved;
-    private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9, -2, 2};
+public class Queen extends Piece{
+    private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    public King(boolean color, int file, int rank){
+    public Queen(boolean color, int file, int rank){
         super(color, file, rank);
-
-        this.not_moved = true;
     }
 
     public int getRank(){
@@ -23,16 +22,16 @@ public class King extends Piece{
         return super.getPos();
     }
 
-    public boolean getColor(){
+    public boolean getColor() {
         return super.getColor();
     }
 
     @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<Integer>();
         for (int i = 0; i < 8; i++){
-            if(Utils.NUMSQUARESTOEDGE[getPos()][i] > 0) {
-                temp.add(getPos() + offsets[i]);
+            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++){
+                temp.add(getPos() + offsets[i] * (j + 1));
             }
         }
         return temp.stream().mapToInt(i -> i).toArray();
@@ -41,6 +40,5 @@ public class King extends Piece{
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
-        not_moved = false;
     }
 }

@@ -1,3 +1,5 @@
+package Entities;
+
 import java.lang.Math.*;
 import java.util.HashMap;
 
@@ -30,6 +32,7 @@ public class Utils {
         }
         return ret;
     }
+
     public static boolean contains(int[] array, int num)
     {
         for (int token : array){

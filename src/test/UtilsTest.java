@@ -1,3 +1,4 @@
+import Entities.Utils;
 import org.junit.*;
 import static org.junit.Assert.*;
 

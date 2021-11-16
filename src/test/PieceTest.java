@@ -1,6 +1,5 @@
+import Entities.*;
 import org.junit.*;
-
-import javax.swing.*;
 
 import static org.junit.Assert.*;
 

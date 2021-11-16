@@ -1,10 +1,12 @@
+package Entities;
+
 import java.util.ArrayList;
 
-public class Bishop extends Piece{
-    private final int[] offsets = {-9, -7, 7, 9};
-    private final int[] checkSquares = {0, 2, 5, 7};
+public class Rook extends Piece{
+    private final int[] offsets = {-8,-1, 1, 8};
+    private final int[] checkSquares = {1, 3, 4, 6};
 
-    public Bishop(boolean color, int file, int rank){
+    public Rook(boolean color, int file, int rank){
         super(color, file, rank);
     }
 
@@ -25,8 +27,9 @@ public class Bishop extends Piece{
         return super.getColor();
     }
 
+    @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
                 temp.add(getPos() + offsets[i] * (j + 1));
