@@ -1,8 +1,7 @@
-Running the application prompts the user to input their login information (a username and password) in a login window or sign up. There are two types of users: player and master users. Player users are the normal users of the app, those that play the chess game. Master users are not able to play the game, but they are able to view the login information of all the player users. Once the user logs in the main menu is displayed.
-The sign up window looks like the login window. The user inputs a username and password, the program stores this login information and then displays the main menu. The sign up function only applies for player users, and not master users. 
-There is only one set of master user login information.
+Running the application prompts the user to input their login information (a username and password) in a login window or sign up. There are two types of users: player and master users. Player users are the normal users of the app, those that play the chess game. Master users are not able to play the game, but they are able to view the login information of all the player users, and make edits to this information. Once the user logs in the main menu is displayed.
+The sign up window looks like the login window. The user inputs a username and password, the program stores this login information and then displays the main menu. The login information is stored in a user login information database implemented with SQLite. This database stores usernames and their associated passwords and Elo ratings. The sign up function only creates player users, and not master users. This is because there is only one set of master user login information.
 
-In the main menu for player users, the user is able to choose whether they would like to play against a computer or another player. The user is also able to see their Elo score from the main menu.
+In the main menu for player users, the user is able to choose whether they would like to play against a computer or another player. The user is also able to see their Elo rating from the main menu.
 If the user chooses to play against another player, a login screen is displayed for the other player to input their login information or signup.
 If the user chooses to play against a computer, the game automatically begins.
 If different game modes are implemented in the future, they will be available in the main menu.
@@ -11,7 +10,7 @@ The game contains the pieces (kings, queen, bishop, knight, rook, pawn) and rule
 A user is able to input their move by clicking on a piece and moving it to the desired location. The board checks if this move is legal, and then updates the board to show the move having been made if it is.
 
 If the board is in a win or draw state, the match ends and the program displays the result. In a win state, the program would display which player won. In a draw state, the program would display that the match ended in a draw.
-If the match was against another player, the program then recalculates each player’s Elo rating to reflect the results of the match.
+If the match was against another player, the program then recalculates each player’s Elo rating to reflect the results of the match, and then updates the database to reflect this.
 The user is brought back to the main menu.
 
-In the main menu for master users, the user is able to type in various commands to interact with the player user login information. The master user is able to view the login information and make edits such as adding and deleting users, and editing users’ username, password, and elo rating information.
+In the main menu for master users, the user is able to type in various commands to interact with the player user login information. The master user is able to view the login information and make edits such as adding and deleting users, and editing users’ username, password, and Elo rating information.

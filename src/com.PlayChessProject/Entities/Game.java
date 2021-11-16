@@ -1,17 +1,15 @@
-package Entities;
-
+import javax.swing.*;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-import Entities.Users.User;
+import java.util.TreeMap;
 
 public class Game {
-    private String game_mode;
-    public boolean isWhitesTurn;
+    private String game_mode; //To be used later
     private String textBoardDisplay; //Temporary board display in text
-    private Board board;
+    public Board board;
     private Scanner console;
-    private boolean turn = true;
+    private boolean turn = true; //White = true, Black = false throughout the program
 
     public Game(String game_mode){
         this.game_mode = game_mode;
@@ -45,7 +43,7 @@ public class Game {
     }
 
     //Initializes display for a classic game of chess.
-    private void standardDisplay(){
+    public void standardDisplay(){
         String boardString = toDisplayString();
         System.out.println(boardString);
     }

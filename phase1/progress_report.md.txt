@@ -1,0 +1,42 @@
+Progress report
+	Omar: Started by working on the database but shifted to implementing the second user type. 
+The second user type is meant to interact with the database so this was a natural progression that 
+has been working well. So far there are a lot of open-ended design questions so there’s difficulty 
+deciding the best way to implement the second type of user. The implementation of the different 
+users is still in its early stages, as there are other parts of the program that need to be 
+developed further so that there is a clearer vision of the functions each user must be able to 
+execute.
+
+	Nathaniel: Worked on rules implementation, specifically checking move legality. Having 
+some trouble with the setup of getLegalMoves vs checkMoveLegal but the functions work fundamentally. 
+Victor and I have a bit of duplicate code between the inCheck and getSlidingMoves methods. We’re 
+figuring out the best way to resolve it but recognize the issue. We originally wrote the pieces with 
+both a single integer position and rank and file instance variables. We don’t currently use rank or 
+file and can easily get either from the integer position so we’re considering deleting them entirely.   
+
+	David: Worked on GUI implementation. Currently, GUI can interact with click and drag or command 
+line input, but the backend only parses the command line. Knows how to fix the click and drag issue and 
+it’s just a matter of time. Having slight difficulty with many possible design and implementation 
+decisions, but nothing unmanageable. There are a lot of online resources for Java Swing, but each 
+recommends their own unique implementations, etc and it can be challenging to sort through the many 
+options. Next immediate steps are fixing the click and drag issue and general cleanup of the code. 
+After that I will work on further integration with the login and database, and try to make the 
+interface more visually pleasing (e.g. adding valid move indicators). 
+
+	Snow: Working on database implementation for MongoDB, storing user info, controllers and use 
+cases. Interacting with Omar’s code has worked well because the functions are well segmented and 
+implemented which can be relied on in LoginGUI and registerGUI. Keeping an eye on the implementation 
+on Board and Game whose update might impact on PlayChess use case classes. Had an issue on how our 
+project better interacts with UI and how use case classes work with entities. Learning some online 
+tutorials like SpringMVC and Spring Boot which can connect our project to web. Collaborating with 
+group members to update the implementation of use case classes whenever there is any update in 
+their entities design.
+
+	Victor: I was mainly tasked with working on a functional inCheck method. Had some minor 
+communication issues with Nathaniel, but the issues were resolved. The inCheck method works well 
+with Nathaniel’s code and calls many helper methods to check for each possible piece attacking a 
+King. It is fully functional but needs to be tested for code smells (such as long method). I also 
+created tests for each possible piece that can put the King in check. I had some trouble using 
+Nathaniel’s position system of 0-63, but everything works together now. Next steps will be 
+implementing the final few rules and finishing up the backend of the program, and putting it 
+all together with Nathaniel and the rest of the group. 

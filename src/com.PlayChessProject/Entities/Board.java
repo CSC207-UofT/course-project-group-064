@@ -1,6 +1,3 @@
-package Entities;
-import Entities.Piece;
-
 import java.util.*;
 import java.util.concurrent.TransferQueue;
 
@@ -12,6 +9,7 @@ public class Board {
     private final int[] whitePawnOffsets = {-7, -8, -9};
     private final int[] blackPawnOffsets = {7, 8, 9};
     private int[] lastMove = {0, 0};
+    private boolean turn = true;
 
     private Map<Integer, Piece> piecePositions;
 
@@ -32,7 +30,11 @@ public class Board {
     }
 
     public boolean checkMoveLegal(int origin, int destination) {
+        if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
+            return false;
+        }
         Piece piece = piecePositions.get(origin);
+        //Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
         if (piece instanceof King) {
             return Utils.contains(getKingMoves(origin), destination);
         }
@@ -136,8 +138,8 @@ public class Board {
             if (piece instanceof King) {
                 //declarations for easy access
                 int king_pos = piece.getPos();
-                int king_file = posToFileRank(king_pos)[0];
-                int king_rank = posToFileRank(king_pos)[1];
+                int king_file = piece.getFile();
+                int king_rank = piece.getRank();
                 boolean king_color = piece.getColor();
                 Bishop bishop = new Bishop(king_color, king_file, king_rank);
                 Rook rook = new Rook(king_color, king_file, king_rank);
@@ -183,6 +185,7 @@ public class Board {
             lastMove[0] = origin;
             lastMove[1] = destination;
             move_valid = true;
+            turn = !turn;
         }
         return move_valid;
     }
@@ -283,43 +286,6 @@ public class Board {
             }
         }
         return false;
-    }
-
-    public int[] posToFileRank(int pos){
-        int[] fin = {0, 0};
-        if (pos <= 7) {
-            fin[0] = pos;
-            fin[1] = 7;
-        }
-        if (pos <= 15) {
-            fin[0] = pos - 8;
-            fin[1] = 6;
-        }
-        if (pos <= 23) {
-            fin[0] = pos - 16;
-            fin[1] = 5;
-        }
-        if (pos <= 31) {
-            fin[0] = pos - 24;
-            fin[1] = 4;
-        }
-        if (pos <= 7) {
-            fin[0] = pos - 32;
-            fin[1] = 3;
-        }
-        if (pos <= 15) {
-            fin[0] = pos - 40;
-            fin[1] = 2;
-        }
-        if (pos <= 23) {
-            fin[0] = pos - 48;
-            fin[1] = 1;
-        }
-        if (pos <= 31) {
-            fin[0] = pos - 56;
-            fin[1] = 0;
-        }
-        return fin;
     }
 
     public String returnResult(boolean color) {
