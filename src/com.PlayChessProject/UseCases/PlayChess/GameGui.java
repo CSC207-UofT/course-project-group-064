@@ -1,4 +1,6 @@
-package Entities;
+package UseCases.PlayChess;
+
+import Entities.Game;
 
 import javax.swing.*;
 import java.awt.*;

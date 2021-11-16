@@ -1,4 +1,5 @@
 package Entities;
+
 public class PlayerUser extends User {
     private String name;
     private int elo;
