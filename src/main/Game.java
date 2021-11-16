@@ -1,8 +1,5 @@
-import javax.swing.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 public class Game {
     private String game_mode; //To be used later
@@ -27,7 +24,7 @@ public class Game {
 
     public void updateDisplay(String move){
         //TODO parse move and update display based on new board state.
-        boolean valid = board.makePlayerMove(move, turn);
+        boolean valid = board.makePlayerMove(move);
         if(valid) {
             turn = !turn;
             String boardString = toDisplayString();
