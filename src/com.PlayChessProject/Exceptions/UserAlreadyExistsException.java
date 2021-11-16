@@ -6,4 +6,8 @@ public class UserAlreadyExistsException extends Exception{
     public UserAlreadyExistsException(){
         this.message = "The User Already Exists in the System ><";
     }
+
+    public String getMessage(){
+        return this.message;
+    }
 }

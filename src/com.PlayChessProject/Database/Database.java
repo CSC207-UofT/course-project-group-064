@@ -2,7 +2,7 @@ package Database;
 
 
 import Exceptions.UserAlreadyExistsException;
-import Entities.User;
+import Entities.Users.User;
 
 public interface Database {
 

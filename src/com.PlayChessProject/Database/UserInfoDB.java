@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 
-import Entities.User;
+import Entities.Users.User;
 
 public class UserInfoDB implements Database{
     public static final String DATABASE_NAME = "userinfodatabase.db";

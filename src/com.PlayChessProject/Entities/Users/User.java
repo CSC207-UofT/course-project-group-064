@@ -1,4 +1,4 @@
-package Entities;
+package Entities.Users;
 public class User{
     private String name;
     private int elo;

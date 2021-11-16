@@ -3,12 +3,12 @@ package Database;
 import Exceptions.UserAlreadyExistsException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import Entities.User;
+import Entities.Users.User;
+import com.mongodb.client.MongoIterable;
 import org.bson.Document;
-
-import java.util.Scanner;
 
 public class UserInfoDB2 implements Database{
 
@@ -103,30 +103,30 @@ public class UserInfoDB2 implements Database{
     @Override
     public void addUserInfo(User user, String password) throws UserAlreadyExistsException {
 
-//        MongoCollection mongoCollection = getCollection();
-//
-//        // create the document
-//        Document document = new Document("name", user.getName());
-//
-//        // check if the document with the same username exists already
-//        int res = readUserInfo(user.getName(), password);
-//
-//        if (res != 0){
-//            // the user with the username already exists
-//            throw new UserAlreadyExistsException();
-//        }
-//
-//        String name = user.getName();
-//        int elo = user.getElo();
-//
-//        document.append("name", name);
-//        document.append("password", password);
-//        document.append("elo", elo);
-//
-//        // insert the document to the mongodb
-//        mongoCollection.insertOne(document);
-//
-//        System.out.println("The User Was Inserted Successfully!");
+        MongoCollection mongoCollection = getCollection();
+
+        // create the document
+        Document document = new Document("name", user.getName());
+
+        // check if the document with the same username exists already
+        boolean res = checkUserExistence(user.getName());
+
+        if (res){
+            // the user with the username already exists
+            throw new UserAlreadyExistsException();
+        }
+
+        String name = user.getName();
+        int elo = user.getElo();
+
+        document.append("name", name);
+        document.append("password", password);
+        document.append("elo", elo);
+
+        // insert the document to the mongodb
+        mongoCollection.insertOne(document);
+
+        System.out.println("The User Was Inserted Successfully!");
 
     }
 
@@ -137,7 +137,23 @@ public class UserInfoDB2 implements Database{
 
     @Override
     public boolean checkUserExistence(String username) {
+        MongoClient mongoClient = connect();
+
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Document document = new Document("name", username);
+
+        Object res = collection.find(document).first();
+
+        if (res != null) {
+            // the username exists
+            return true;
+        }
+
+        // the username does not exist
         return false;
+
     }
 
     @Override
@@ -152,6 +168,22 @@ public class UserInfoDB2 implements Database{
 
     @Override
     public boolean checkUserPassword(String username, String password) {
+        MongoClient mongoClient = connect();
+
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Document document = new Document("name", username);
+        document.append("password", password);
+
+        Object res = collection.find(document).first();
+
+        if (res != null) {
+            // the username exists
+            return true;
+        }
+
+        // the username does not exist
         return false;
     }
 

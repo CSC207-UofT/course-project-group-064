@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import Entities.User;
+import Entities.Users.User;
 
 
 public class RegisterGUI implements ActionListener{
@@ -97,12 +97,32 @@ public class RegisterGUI implements ActionListener{
         String password = new String (((JPasswordField) c).getPassword());
 
         Database database = new UserInfoDB2();
+        String msg = "";
         try {
             database.addUserInfo(new User(username, "0"), password);
+            msg = "The User Successfully Registered!";
 
         } catch (UserAlreadyExistsException ex) {
-            ex.printStackTrace();
+            msg = ex.getMessage();
         }
+
+        // check if there is a resultLabel in the jPanel
+        try {
+            Component x = jPanel.getComponent(5);
+            // a. there is an existing JLabel
+            ((JLabel) x).setText(msg);
+        }catch (IndexOutOfBoundsException ee) {
+            // b. not exists -> create a JLabel for the login_info
+            JLabel resultLabel = new JLabel(msg);
+            resultLabel.setBounds(70,150,300,25);
+
+            jPanel.add(resultLabel, 5);
+        };
+
+
+        // display the updated Jframe
+        this.close();
+        this.run();
 
     }
 

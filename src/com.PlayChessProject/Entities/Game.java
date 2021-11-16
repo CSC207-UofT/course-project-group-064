@@ -2,7 +2,8 @@ package Entities;
 
 import java.util.Map;
 import java.util.Scanner;
-import Entities.Board;
+
+import Entities.Users.User;
 
 public class Game {
     private String game_mode;
