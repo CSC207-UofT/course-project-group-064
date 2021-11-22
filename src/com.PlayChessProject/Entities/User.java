@@ -14,12 +14,20 @@ public class User{
         this.password = password;
     }
 
+    public User(){};
+
     public User(String username){
         this.name = username;
     }
 
     public User(String username, int elo){
         this.name = username;
+        this.elo = elo;
+    }
+
+    public User(String username, String password, int elo){
+        this.name = username;
+        this.password = password;
         this.elo = elo;
     }
 

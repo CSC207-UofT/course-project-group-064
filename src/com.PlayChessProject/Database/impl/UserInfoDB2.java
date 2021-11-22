@@ -1,15 +1,18 @@
-package Database;
+package Database.impl;
 
+import Database.Database;
 import Entities.PlayerUser;
 import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-public class UserInfoDB2 implements Database{
+public class UserInfoDB2 implements Database {
+    private FindIterable result;
 
 //    public static void main(String[] args) throws UserAlreadyExistsException {
 //
@@ -184,6 +187,26 @@ public class UserInfoDB2 implements Database{
 
         // the username does not exist
         return false;
+    }
+
+    public User getUser(String username){
+        MongoClient mongoClient = connect();
+
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Document document = new Document("name", username);
+        FindIterable<Document> results = collection.find(document);
+
+        String password = "";
+        int elo = 0;
+        for (Document res: results) {
+            password = (String) res.get("password");
+            elo = Integer.valueOf((String) res.get("elo"));
+        }
+
+        return new User(username, password, elo);
+
     }
 
 }
