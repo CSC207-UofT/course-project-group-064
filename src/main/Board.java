@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.TransferQueue;
 
 public class Board {
     private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
@@ -34,7 +33,13 @@ public class Board {
             return false;
         }
         Piece piece = piecePositions.get(origin);
-        //Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
+        Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
+        piecePositions.remove(destination);
+        piecePositions.put(destination, piecePositions.remove(origin));
+        if (inCheck()){
+            return false;
+        }
+        piecePositions = shallowPiecePositions;
         if (piece instanceof King) {
             return Utils.contains(getKingMoves(origin), destination);
         }
@@ -133,9 +138,9 @@ public class Board {
     }
 
     //checks if given board state is in check
-    public String inCheck(Board board) {
-        for (Piece piece : board.piecePositions.values()) {
-            if (piece instanceof King) {
+    public boolean inCheck() {
+        for (Piece piece : piecePositions.values()) {
+            if (piece instanceof King && piece.getColor() == turn) {
                 //declarations for easy access
                 int king_pos = piece.getPos();
                 int king_file = piece.getFile();
@@ -145,29 +150,27 @@ public class Board {
                 Rook rook = new Rook(king_color, king_file, king_rank);
                 Queen queen = new Queen(king_color, king_file, king_rank);
                 //check pawns
+                int pawnOffset1 = king_color ? 7 : -7;
+                int pawnOffset2 = king_color ? 9 : -9;
                 for (int move : piece.getValidMoves()) {
-                    if (king_color && (piecePositions.get(move) instanceof Pawn && (move == (king_pos - 9) ||
-                            move == (king_pos - 7)) && !piecePositions.get(move).getColor())) {
-                        return returnResult(true);
-                    }
-                    if (!king_color && (piecePositions.get(move) instanceof Pawn &&(move == (king_pos + 9) ||
-                            move == (king_pos + 7)) &&  piecePositions.get(move).getColor())) {
-                        return returnResult(false);
+                    if ((piecePositions.get(move) instanceof Pawn && (move == (king_pos - pawnOffset2) ||
+                            move == (king_pos - pawnOffset1)) && piecePositions.get(move).getColor() != king_color)) {
+                        return true;
                     }
                 }
                 //check for bishop, rook, queen, knight, king
                 if (checkSliding(king_color, king_pos, bishop) || checkSliding(king_color, king_pos, rook) ||
                         checkSliding(king_color, king_pos, queen) || checkKnights(king_color, king_file, king_rank) ||
                         checkKing(king_color, piece)) {
-                    return returnResult(king_color);
+                    return true;
                 }
 
             }
         }
-        return "";
+        return false;
     }
 
-    public boolean makePlayerMove(String move, boolean color) {
+    public boolean makePlayerMove(String move) {
         //TODO Once the player inputs a move through the CLI and it's determined legal,
         // adjust piece position and prompt game to update position
 
@@ -288,13 +291,8 @@ public class Board {
         return false;
     }
 
-    public String returnResult(boolean color) {
-        if (!color){
-            return "black";
-        }
-        else {
-            return "white";
-        }
+    private void promote(int origin, int destination){
+
     }
 }
 
