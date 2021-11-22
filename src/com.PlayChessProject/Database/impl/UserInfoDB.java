@@ -1,4 +1,4 @@
-package Database;
+package Database.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,9 +7,10 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 
+import Database.Database;
 import Entities.PlayerUser;
 
-public class UserInfoDB implements Database{
+public class UserInfoDB implements Database {
     public static final String DATABASE_NAME = "userinfodatabase.db";
     public static final String TABLE_NAME = "userinformation";
 

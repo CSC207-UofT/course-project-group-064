@@ -1,7 +1,5 @@
 package UseCases.RegisterLogin;
 
-import Database.UserInfoDB;
-
 import ReadWriter.ReadWriter;
 
 public class LoginUseCase {

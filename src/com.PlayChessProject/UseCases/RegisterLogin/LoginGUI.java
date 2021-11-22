@@ -1,6 +1,7 @@
 package UseCases.RegisterLogin;
 
 import Database.*;
+import Database.impl.UserInfoDB2;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -146,7 +147,7 @@ public class LoginGUI implements ActionListener{
     }
 
     private LoginUseCase.LoginResult logIn(String username, String password) {
-        Database database  = new UserInfoDB2();
+        Database database  = new UserInfoDB2();     // Dependency Injection!!!
         boolean res = database.checkUserExistence(username);
 
         boolean res2 = database.checkUserPassword(username, password);

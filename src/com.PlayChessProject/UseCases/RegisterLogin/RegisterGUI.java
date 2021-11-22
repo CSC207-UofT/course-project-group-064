@@ -1,10 +1,9 @@
 package UseCases.RegisterLogin;
 
 import Entities.PlayerUser;
-import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import Database.Database;
-import Database.UserInfoDB2;
+import Database.impl.UserInfoDB2;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
