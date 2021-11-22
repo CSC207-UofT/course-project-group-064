@@ -150,10 +150,11 @@ public class Board {
                 Rook rook = new Rook(king_color, king_file, king_rank);
                 Queen queen = new Queen(king_color, king_file, king_rank);
                 //check pawns
+                int pawnOffset1 = king_color ? 7 : -7;
+                int pawnOffset2 = king_color ? 9 : -9;
                 for (int move : piece.getValidMoves()) {
-                    if ((piecePositions.get(move) instanceof Pawn && (move == (king_pos - 9) ||
-                            move == (king_pos - 7) || move == (king_pos + 9) || move == (king_pos + 7))
-                            && piecePositions.get(move).getColor() != king_color)) {
+                    if ((piecePositions.get(move) instanceof Pawn && (move == (king_pos - pawnOffset2) ||
+                            move == (king_pos - pawnOffset1)) && piecePositions.get(move).getColor() != king_color)) {
                         return true;
                     }
                 }
@@ -288,6 +289,10 @@ public class Board {
             }
         }
         return false;
+    }
+
+    private void promote(int origin, int destination){
+
     }
 }
 
