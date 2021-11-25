@@ -19,6 +19,14 @@ public class BoardTest {
     }
 
     @Test(timeout = 50)
+    public void TestGetMoves(){
+        int[][] moves = board.getLegalMoves();
+        int[][] equalArray = {{48, 40, 32}, {49, 41, 33}, {50, 42, 34}, {51, 43, 35}, {52, 44, 36}, {53, 45, 37},
+                {54, 46, 38}, {55, 47, 39}, {56}, {57, 40, 42}, {58}, {59}, {60}, {61}, {62, 45, 47}, {63}};
+        assertArrayEquals(moves, equalArray);
+    }
+
+    @Test(timeout = 50)
     public void TestLegal(){
         assertTrue(board.makePlayerMove("e2,e4"));
         assertTrue(board.makePlayerMove("e7,e5"));

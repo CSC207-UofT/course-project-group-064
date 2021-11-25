@@ -20,37 +20,60 @@ public class Board {
         }
     }
 
-    public void getLegalMoves(boolean turn) {
-        //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
-        //for piece in piecePositions, if color matches turn (maybe hold pieces of different
-        //colors in different arrays
-        //get legal moves for piece's type, check that each move doesn't lead to
-        //check for turn player
+    public int[][] getLegalMoves() {
+        /*Returns every legal move that can be made on this turn. The returned 2d array is a list of every move that
+        * can be made by the pieces currently availible to the active player. The first element of each piece's move
+        * array is the piece's current position.*/
+        int[][] moves = new int[16][];
+        int index = 0;
+        HashMap<Integer, Piece> tempPositions = new HashMap<>(piecePositions);
+        for(int key : tempPositions.keySet()){
+            Piece piece = piecePositions.get(key);
+            if(piece.getColor() == turn) {
+                moves[index] = pieceTypeMoves(piece);
+                index++;
+            }
+        }
+        return moves;
     }
 
     public boolean checkMoveLegal(int origin, int destination) {
         if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
             return false;
         }
-        Piece piece = piecePositions.get(origin);
-        Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
-        piecePositions.remove(destination);
-        piecePositions.put(destination, piecePositions.remove(origin));
-        if (inCheck()){
-            return false;
+        int[] moves = pieceTypeMoves(piecePositions.get(origin));
+        return Utils.contains(moves, destination);
+    }
+
+    public int[] pieceTypeMoves(Piece piece){
+        /*Helper method that returns a piece's legal moves regardless of type with the first element of the returned
+        * array being the piece's starting position.*/
+        int[] pseudoMoves; //Pseudo legal moves before check and mate checks
+        int position = piece.getPos();
+        if (piece instanceof Pawn){
+            pseudoMoves = getPawnMoves(position);
         }
-        piecePositions = shallowPiecePositions;
-        if (piece instanceof King) {
-            return Utils.contains(getKingMoves(origin), destination);
+        else if (piece instanceof King){
+            pseudoMoves = getKingMoves(position);
         }
-        if (piece instanceof Pawn) {
-            return Utils.contains(getPawnMoves(origin), destination);
+        else if (piece instanceof Knight){
+            pseudoMoves = getKnightMoves(position);
         }
-        if (piece instanceof Knight) {
-            return Utils.contains(getKnightMoves(origin), destination);
-        } else {
-            return Utils.contains(getSlidingMoves(origin), destination);
+        else{
+            pseudoMoves = getSlidingMoves(position);
         }
+        ArrayList<Integer> moves = new ArrayList<>();
+        moves.add(piece.getPos());
+        for (int move : pseudoMoves){
+            Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
+            piecePositions.remove(move);
+            piecePositions.put(move, piecePositions.remove(position));
+            if (!inCheck()){
+                moves.add(move);
+            }
+            piecePositions = shallowPiecePositions;
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
     }
 
     //TODO make private once inside bigger method
@@ -218,11 +241,11 @@ public class Board {
         piecePositions.put(7, new Rook(false, 7, 7));
         //White Pawns
         for (int i = 48; i < 56; i++) {
-            piecePositions.put(i, new Pawn(true, i - 8, 6));
+            piecePositions.put(i, new Pawn(true, i % 8, 1));
         }
         //Black Pawns
         for (int i = 8; i < 16; i++) {
-            piecePositions.put(i, new Pawn(false, i - 40, 0));
+            piecePositions.put(i, new Pawn(false, i % 8, 6));
         }
     }
 
