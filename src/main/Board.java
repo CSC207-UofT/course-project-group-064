@@ -14,7 +14,6 @@ public class Board {
 
     public Board(String gameMode) {
         this.piecePositions = new HashMap<>();
-        //TODO implement constructor
         if (gameMode.equals("Standard")) {
             standardPieceArangement();
         }
@@ -211,7 +210,13 @@ public class Board {
             lastMove[0] = origin;
             lastMove[1] = destination;
             move_valid = true;
+            if (piecePositions.get(origin) instanceof Pawn && (destination >= 56 || destination <= 7)){
+                piecePositions.remove(destination);
+                piecePositions.put(destination, new Queen(turn, destination % 8, 7 -
+                        ((destination - (destination % 8)) / 8)));
+            }
             turn = !turn;
+
         }
         return move_valid;
     }
