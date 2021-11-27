@@ -1,5 +1,5 @@
 package Entities;
-public class PlayerUser extends User {
+public class PlayerUser extends User{
     private String name;
     private int elo;
 
@@ -11,16 +11,15 @@ public class PlayerUser extends User {
         this.elo = elo;
     }
 
-    // TODO: do we have a default elo score?
     public PlayerUser(String username) {
         super(username);
-        this.elo = 0;
+        this.elo = 1000;
     }
 
     public int getElo(){
         return this.elo;
     }
-    public void updateElo(int new_elo){
-        this.elo = new_elo;
+    public void setElo(int newElo){
+        super.setElo(newElo);
     }
 }

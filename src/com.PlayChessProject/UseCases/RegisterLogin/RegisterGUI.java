@@ -1,7 +1,6 @@
 package UseCases.RegisterLogin;
 
 import Entities.PlayerUser;
-import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import Database.Database;
 import Database.UserInfoDB2;

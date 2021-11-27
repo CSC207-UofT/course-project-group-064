@@ -2,7 +2,6 @@ package Database;
 
 
 import Entities.PlayerUser;
-import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 
 

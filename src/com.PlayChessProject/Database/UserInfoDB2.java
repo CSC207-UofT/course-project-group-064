@@ -1,7 +1,6 @@
 package Database;
 
 import Entities.PlayerUser;
-import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;

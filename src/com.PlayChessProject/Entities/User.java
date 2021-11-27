@@ -40,7 +40,7 @@ public class User{
     public void setElo(int newElo) {
         this.elo = newElo;
         if (this.games==10){
-            kFactor = 10
+            kFactor = 10;
         }
         this.games++;
     }

@@ -1,8 +1,5 @@
 package Entities;
 
-import java.lang.Math.*;
-import java.util.HashMap;
-
 public class Utils {
     public static final int[][] NUMSQUARESTOEDGE = fillNumSquares();
 
@@ -53,12 +50,12 @@ public class Utils {
 
         //Winner
         //Use inflated k factor for players with fewer than 10 games played
-        finalWinnerElo = winnerElo + winner.kFactor * (1 - adjustedDifference(winnerElo, loserElo));
-        winner.setElo(finalWinnerElo);
+        finalWinnerElo = winnerElo + winner.getkFactor() * (1 - adjustedDifference(winnerElo, loserElo));
+        winner.setElo((int)finalWinnerElo);
 
         //Loser
-        finalLoserElo = loserElo + loser.kFactor * (0 - adjustedDifference(loserElo, winnerElo));
-        loser.setElo(finalLoserElo);
+        finalLoserElo = loserElo + loser.getkFactor() * (0 - adjustedDifference(loserElo, winnerElo));
+        loser.setElo((int)finalLoserElo);
     }
 
     //First Part of Calculation
