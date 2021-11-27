@@ -42,4 +42,33 @@ public class Utils {
         }
         return false;
     }
+
+    public static void calcElo(User winner, User loser) {
+        // calculate change in elo for winner and loser
+        // winner and loser elo
+        double winnerElo = winner.getElo();
+        double loserElo = loser.getElo();
+        double finalWinnerElo = winnerElo;
+        double finalLoserElo = loserElo;
+
+        //Winner
+        //Use inflated k factor for players with fewer than 10 games played
+        finalWinnerElo = winnerElo + winner.kFactor * (1 - adjustedDifference(winnerElo, loserElo));
+        winner.setElo(finalWinnerElo);
+
+        //Loser
+        finalLoserElo = loserElo + loser.kFactor * (0 - adjustedDifference(loserElo, winnerElo));
+        loser.setElo(finalLoserElo);
+    }
+
+    //First Part of Calculation
+    public static double adjustedDifference(double elo1, double elo2) {
+        double exp1 = elo1/400.0;
+        double exp2 = elo2/400.0;
+        double num = Math.pow(10, exp1);
+        double den1 = Math.pow(10, exp1);
+        double den2 = Math.pow(10, exp2);
+        double den = den1+den2;
+        return num / den;
+    }
 }

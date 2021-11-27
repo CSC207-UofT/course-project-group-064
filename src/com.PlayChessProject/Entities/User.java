@@ -7,11 +7,15 @@ public class User{
     private String password;
 
     private int elo;
+    private int kFactor;
+    private int games;
 
     // TODO: do we have a default elo score?
     public User(String username, String password){
         this.name = username;
         this.password = password;
+        this.kFactor = 50;
+        this.games = 0;
     }
 
     public User(String username){
@@ -31,5 +35,17 @@ public class User{
 
     public int getElo(){
         return this.elo;
+    }
+
+    public void setElo(int newElo) {
+        this.elo = newElo;
+        if (this.games==10){
+            kFactor = 10
+        }
+        this.games++;
+    }
+
+    public int getkFactor(){
+        return this.kFactor;
     }
 }
