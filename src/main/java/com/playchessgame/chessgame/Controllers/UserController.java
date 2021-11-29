@@ -22,8 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/register")
-    public String getRegisterRegular(Model model){
-        //model.addAttribute("isuserexist", "no");
+    public String getRegister(Model model){
         model.addAttribute("user", new PlayerUser());
         return "addUser";
     }
@@ -52,26 +51,18 @@ public class UserController {
 
     }
 
-    @GetMapping("/login?type=0")
-    public String getLoginRegular(Model model){
-        //model.addAttribute("isuserexist", "no");
+    @GetMapping("/login")
+    public String getLogin(Model model){
         model.addAttribute("user", new PlayerUser());
         return "login";
     }
 
-    @GetMapping("/login?type=1")
-    public String getLoginMaster(Model model){
-        //model.addAttribute("isuserexist", "no");
-        model.addAttribute("user", new MasterUser());
-        return "login";
-    }
-
-    @PostMapping("/login?type=0")
-    public String loginRegular(@ModelAttribute(value="user") PlayerUser user, Model model) {
+    @PostMapping("/login")
+    public String login(@ModelAttribute(value="user") PlayerUser user, Model model) {
 
         if (userService.checkUserExistence(user)) {
             model.addAttribute("student", user);
-            model.addAttribute("message", "sss");
+            model.addAttribute("message", "success");
             return "userinfo";
         }
 
@@ -80,21 +71,5 @@ public class UserController {
         return "login";
 
     }
-
-    @PostMapping("/login?type=1")
-    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
-
-        if (userService.checkUserExistence(user)) {
-            model.addAttribute("student", user);
-            model.addAttribute("message", "sss");
-            return "userinfo";
-        }
-
-        model.addAttribute("user", new PlayerUser());
-        model.addAttribute("message", "Username or password is not correct, please try again!");
-        return "login";
-
-    }
-
 
 }

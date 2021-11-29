@@ -58,7 +58,7 @@ public class UserInfoDB implements Database {
      * @param user The user whose information is being inserted
      */
     @Override
-    public void addUserInfo(User user) {
+    public void addUserInfo(PlayerUser user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
@@ -101,7 +101,7 @@ public class UserInfoDB implements Database {
      * @return A true or false value based on whether the user is already in the SQLite database and table
      */
     @Override
-    public boolean checkUserExistence(User user) {
+    public boolean checkUserExistence(PlayerUser user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
 
@@ -177,7 +177,8 @@ public class UserInfoDB implements Database {
         }
     }
 
-    public boolean checkUserPassword(String username, String password){
+    //TODO: to take a look at it
+    public boolean checkUserPassword(PlayerUser user, String password){
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
 

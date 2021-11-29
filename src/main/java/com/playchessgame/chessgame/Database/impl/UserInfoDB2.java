@@ -119,7 +119,7 @@ public class UserInfoDB2 implements Database {
      * @param user
      */
     @Override
-    public void addUserInfo(User user) throws UserAlreadyExistsException {
+    public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
 
         if (checkUserNameExistence(user)){
             throw new UserAlreadyExistsException();
@@ -141,26 +141,16 @@ public class UserInfoDB2 implements Database {
 
     @Override
     public void deleteUserInfo(PlayerUser user) {
-        MongoClient mongoClient = connect();
-
-        MongoDatabase database = mongoClient.getDatabase("MongoDB");
-        MongoCollection collection = database.getCollection("ChessGameUsers");
+        MongoCollection mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
-        collection.deleteOne(filter);
+        mongoCollection.deleteOne(filter);
     }
 
     @Override
-    public boolean checkUserExistence(User user) {
+    public boolean checkUserExistence(PlayerUser user) {
 
         MongoCollection collection = getCollection();
-
-        if (user instanceof MasterUser) {
-            if (user.getName() == "masterusername" && user.getPassword() == "masteruserpassword"){
-                return true;
-            }
-            return false;
-        }
 
         Document document = new Document("name", user.getName());
         document.append("password", user.getPassword());
@@ -179,41 +169,34 @@ public class UserInfoDB2 implements Database {
 
     @Override
     public void updateUserPassword(PlayerUser user, String newPassword) {
-        MongoClient mongoClient = connect();
-
-        MongoDatabase database = mongoClient.getDatabase("MongoDB");
-        MongoCollection collection = database.getCollection("ChessGameUsers");
+        MongoCollection mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
         Bson passwordUpdate = set("password", newPassword);
 
-        collection.updateOne(filter, passwordUpdate);
+        mongoCollection.updateOne(filter, passwordUpdate);
     }
 
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) {
-        MongoClient mongoClient = connect();
 
-        MongoDatabase database = mongoClient.getDatabase("MongoDB");
-        MongoCollection collection = database.getCollection("ChessGameUsers");
+        MongoCollection mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
         Bson eloUpdate = set("elo", newElo);
 
-        collection.updateOne(filter, eloUpdate);
+        mongoCollection.updateOne(filter, eloUpdate);
     }
 
     @Override
-    public boolean checkUserPassword(String username, String password) {
-        MongoClient mongoClient = connect();
+    public boolean checkUserPassword(PlayerUser user, String password) {
 
-        MongoDatabase database = mongoClient.getDatabase("MongoDB");
-        MongoCollection collection = database.getCollection("ChessGameUsers");
+        MongoCollection mongoCollection = getCollection();
 
-        Document document = new Document("name", username);
+        Document document = new Document("name", user.getName());
         document.append("password", password);
 
-        Object res = collection.find(document).first();
+        Object res = mongoCollection.find(document).first();
 
         if (res != null) {
             // the username exists
@@ -242,7 +225,7 @@ public class UserInfoDB2 implements Database {
 
     }
 
-    private boolean checkUserNameExistence(User user){
+    private boolean checkUserNameExistence(PlayerUser user){
         MongoCollection mongoCollection = getCollection();
         Document document = new Document();
         document.append("name", user.getName());

@@ -100,7 +100,7 @@ public class UserInfoDB2 implements Database{
     }
 
     @Override
-    public void addUserInfo(PlayerUser user, String password) throws UserAlreadyExistsException {
+    public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
 
         MongoCollection mongoCollection = getCollection();
 
