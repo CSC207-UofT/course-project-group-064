@@ -34,7 +34,7 @@ public class UserServiceImpl1 implements UserService {
      */
     @Override
     @Transactional
-    public boolean checkUserExistence(PlayerUser user){
+    public boolean checkUserExistence(User user){
         return this.database.checkUserExistence(user);
     }
 }

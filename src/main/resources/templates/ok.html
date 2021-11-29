@@ -5,6 +5,9 @@
     <title>Register Success</title>
 </head>
 <body>
-    You Have Registered Successfully!
+    You Have Registered Successfully!</br>
+    <form th:action="@{/login}" th:method="get">
+        <input type="submit", value="login">
+    </form>
 </body>
 </html>

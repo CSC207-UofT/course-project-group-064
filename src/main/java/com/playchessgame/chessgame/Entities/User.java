@@ -35,6 +35,10 @@ public class User{
         return this.name;
     }
 
+    public String getPassword(){
+        return this.name;
+    }
+
     public boolean passwordMatch(String password) {return this.password.matches(password);}
 
     public int getElo(){

@@ -28,19 +28,8 @@ public class PageController {
         return "userinfo";
     }
 
-    @RequestMapping("/register")
-    public String getRegister(Model model){
-        //model.addAttribute("isuserexist", "no");
-        model.addAttribute("user", new PlayerUser());
-        return "addUser";
-    }
 
-//    @GetMapping("/login")
-//    public String getLogin(Model model){
-//        //model.addAttribute("isuserexist", "no");
-//        model.addAttribute("user", new PlayerUser());
-//        return "login";
-//    }
+
 
     @RequestMapping("/ok")
     public String getRegisterOK(){

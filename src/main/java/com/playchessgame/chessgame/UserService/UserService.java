@@ -16,5 +16,5 @@ public interface UserService {
      * @param user: a user of the game
      * @return true if the user exists or false if the user does not exist
      */
-    public boolean checkUserExistence(PlayerUser user);
+    public boolean checkUserExistence(User user);
 }

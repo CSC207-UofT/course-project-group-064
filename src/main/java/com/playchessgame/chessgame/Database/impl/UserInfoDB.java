@@ -2,6 +2,7 @@ package com.playchessgame.chessgame.Database.impl;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
+import com.playchessgame.chessgame.Entities.User;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -57,7 +58,7 @@ public class UserInfoDB implements Database {
      * @param user The user whose information is being inserted
      */
     @Override
-    public void addUserInfo(PlayerUser user) {
+    public void addUserInfo(User user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
@@ -100,7 +101,7 @@ public class UserInfoDB implements Database {
      * @return A true or false value based on whether the user is already in the SQLite database and table
      */
     @Override
-    public boolean checkUserExistence(PlayerUser user) {
+    public boolean checkUserExistence(User user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
 
