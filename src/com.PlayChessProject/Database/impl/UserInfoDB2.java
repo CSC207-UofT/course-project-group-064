@@ -1,23 +1,15 @@
-package Database.impl;
+package Database;
 
-import Database.Database;
 import Entities.PlayerUser;
+import Entities.User;
 import Exceptions.UserAlreadyExistsException;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public class UserInfoDB2 implements Database {
-    private FindIterable result;
-
-    @Autowired
-    private ApplicationContext applicationContext;
+public class UserInfoDB2 implements Database{
 
 //    public static void main(String[] args) throws UserAlreadyExistsException {
 //
@@ -82,18 +74,18 @@ public class UserInfoDB2 implements Database {
 
     // get connection to mongodb
     private MongoClient connect(){
-
-        return (MongoClient) applicationContext.getBean("mongoclient");
+        String uri = "mongodb+srv://kaixinrongzi:kaixinrongzi123456@cluster0.c8qyn.mongodb.net/test";
+        MongoClientURI mongoClientURI = new MongoClientURI(uri);
+        MongoClient mongoClient = new MongoClient(mongoClientURI);
+        System.out.println("MongoDB connected");
+        return mongoClient;
     }
 
     private MongoCollection getCollection(){
-
         MongoClient mongoClient = connect();
-
         MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
-        MongoCollection mongoCollection = mongoDatabase.getCollection("ChessGameUsers");
 
-        return mongoCollection;
+        return mongoDatabase.getCollection("ChessGameUsers");
 
     }
 
@@ -107,25 +99,30 @@ public class UserInfoDB2 implements Database {
         System.out.println("Collection created successfully");
     }
 
-
-    /**
-     * Add an User to database: an User instance
-     * @param user
-     */
     @Override
-    public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
-
-        if (checkUserExistence(user)){
-            throw new UserAlreadyExistsException();
-        }
+    public void addUserInfo(PlayerUser user, String password) throws UserAlreadyExistsException {
 
         MongoCollection mongoCollection = getCollection();
 
-        Document document = new Document();
-        document.append("name", user.getName());
-        document.append("password", user.getPassword());
-        document.append("elo", 0);
+        // create the document
+        Document document = new Document("name", user.getName());
 
+        // check if the document with the same username exists already
+        boolean res = checkUserExistence(user.getName());
+
+        if (res){
+            // the user with the username already exists
+            throw new UserAlreadyExistsException();
+        }
+
+        String name = user.getName();
+        int elo = user.getElo();
+
+        document.append("name", name);
+        document.append("password", password);
+        document.append("elo", elo);
+
+        // insert the document to the mongodb
         mongoCollection.insertOne(document);
 
         System.out.println("The User Was Inserted Successfully!");
@@ -138,12 +135,13 @@ public class UserInfoDB2 implements Database {
     }
 
     @Override
-    public boolean checkUserExistence(PlayerUser user) {
+    public boolean checkUserExistence(String username) {
+        MongoClient mongoClient = connect();
 
-        MongoCollection collection = getCollection();
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
 
-        Document document = new Document("name", user.getName());
-        document.append("password", user.getPassword());
+        Document document = new Document("name", username);
 
         Object res = collection.find(document).first();
 
@@ -186,24 +184,6 @@ public class UserInfoDB2 implements Database {
 
         // the username does not exist
         return false;
-    }
-
-    public PlayerUser getUser(String username){
-        MongoCollection mongoCollection = getCollection();
-
-        Document document = new Document("username", username);
-        FindIterable<Document> results = mongoCollection.find(document);
-
-        String password = "";
-        int elo = 0;
-        for (Document res: results) {
-            password = (String) res.get("password");
-            elo = Integer.valueOf((String) res.get("elo"));
-        }
-
-        //TODO: to implement
-        return new PlayerUser();
-
     }
 
 }
