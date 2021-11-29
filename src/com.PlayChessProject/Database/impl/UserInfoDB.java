@@ -1,12 +1,6 @@
 package Database.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-
+import java.sql.*;
 import Database.Database;
 import Entities.PlayerUser;
 
@@ -59,14 +53,13 @@ public class UserInfoDB implements Database {
      * Adds the specified player user's information into the SQLite database and table.
      *
      * @param user The user whose information is being inserted
-     * @param password The user's password
      */
     @Override
-    public void addUserInfo(PlayerUser user, String password) {
+    public void addUserInfo(PlayerUser user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
-                    "VALUES (" + user.getName() + ", " + password + ", " + user.getElo() + " );";
+                    "VALUES (" + user.getName() + ", " + user.getPassword() + ", " + user.getElo() + " );";
             statement.executeUpdate(sql);
             conn.commit();
         }
@@ -100,19 +93,19 @@ public class UserInfoDB implements Database {
     /**
      * Checks if the specified player user is already in the SQLite database and table.
      *
-     * @param username The user whose existence is being checked
+     * @param user
      *
      * @return A true or false value based on whether the user is already in the SQLite database and table
      */
     @Override
-    public boolean checkUserExistence(String username) {
+    public boolean checkUserExistence(PlayerUser user) {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
 
             String sql = "SELECT username FROM " + TABLE_NAME;
             try (ResultSet rs    = statement.executeQuery(sql)) {
                 while (rs.next()) {
-                    if (this.compareUsernames(username, rs.getString("username"))) {
+                    if (this.compareUsernames(user.getPassword(), rs.getString("username"))) {
                         return true;
                     }
                 }

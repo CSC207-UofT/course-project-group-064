@@ -1,6 +1,6 @@
 package Entities;
 
-public class User{
+public class User {
     private String name;
 
     // TODO: should we add password to the User?

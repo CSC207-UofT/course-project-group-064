@@ -4,16 +4,15 @@ package Database;
 import Entities.PlayerUser;
 import Exceptions.UserAlreadyExistsException;
 
-
 public interface Database {
 
     public void createNewDatabase();
 
-    public void addUserInfo(PlayerUser user, String password) throws UserAlreadyExistsException;
+    public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException;
 
     public void deleteUserInfo(PlayerUser user);
 
-    public boolean checkUserExistence(String username);
+    public boolean checkUserExistence(PlayerUser user);
 
     public void updateUserPassword(PlayerUser user, String newPassword);
 
