@@ -1,20 +1,22 @@
 package com.playchessgame.chessgame.Database.impl;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.playchessgame.chessgame.ContextService.ApplicationContextProvider;
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Entities.User;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 
 @Repository
 public class UserInfoDB2 implements Database {
@@ -139,7 +141,13 @@ public class UserInfoDB2 implements Database {
 
     @Override
     public void deleteUserInfo(PlayerUser user) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Bson filter = eq("name", user.getName());
+        collection.deleteOne(filter);
     }
 
     @Override
@@ -171,12 +179,28 @@ public class UserInfoDB2 implements Database {
 
     @Override
     public void updateUserPassword(PlayerUser user, String newPassword) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Bson filter = eq("name", user.getName());
+        Bson passwordUpdate = set("password", newPassword);
+
+        collection.updateOne(filter, passwordUpdate);
     }
 
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+
+        Bson filter = eq("name", user.getName());
+        Bson eloUpdate = set("elo", newElo);
+
+        collection.updateOne(filter, eloUpdate);
     }
 
     @Override
