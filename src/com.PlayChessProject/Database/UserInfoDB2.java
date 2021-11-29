@@ -8,6 +8,7 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class UserInfoDB2 implements Database{
 
@@ -131,7 +132,13 @@ public class UserInfoDB2 implements Database{
 
     @Override
     public void deleteUserInfo(PlayerUser user) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+        
+        Bson filter = eq("name", user.getName());
+        collection.deleteOne(filter);
     }
 
     @Override
@@ -157,12 +164,28 @@ public class UserInfoDB2 implements Database{
 
     @Override
     public void updateUserPassword(PlayerUser user, String newPassword) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+        
+        Bson filter = eq("name", user.getName());
+        Bson passwordUpdate = set("password", newPassword);
+
+        collection.updateOne(filter, passwordUpdate);
     }
 
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) {
+        MongoClient mongoClient = connect();
 
+        MongoDatabase database = mongoClient.getDatabase("MongoDB");
+        MongoCollection collection = database.getCollection("ChessGameUsers");
+        
+        Bson filter = eq("name", user.getName());
+        Bson eloUpdate = set("elo", newElo);
+
+        collection.updateOne(filter, eloUpdate);
     }
 
     @Override
