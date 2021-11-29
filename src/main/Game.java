@@ -24,18 +24,28 @@ public class Game {
 
     public void updateDisplay(String move){
         //TODO parse move and update display based on new board state.
-        boolean valid = board.makePlayerMove(move);
-        if(valid) {
+        int valid = board.makePlayerMove(move);
+        if(valid == Board.LEGAL) {
             turn = !turn;
             String boardString = toDisplayString();
             System.out.println(boardString);
+        }
+        else if (valid == Board.CHECKMATE){
+            endGame(true);
+        }
+        else if (valid == Board.STALEMATE){
+            endGame(false);
         }
         else {
             System.out.println("Illegal move, please input a legal move");
         }
     }
 
-    public void calculateElo(boolean game_result, User white, User black){
+    /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
+     * if passed false the game ended in a draw*/
+    public void endGame(boolean result){
+    }
+    public void calculateElo(double game_result, User white, User black){
         //TODO update user elos based on game result
     }
 
