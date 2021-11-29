@@ -1,0 +1,117 @@
+Major Design Changes and Explanation
+	One major change implemented is the inclusion of two different types of users. 
+Originally, the program only had one type of user, a user that was able to use the 
+program to play chess. We have now updated this so there are two types of users: 
+a player and a master user. The player is the same as the generic user the program had 
+prior to design change, a user that is able to play chess. The master user is able 
+to view and edit the login information of all the players stored in the database and 
+is unable to play chess. 
+
+How Project Adheres to clean architecture
+	The project is well segmented into clearly defined layers. The innermost of 
+which governs the basics of the pieces in the abstract Piece class and its subclasses. 
+The next layer up is the Board which uses the properties of individual pieces and the 
+positions of many of them to handle moves and move legality. 
+
+We figured out that the most-inner entities layer are pieces on a chess board like 
+King, Queen, Rook, ect along with game, board, and users of the chess game. The most-outer 
+UI layer is a GUI or a webpage displaying the game board and interacting with players and a 
+database storing player information including their usernames, password, and elo scores. We 
+use controllers and use case classes to bridge those 2 layers based on the clean architecture 
+structure. In the controller layer, we design 2 basic ones one of which is responsible for 
+registering, logging, and updating players and the other one is responsible for arranging chess 
+games for players like displaying the chess board, updating player moves, and checking the game 
+status. The controllers work as facades to delegate work and combine results to and from their 
+user case classes. The use case classes will interact with entities classes like accessing username 
+and password of a user, updating information for a user, and starting off a chess game. As a result, 
+the outer layer will depend on inner layer classes and inner classes do not depend on outer classes.
+
+How Project is consistent with SOLID principles
+	Single Responsibility Principle
+We segment the project in such a way that piece classes store and handle their own information while 
+the board class handles the overall position of the pieces in relation to each other and using that 
+information, verifies the legality of their moves. The Game class above Board handles the overall game 
+state and menus while providing a point of contact between Board which stores the information, and 
+GameGui which displays that information.
+
+	Open-Closed Principle:
+The construction of the checkMoveLegal and in the future getLegalMoves methods is such that they are 
+segmented into numerous helper methods that check move legality for specific piece types, which means 
+that features including different rule sets or even entirely new pieces could be added without modifying 
+the existing legality checks. 
+
+The Database design complies with this principle by designing an interface Database and implementing 
+classes like UserInfoDB and UserInfoDB2. This makes it open for future clients of the code to have 
+their different implementation of databases and closed for modification for the code using a database 
+object. The below code is one example:
+
+We create a database object in LogInGUI.logIn() method and use it no matter if it is a type of UserInfoDB 
+or UserInfoDB2 or others. If we decide to change to use UserInfoDB2 later on, we can simply change the code 
+“new UserInfoDB()”  to “new UserInfoDB2()” while keeping all other codes as they are.
+
+Liskov Substitution Principle: 
+A move from any piece type can be passed into the checkMoveLegal function, from there it is filtered into 
+more specific checks for its type, all of which is done automatically. 
+
+	Interface Segregation: 
+We did not end up implementing any interfaces yet, but will keep in mind the interface segregation principle 
+if we end up doing so.
+	Dependency Inversion: 
+The Game and GameGui classes get information directly from Board which in turn processes information from 
+the various Piece classes. Game does not import Piece or any of its subclasses. Similarly, the User and 
+database related classes have no reason to interact with Pieces or the Board, they get information about 
+game results directly from the Game class.
+
+
+
+Packaging strategies
+	We put our codes in the com.PlayChessProject folder and organize them into several packages: entities, 
+user case, controller, database, and exceptions based on clean architecture structure. 
+
+	In Entity package, we have User classes, Board class, Game class, Piece class and other classes extending 
+Piece class like King, Queen, Rook and etc. Those classes are in the most-inner layer and will not rely on any 
+classes in other packages. We have a sub-package Users in Entities package because we have 2 kinds of users basically.
+
+	In Controllers package, we have LoginRegisterController and PlayChessController. The LoginRegisterController 
+is responsible for players registering, logging into our chess game, and presenting corresponding results on GUI or 
+web. The PlayChessController is responsible for kicking off a chess game, displaying the chess board, and updating 
+the chess game for players. The LoginRegisterController delegates register and login works to the corresponding User 
+Case class LogInGUI and RegisterGUI and PlayChessController delegates works to its use case classes such as BoardGUI, 
+UpdateGame, and CheckChessStatus.
+
+	In Use Case Package, the RegisterGUI is responsible for registering players by prompting players with GUI through 
+which players can type their username and password, collecting data typed by players, and inserting it into our database. 
+The LoginGUI works for logging in players into the chess game by collecting data through GUI, passing it on to our database, 
+verifying, and returning the login result. Those 2 use case classes are delegated by LoginRegisterController. Additionally, 
+we have BoardGUI, UpdateGame, and CheckChessStatus use case classes which are delegated by PlayChessController.
+
+	In Database package, we design an interface Database which provides services including connecting with our database, 
+creating a new database, adding and reading player information into and from databases. Based on Open-Closed Principle, 
+we plan to offer flexibility in how the database is implemented. So we have 2 database implementations, one is for MySql 
+and the other one is for MongoDB, allowing future clients to choose if they want to reply on local database (MySql) or 
+online database(MongoDB) or even to design their preferred database.
+
+	In Exceptions package, we defined a UserAlreadyExistsException which will be thrown if the username already exists 
+in the database when a new player registers. The exception is thrown in Database classes and will be handled in RegisterGUI class.
+
+
+Design Patterns
+	Chess pieces are an example of the template method design pattern because Piece defines the skeleton and then defers 
+steps to subclasses like Pawn, Rook, etc. It also establishes placeholders for the subclasses to implement. The different user 
+classes also demonstrate the template method design pattern, with a framework User class and the PlayerUser and MasterUser 
+classes extending the framework.
+	LoginController is a facade 
+		The LoginController class is a facade of the register and login part of our program by collecting information 
+from players and presenting results to them. The class does not contain much implementation details and instead, it delegates 
+register and login work to other classes (RegisterGUI and LoginGUI) and maps presenting pages containing register and login 
+results to html files. So if one simply looks at the LoginController class itself, one will be able to understand what kind 
+of services our program provides for players when they are registering and logging, but one will not know in which way they 
+are provided because it is encapsulated in the delegated classes and mapped files. . 
+
+	RegisterLoginController is an example of Dependency Injection
+		 The RegisterLoginController class composites loginGUI and registerGUI objects by injecting them in the 
+constructor rather than creating them within the RegisterLoginController class. The goal we design in this way is to reduce 
+dependency of controller on the use case. If the use case design is modified in the future, we can avoid troubles touching 
+controller classes.
+
+	Future: Builder to facilitate different game modes
