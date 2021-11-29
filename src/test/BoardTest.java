@@ -235,15 +235,15 @@ public class BoardTest {
         assertTrue(board.inCheck());
     }
 
-    @Test(timeout = 50)
-    public void TestCastleWhite(){
-        board.makePlayerMove("e2,e4");
-        board.makePlayerMove("f7,f5");
-        board.makePlayerMove("g1,f3");
-
-        board.makePlayerMove("h7,h6");
-        board.makePlayerMove("f5,f6");
-        board.makePlayerMove("h6,h5");
-        board.makePlayerMove("f6,f7");
-    }
+//    @Test(timeout = 50)
+//    public void TestCastleWhite(){
+//        board.makePlayerMove("e2,e4");
+//        board.makePlayerMove("f7,f5");
+//        board.makePlayerMove("g1,f3");
+//
+//        board.makePlayerMove("h7,h6");
+//        board.makePlayerMove("f5,f6");
+//        board.makePlayerMove("h6,h5");
+//        board.makePlayerMove("f6,f7");
+//    }
 }
