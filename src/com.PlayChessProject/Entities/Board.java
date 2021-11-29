@@ -1,52 +1,89 @@
 package Entities;
 import java.util.*;
-import java.util.concurrent.TransferQueue;
 
 public class Board {
+
+    //Piece type offsets
     private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
     private final int[] queenIndecies = {0, 1, 2, 3, 4, 5, 6, 7};
     private final int[] rookIndecies = {1, 3, 4, 6};
     private final int[] bishopIndecies = {0, 2, 5, 7};
     private final int[] whitePawnOffsets = {-7, -8, -9};
     private final int[] blackPawnOffsets = {7, 8, 9};
+
     private int[] lastMove = {0, 0};
     private boolean turn = true;
+
+
+    //Move result indicators
+    public static final int LEGAL = 0;
+    public static final int ILLEGAL = 1;
+    public static final int CHECKMATE = 2;
+    public static final int STALEMATE = 3;
 
     private Map<Integer, Piece> piecePositions;
 
     public Board(String gameMode) {
         this.piecePositions = new HashMap<>();
-        //TODO implement constructor
         if (gameMode.equals("Standard")) {
             standardPieceArangement();
         }
     }
 
-    public void getLegalMoves(boolean turn) {
-        //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
-        //for piece in piecePositions, if color matches turn (maybe hold pieces of different
-        //colors in different arrays
-        //get legal moves for piece's type, check that each move doesn't lead to
-        //check for turn player
+    public int[][] getLegalMoves(boolean checkTurn) {
+        /*Returns every legal move that can be made on this turn. The returned 2d array is a list of every move that
+        * can be made by the pieces currently availible to the active player. The first element of each piece's move
+        * array is the piece's current position.*/
+        int[][] moves = new int[16][];
+        int index = 0;
+        HashMap<Integer, Piece> tempPositions = new HashMap<>(piecePositions);
+        for(int key : tempPositions.keySet()){
+            Piece piece = piecePositions.get(key);
+            if(piece.getColor() == checkTurn) {
+                moves[index] = pieceTypeMoves(piece, checkTurn);
+                index++;
+            }
+        }
+        return moves;
     }
 
     public boolean checkMoveLegal(int origin, int destination) {
         if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
             return false;
         }
-        Piece piece = piecePositions.get(origin);
-        //Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
-        if (piece instanceof King) {
-            return Utils.contains(getKingMoves(origin), destination);
+        int[] moves = pieceTypeMoves(piecePositions.get(origin), turn);
+        return Utils.contains(moves, destination);
+    }
+
+    /**Helper method that returns a piece's legal moves regardless of type with the first element of the returned
+     * array being the piece's starting position.*/
+    public int[] pieceTypeMoves(Piece piece, boolean checkTurn){
+        int[] pseudoMoves; //Pseudo legal moves before check and mate checks
+        int position = piece.getPos();
+        if (piece instanceof Pawn){
+            pseudoMoves = getPawnMoves(position);
         }
-        if (piece instanceof Pawn) {
-            return Utils.contains(getPawnMoves(origin), destination);
+        else if (piece instanceof King){
+            pseudoMoves = getKingMoves(position);
         }
-        if (piece instanceof Knight) {
-            return Utils.contains(getKnightMoves(origin), destination);
-        } else {
-            return Utils.contains(getSlidingMoves(origin), destination);
+        else if (piece instanceof Knight){
+            pseudoMoves = getKnightMoves(position);
         }
+        else{
+            pseudoMoves = getSlidingMoves(position);
+        }
+        ArrayList<Integer> moves = new ArrayList<>();
+        moves.add(piece.getPos());
+        for (int move : pseudoMoves){
+            Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
+            piecePositions.remove(move);
+            piecePositions.put(move, piecePositions.remove(position));
+            if (!inCheck(checkTurn)){
+                moves.add(move);
+            }
+            piecePositions = shallowPiecePositions;
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
     }
 
     //TODO make private once inside bigger method
@@ -117,6 +154,9 @@ public class Board {
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
         ArrayList<Integer> moves = new ArrayList<>();
+        if (origin==0){
+            int k=0;
+        }
         for (int offset : offsets) {
             for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offset]; j++) {
                 int move = origin + queenOffsets[offset] * j;
@@ -134,44 +174,64 @@ public class Board {
     }
 
     //checks if given board state is in check
-    public String inCheck(Board board) {
-        for (Piece piece : board.piecePositions.values()) {
-            if (piece instanceof King) {
+    public boolean inCheck(boolean player) {
+        for (int key : piecePositions.keySet()) {
+            Piece piece = piecePositions.get(key);
+            if (piece instanceof King && piece.getColor() == player) {
                 //declarations for easy access
-                int king_pos = piece.getPos();
-                int king_file = piece.getFile();
-                int king_rank = piece.getRank();
+                int king_file = key % 8;
+                int king_rank = 7 - ((key - king_file) / 8);
                 boolean king_color = piece.getColor();
                 Bishop bishop = new Bishop(king_color, king_file, king_rank);
                 Rook rook = new Rook(king_color, king_file, king_rank);
                 Queen queen = new Queen(king_color, king_file, king_rank);
                 //check pawns
+                int pawnOffset1 = king_color ? 7 : -7;
+                int pawnOffset2 = king_color ? 9 : -9;
                 for (int move : piece.getValidMoves()) {
-                    if (king_color && (piecePositions.get(move) instanceof Pawn && (move == (king_pos - 9) ||
-                            move == (king_pos - 7)) && !piecePositions.get(move).getColor())) {
-                        return returnResult(true);
-                    }
-                    if (!king_color && (piecePositions.get(move) instanceof Pawn &&(move == (king_pos + 9) ||
-                            move == (king_pos + 7)) &&  piecePositions.get(move).getColor())) {
-                        return returnResult(false);
+                    if ((piecePositions.get(move) instanceof Pawn && (move == (key - pawnOffset2) ||
+                            move == (key - pawnOffset1)) && piecePositions.get(move).getColor() != king_color)) {
+                        return true;
                     }
                 }
                 //check for bishop, rook, queen, knight, king
-                if (checkSliding(king_color, king_pos, bishop) || checkSliding(king_color, king_pos, rook) ||
-                        checkSliding(king_color, king_pos, queen) || checkKnights(king_color, king_file, king_rank) ||
+                if (checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
+                        checkSliding(king_color, key, queen) || checkKnights(king_color, king_file, king_rank) ||
                         checkKing(king_color, piece)) {
-                    return returnResult(king_color);
+                    return true;
                 }
 
             }
         }
-        return "";
+        return false;
     }
 
-    public boolean makePlayerMove(String move, boolean color) {
-        //TODO Once the player inputs a move through the CLI and it's determined legal,
-        // adjust piece position and prompt game to update position
+    /**checks if a position is checkmate or stalemate.
+     returns 0 if no mate
+     returns 2 if checkmate
+     returns 3 if stalemate**/
+    public int checkMate(){
+        int[][] moves = getLegalMoves(!turn);
+        for (int[] piece : moves){
+            if (piece != null && piece.length > 1){
+                return LEGAL;
+            }
+        }
+        if (inCheck(!turn)){
+            return CHECKMATE;
+        }
+        else {
+            return STALEMATE;
+        }
+    }
 
+    /**Makes players move
+     * returns 0 if the move was valid and the game continues
+     * retunrs 1 if the move was illegal
+     * returns 2 if the move was checkmate
+     * returns 3 if the move was stalemate
+     * */
+    public int makePlayerMove(String move) {
         //Parse CLI move input
         boolean move_valid = false;
         String[] orDest = move.split(",");
@@ -186,9 +246,20 @@ public class Board {
             lastMove[0] = origin;
             lastMove[1] = destination;
             move_valid = true;
-            turn = !turn;
+            if (piecePositions.get(origin) instanceof Pawn && (destination >= 56 || destination <= 7)){
+                piecePositions.remove(destination);
+                piecePositions.put(destination, new Queen(turn, destination % 8, 7 -
+                        ((destination - (destination % 8)) / 8)));
+            }
         }
-        return move_valid;
+        if (!move_valid){
+            return ILLEGAL;
+        }
+        else {
+            int result = checkMate();
+            turn = !turn;
+            return result;
+        }
     }
 
     public Map<Integer, Piece> getPiecePositions() {
@@ -216,11 +287,11 @@ public class Board {
         piecePositions.put(7, new Rook(false, 7, 7));
         //White Pawns
         for (int i = 48; i < 56; i++) {
-            piecePositions.put(i, new Pawn(true, i - 8, 6));
+            piecePositions.put(i, new Pawn(true, i % 8, 1));
         }
         //Black Pawns
         for (int i = 8; i < 16; i++) {
-            piecePositions.put(i, new Pawn(false, i - 40, 0));
+            piecePositions.put(i, new Pawn(false, i % 8, 6));
         }
     }
 
@@ -287,15 +358,6 @@ public class Board {
             }
         }
         return false;
-    }
-
-    public String returnResult(boolean color) {
-        if (!color){
-            return "black";
-        }
-        else {
-            return "white";
-        }
     }
 }
 

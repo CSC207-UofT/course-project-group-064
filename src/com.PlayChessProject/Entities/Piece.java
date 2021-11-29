@@ -17,6 +17,7 @@ public abstract class Piece {
         this.not_moved = true;
     }
 
+    //Used to determine whether a king or rook can castle.
     public boolean getNotMoved(){
         return not_moved;
     }
