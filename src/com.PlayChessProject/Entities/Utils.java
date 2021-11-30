@@ -40,22 +40,24 @@ public class Utils {
         return false;
     }
 
-    public static void calcElo(User winner, User loser) {
+    /**0, .5, 1 are possible ints passed in
+     * 0 if player 1 lost
+     * .5 if draw
+     * 1 if player 1 won
+     * */
+    public static void calculateElo(double result, User white, User black) {
         // calculate change in elo for winner and loser
         // winner and loser elo
-        double winnerElo = winner.getElo();
-        double loserElo = loser.getElo();
-        double finalWinnerElo = winnerElo;
-        double finalLoserElo = loserElo;
+        int p1Elo = white.getElo();
+        int p2Elo = black.getElo();
 
-        //Winner
-        //Use inflated k factor for players with fewer than 10 games played
-        finalWinnerElo = winnerElo + winner.getkFactor() * (1 - adjustedDifference(winnerElo, loserElo));
-        winner.setElo((int)finalWinnerElo);
+        //Player 1
+        double finalp1Elo = p1Elo + white.getkFactor() * (result - adjustedDifference(p1Elo, p2Elo));
+        white.setElo((int)finalp1Elo);
 
-        //Loser
-        finalLoserElo = loserElo + loser.getkFactor() * (0 - adjustedDifference(loserElo, winnerElo));
-        loser.setElo((int)finalLoserElo);
+        //Player 2
+        double finalp2Elo = p2Elo + black.getkFactor() * (1-result - adjustedDifference(p2Elo, p1Elo));
+        black.setElo((int)finalp2Elo);
     }
 
     //First Part of Calculation

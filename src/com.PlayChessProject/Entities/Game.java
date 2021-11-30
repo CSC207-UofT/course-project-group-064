@@ -10,18 +10,32 @@ public class Game {
     private Board board;
     private Scanner console;
     private boolean turn = true;
+    private User whitePlayer;
+    private User blackPlayer;
 
-    public Game(String game_mode){
+    public Game(String game_mode, User white, User black){
         this.game_mode = game_mode;
         //TODO implement initial game setup
         this.textBoardDisplay = "";
         this.board = new Board(game_mode);
         this.console = new Scanner(System.in);
+        this.whitePlayer = white;
+        this.blackPlayer = black;
     }
     public void initializeDisplay(){
         //TODO displays image of board and pieces in default positions depending on gamemode
         if (this.game_mode.equals("Standard")){
             this.standardDisplay();
+        }
+    }
+
+    public void endGame(int result){
+        if (result==3){
+            Utils.calculateElo(.5, whitePlayer, blackPlayer);
+        }
+        else{
+            result = turn ? 1 : 0;
+            Utils.calculateElo(result, whitePlayer, blackPlayer);
         }
     }
 
@@ -36,10 +50,6 @@ public class Game {
         else {
             System.out.println("Illegal move, please input a legal move");
         }
-    }
-
-    public void calculateElo(boolean game_result, User white, User black){
-        //TODO update user elos based on game result
     }
 
     //Initializes display for a classic game of chess.
@@ -104,7 +114,9 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        User white = new PlayerUser("Test", 1000);
+        User black = new PlayerUser("test", 1000);
+        Game game = new Game("Standard", white, black);
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){
