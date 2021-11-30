@@ -153,7 +153,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         String move = game.getMove();
         while (!move.equals("end")){
             frame.dispose();
-            game.updateDisplay(move);
+            //game.updateDisplay(move);
 
             GameGui frame1 = new GameGui();
             frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );

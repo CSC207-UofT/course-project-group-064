@@ -22,9 +22,9 @@ public class Game {
         }
     }
 
-    public void updateDisplay(String move){
+    public void updateDisplay(int origin, int destination){
         //TODO parse move and update display based on new board state.
-        int valid = board.makePlayerMove(move);
+        int valid = board.makePlayerMove(origin, destination);
         if(valid == Board.LEGAL) {
             turn = !turn;
             String boardString = toDisplayString();
@@ -115,7 +115,7 @@ public class Game {
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){
-            game.updateDisplay(move);
+            //game.updateDisplay(origin, destination);
             move = game.getMove();
         }
     }

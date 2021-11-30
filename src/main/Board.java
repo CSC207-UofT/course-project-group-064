@@ -230,12 +230,12 @@ public class Board {
      * returns 2 if the move was checkmate
      * returns 3 if the move was stalemate
      * */
-    public int makePlayerMove(String move) {
+    public int makePlayerMove(int origin, int destination) {
         //Parse CLI move input
         boolean move_valid = false;
-        String[] orDest = move.split(",");
+        /*String[] orDest = move.split(",");
         int origin = algebraicToInt(orDest[0]);
-        int destination = algebraicToInt(orDest[1]);
+        int destination = algebraicToInt(orDest[1]);*/
 
         //Check that the origin is occupied
         if (checkMoveLegal(origin, destination)) {
