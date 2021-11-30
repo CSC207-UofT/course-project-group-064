@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>loginMaster</title>
 </head>
 <body>
 <div>
-    <form th:action="@{/register}" th:object="${user}" th:method="post">
+    <form th:action="@{/login?type='master'}" th:object="${user}" th:method="post">
         username: <input type="text" th:field="${user.name}" required><br/>
         password: <input type="text" th:field="${user.password}" required><br/>
-        <input type="submit" value="register">
+        <input type="submit" value="login">
     </form>
-
-
-
+</div>
+</hr>
+<div>
+    <span th:text="${message}"></span>
 </div>
 
 </body>

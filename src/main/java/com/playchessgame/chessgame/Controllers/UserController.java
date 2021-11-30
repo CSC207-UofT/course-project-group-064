@@ -3,10 +3,9 @@ package com.playchessgame.chessgame.Controllers;
 import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
-import com.playchessgame.chessgame.GameService.GameGui;
 import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +19,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MasterUser masterUser;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @GetMapping("/register")
     public String getRegister(Model model){
@@ -41,7 +46,7 @@ public class UserController {
             userService.addUser(user);
             return "redirect:/ok";
         } catch (UserAlreadyExistsException e){
-            model.addAttribute("message", "The username has been registered, please try another one");
+            model.addAttribute("message", e.getMessage() + "\nPlease try another username~~~");
             return "addUser";
 
         } catch(Exception e){
@@ -51,14 +56,20 @@ public class UserController {
 
     }
 
-    @GetMapping("/login")
-    public String getLogin(Model model){
+    @GetMapping("/login?type='player")
+    public String getLoginPlayer(Model model){
         model.addAttribute("user", new PlayerUser());
-        return "login";
+        return "loginPlayer";
     }
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute(value="user") PlayerUser user, Model model) {
+    @GetMapping("/login?type='master")
+    public String getLoginMaster(Model model){
+        model.addAttribute("user", new MasterUser());
+        return "loginMaster";
+    }
+
+    @PostMapping("/login?type='player")
+    public String loginPlayer(@ModelAttribute(value="user") PlayerUser user, Model model) {
 
         if (userService.checkUserExistence(user)) {
             model.addAttribute("student", user);
@@ -68,8 +79,37 @@ public class UserController {
 
         model.addAttribute("user", new PlayerUser());
         model.addAttribute("message", "Username or password is not correct, please try again!");
-        return "login";
+        return "loginPlayer";
 
     }
+
+    @PostMapping("/login?type='master")
+    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
+
+        if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
+            return "masterUserPage";
+        }
+
+        model.addAttribute("user", new PlayerUser());
+        model.addAttribute("message", "Username or password is not correct, please try again!");
+        return "loginMaster";
+
+    }
+
+    @GetMapping("/resetpassword")
+    public String getResetPassword(Model model){
+        model.addAttribute("user", new PlayerUser());
+        model.addAttribute("email", "");
+        return "resetpassword";
+
+    }
+
+//    @PostMapping("/resetpassword")
+//    public String resetPassword(@ModelAttribute(value="user") PlayerUser user, Model model){
+//        model.addAttribute("message", this.userService.resetPassword(user));
+//        return "resetpassword";
+//
+//    }
+
 
 }

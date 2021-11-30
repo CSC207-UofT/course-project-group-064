@@ -5,10 +5,9 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.playchessgame.chessgame.Database.Database;
-import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
-import com.playchessgame.chessgame.Entities.User;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
+import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,21 +120,22 @@ public class UserInfoDB2 implements Database {
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
 
-        if (checkUserNameExistence(user)){
-            throw new UserAlreadyExistsException();
+        try {checkUserNameExistence(user);
+            System.out.println("The Username Has Been Used!");
+            throw new UserAlreadyExistsException();}
+        catch(UsernameDoesNotExist e){
+            MongoCollection mongoCollection = getCollection();
+
+            Document document = new Document();
+            document.append("name", user.getName());
+            document.append("password", user.getPassword());
+            document.append("elo", 0);
+            document.append("master", 0);
+
+            mongoCollection.insertOne(document);
+
+            System.out.println("The User Was Inserted Successfully!");
         }
-
-        MongoCollection mongoCollection = getCollection();
-
-        Document document = new Document();
-        document.append("name", user.getName());
-        document.append("password", user.getPassword());
-        document.append("elo", 0);
-        document.append("master", 0);
-
-        mongoCollection.insertOne(document);
-
-        System.out.println("The User Was Inserted Successfully!");
 
     }
 
@@ -168,13 +168,15 @@ public class UserInfoDB2 implements Database {
     }
 
     @Override
-    public void updateUserPassword(PlayerUser user, String newPassword) {
+    public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
+
         MongoCollection mongoCollection = getCollection();
 
-        Bson filter = eq("name", user.getName());
-        Bson passwordUpdate = set("password", newPassword);
+        checkUserNameExistence(user);
+        Bson username = eq("name", user.getName());
+        Bson password = eq("password", user.getPassword());
+        mongoCollection.updateOne(username, password);
 
-        mongoCollection.updateOne(filter, passwordUpdate);
     }
 
     @Override
@@ -225,7 +227,7 @@ public class UserInfoDB2 implements Database {
 
     }
 
-    private boolean checkUserNameExistence(PlayerUser user){
+    private boolean checkUserNameExistence(PlayerUser user) throws UsernameDoesNotExist{
         MongoCollection mongoCollection = getCollection();
         Document document = new Document();
         document.append("name", user.getName());
@@ -235,7 +237,7 @@ public class UserInfoDB2 implements Database {
             return true;
         }
 
-        return false;
+        throw new UsernameDoesNotExist();
     }
 
 }

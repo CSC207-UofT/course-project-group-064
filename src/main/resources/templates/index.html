@@ -11,8 +11,12 @@
         <input type="submit" value="register"></input></br>
     </form>
 
-    <form th:action="@{/login?}" th:method="get">
-        <input type="submit" value="login"></input></br>
+    <form th:action="@{/login?type='player'}" th:method="get">
+        <input type="submit" value="login as a player"></input></br>
+    </form>
+
+    <form th:action="@{/login?type='master'}" th:method="get">
+        <input type="submit" value="login as a master user"></input></br>
     </form>
 
 </body>

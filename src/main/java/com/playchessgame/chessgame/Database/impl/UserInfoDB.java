@@ -3,6 +3,7 @@ package com.playchessgame.chessgame.Database.impl;
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Entities.User;
+import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -137,17 +138,16 @@ public class UserInfoDB implements Database {
      * Updates the specified player user's password to the specified new password.
      *
      * @param user The user whose password is being updated
-     * @param newPassword The new password
      */
     @Override
-    public void updateUserPassword(PlayerUser user, String newPassword) {
+    public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist {
         String sql = "UPDATE " + TABLE_NAME + " SET password = ? "
                 + "WHERE username = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
 
-            preparedStatement.setString(1, newPassword);
+            preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getName());
             preparedStatement.executeUpdate();
 
@@ -195,4 +195,5 @@ public class UserInfoDB implements Database {
             return false;
         }
     }
+
 }
