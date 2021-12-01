@@ -10,27 +10,37 @@ public class MasterUser extends User {
     private String name = "masterusername";
     @Column
     private String password = "masteruserpassword";
-    @Column
-    private int elo;
     /** The idea here is that there will only ever be one master user with a set username and password*/
 
     public MasterUser() {
     }
 
+    /**
+     * Returns the master user's username.
+     *
+     * @return the master user's name
+     */
     public String getName() {return name;}
 
+    /**
+     * Sets the master user's username to the specified name.
+     *
+     * @param name The specified name
+     */
     public void setName(String name) {this.name = name;
     }
 
-    public void setElo(int elo) {this.elo = elo;}
-
+    /**
+     * Returns the master user's password.
+     *
+     * @return the master user's password
+     */
     public String getPassword() {return password;}
 
+    /**
+     * Sets the master user's password to the specified password.
+     *
+     * @param password The specified password
+     */
     public void setPassword(String password) {this.password = password;}
-
-    public int getElo(){
-        return this.elo;
-    }
-
-
 }
