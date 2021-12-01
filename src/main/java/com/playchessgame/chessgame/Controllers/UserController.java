@@ -1,5 +1,6 @@
 package com.playchessgame.chessgame.Controllers;
 
+import com.playchessgame.chessgame.ContextService.MyListener;
 import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
@@ -8,20 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private MasterUser masterUser;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -56,24 +53,45 @@ public class UserController {
 
     }
 
-    @GetMapping("/login?type='player")
+    @GetMapping("/login1")
     public String getLoginPlayer(Model model){
         model.addAttribute("user", new PlayerUser());
-        return "loginPlayer";
+        return "loginPlayer.html";
     }
 
-    @GetMapping("/login?type='master")
+    @GetMapping("/login2")
     public String getLoginMaster(Model model){
         model.addAttribute("user", new MasterUser());
         return "loginMaster";
     }
 
-    @PostMapping("/login?type='player")
-    public String loginPlayer(@ModelAttribute(value="user") PlayerUser user, Model model) {
+    @PostMapping("/login1")
+    public String loginPlayer(@ModelAttribute(value="user") PlayerUser user, Model model, HttpServletRequest request) {
 
         if (userService.checkUserExistence(user)) {
             model.addAttribute("student", user);
             model.addAttribute("message", "success");
+
+            HttpSession httpSession = request.getSession(true);
+//
+//            List<PlayerUser> loginUsers = (List<PlayerUser>) httpSession.getServletContext().getAttribute("loginUsers");
+//
+////            if (loginUsers == null) {
+////                httpSession.setAttribute("loginUsers", new ArrayList<PlayerUser>().add(user));
+////            }else {
+////                httpSession.setAttribute("loginUsers", loginUsers.add(user));
+////            }
+//
+//            if (loginUsers == null) {
+//                loginUsers = new ArrayList<PlayerUser>();
+//            }
+//
+//            loginUsers.add(user);
+//
+            httpSession.setAttribute("username", user);
+
+            MyListener.onlineUsers.add(user);
+
             return "userinfo";
         }
 
@@ -83,7 +101,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/login?type='master")
+    @PostMapping("/login2")
     public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
 
         if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
@@ -110,6 +128,26 @@ public class UserController {
 //        return "resetpassword";
 //
 //    }
+
+    /**
+     * PlayerUser logout
+     */
+    @PostMapping("/logout")
+    public String Logout(HttpServletRequest request, Model model) {
+        HttpSession httpSession = request.getSession(true);
+//
+        PlayerUser user = (PlayerUser) httpSession.getAttribute("username");
+
+        model.addAttribute("userToLogout", user);
+
+        httpSession.removeAttribute("username");
+        httpSession.invalidate();
+
+//        MyListener.onlineUsers.remove(user);
+//
+        return "logout";
+
+    }
 
 
 }

@@ -23,14 +23,16 @@ public class PageController {
         return "index2";
     }
 
-    @RequestMapping("/showuserinfo")
-    public String getUserInfo(){
-        return "userinfo";
-    }
+//    @RequestMapping("/showuserinfo")
+//    public String getUserInfo(){
+//        return "userinfo";
+//    }
 
-    @RequestMapping("/ok")
-    public String getRegisterOK(){
-        return "ok";
-    }
+//    @RequestMapping("/ok")
+//    public String getRegisterOK(){
+//        return "ok";
+//    }
+
+
 
 }

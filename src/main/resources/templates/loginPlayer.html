@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>
-    <form th:action="@{/login?type='player'}" th:object="${user}" th:method="post">
+    <form th:action="@{/login1}" th:object="${user}" th:method="post">
         username: <input type="text" th:field="${user.name}" required><br/>
         password: <input type="text" th:field="${user.password}" required><br/>
         <input type="submit" value="login">
@@ -15,6 +15,11 @@
 </hr>
 <div>
     <span th:text="${message}"></span>
+</div>
+<div>
+    <form th:action="@{/resetpassword}" th:object="${user}" th:method="get">
+        <input type="submit" value="reset password">
+    </form>
 </div>
 
 </body>

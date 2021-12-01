@@ -47,17 +47,19 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 
     private void receiveEmail(String subject, Map message) {
 
-        var mailMessage = new SimpleMailMessage();
+//        var mailMessage = new SimpleMailMessage();
+//
+//        String sentFrom = (String) message.get("email");
+//
+//        mailMessage.setTo(masterUserEmail);
+//        mailMessage.setSubject(subject);
+//        mailMessage.setText(message.toString());
+//
+//        mailMessage.setFrom(sentFrom);
+//
+//        //TODO: to be listened and reflected on masterUserPage.html
+//        javaMailSender.send(mailMessage);
 
-        String sentFrom = (String) message.get("email");
 
-        mailMessage.setTo(masterUserEmail);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message.toString());
-
-        mailMessage.setFrom(sentFrom);
-
-        //TODO: to be listened and reflected on masterUserPage.html
-        javaMailSender.send(mailMessage);
     }
 }
