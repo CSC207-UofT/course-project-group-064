@@ -19,43 +19,43 @@ public class BoardTest {
         assertEquals(28, board.getPiecePositions().get(28).getPos());
     }
 
-    /*@Test(timeout = 50)
+    @Test(timeout = 50)
     public void TestGetMoves(){
         int[][] moves = board.getLegalMoves(true);
         int[][] equalArray = {{48, 40, 32}, {49, 41, 33}, {50, 42, 34}, {51, 43, 35}, {52, 44, 36}, {53, 45, 37},
                 {54, 46, 38}, {55, 47, 39}, {56}, {57, 40, 42}, {58}, {59}, {60}, {61}, {62, 45, 47}, {63}};
         assertArrayEquals(moves, equalArray);
-        board.makePlayerMove("e2,e4");
+        board.makePlayerMove(52, 36);
     }
 
     @Test(timeout = 150)
     public void TestLegal(){
-        assertEquals(Board.LEGAL, board.makePlayerMove("e2,e4"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("e7,e5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("g1,f3"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("e5,e6"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("e1,e2"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("e8,f7"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("b8,c6"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("f1,c4"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("g8,f6"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("f3,g5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("d7,d5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("e4,d5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("f6,d5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("g5,f7"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("e8,f7"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("d1,f3"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("f7,f6"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("d5,e3"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("f8,c5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("f7,g8"));
-        assertEquals(Board.ILLEGAL, board.makePlayerMove("f8,c5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("c4,d5"));
-        assertEquals(Board.LEGAL, board.makePlayerMove("c8,e6"));
-        assertEquals(Board.CHECKMATE, board.makePlayerMove("d5,e6"));
+        assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
+        assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
+        assertEquals(Board.LEGAL, board.makePlayerMove(62, 45));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(28, 20));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(60, 52));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(4, 13));
+        assertEquals(Board.LEGAL, board.makePlayerMove(1, 18));
+        assertEquals(Board.LEGAL, board.makePlayerMove(61, 34));
+        assertEquals(Board.LEGAL, board.makePlayerMove(6, 21));
+        assertEquals(Board.LEGAL, board.makePlayerMove(45, 30));
+        assertEquals(Board.LEGAL, board.makePlayerMove(11, 27));
+        assertEquals(Board.LEGAL, board.makePlayerMove(36, 27));
+        assertEquals(Board.LEGAL, board.makePlayerMove(21, 27));
+        assertEquals(Board.LEGAL, board.makePlayerMove(30, 13));
+        assertEquals(Board.LEGAL, board.makePlayerMove(4, 13));
+        assertEquals(Board.LEGAL, board.makePlayerMove(59, 45));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(13, 21));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(27, 44));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(5, 26));
+        assertEquals(Board.LEGAL, board.makePlayerMove(13, 6));
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(5, 26));
+        assertEquals(Board.LEGAL, board.makePlayerMove(34, 27));
+        assertEquals(Board.LEGAL, board.makePlayerMove(2,20));
+        assertEquals(Board.CHECKMATE, board.makePlayerMove(27, 20));
     }
-
+/*
     @Test(timeout = 50)
     public void TestSlidingMove(){
         board.makePlayerMove("e2,e4");
