@@ -52,6 +52,7 @@ public class Utils {
         int p2Elo = black.getElo();
 
         //Player 1
+        double expected = adjustedDifference(p1Elo, p2Elo);
         double finalp1Elo = p1Elo + white.getkFactor() * (result - adjustedDifference(p1Elo, p2Elo));
         white.setElo((int)finalp1Elo);
 

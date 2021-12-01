@@ -20,11 +20,15 @@ public class User{
 
     public User(String username){
         this.name = username;
+        this.kFactor = 50;
+        this.games = 0;
     }
 
     public User(String username, int elo){
         this.name = username;
         this.elo = elo;
+        this.kFactor = 50;
+        this.games = 0;
     }
 
     public String getName(){
