@@ -55,6 +55,48 @@ public class BoardTest {
         assertEquals(Board.LEGAL, board.makePlayerMove(2,20));
         assertEquals(Board.CHECKMATE, board.makePlayerMove(27, 20));
     }
+
+    @Test(timeout = 150)
+    public void TestCastle1(){
+        assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
+        assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
+        assertEquals(Board.LEGAL, board.makePlayerMove(53, 37));
+        assertEquals(Board.LEGAL, board.makePlayerMove(11, 27));
+        assertEquals(Board.LEGAL, board.makePlayerMove(62, 45));
+        assertEquals(Board.LEGAL, board.makePlayerMove(1, 18));
+        assertEquals(Board.LEGAL, board.makePlayerMove(61, 52));
+        assertEquals(Board.LEGAL, board.makePlayerMove(2, 11));
+        assertEquals(Board.LEGAL, board.makePlayerMove(60, 62));
+        assertEquals(Board.LEGAL, board.makePlayerMove(3, 21));
+        assertEquals(Board.LEGAL, board.makePlayerMove(50, 42));
+        assertEquals(Board.LEGAL, board.makePlayerMove(4, 2));
+        assertTrue(board.getPiecePositions().get(62) instanceof King);
+        assertFalse(board.getPiecePositions().get(62).getNotMoved());
+        assertTrue(board.getPiecePositions().get(61) instanceof Rook);
+        assertFalse(board.getPiecePositions().get(61).getNotMoved());
+        assertNull(board.getPiecePositions().get(63));
+    }
+
+    @Test(timeout = 150)
+    public void TestCastle2(){
+        assertEquals(Board.LEGAL, board.makePlayerMove(51, 35));
+        assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
+        assertEquals(Board.LEGAL, board.makePlayerMove(58, 44));
+        assertEquals(Board.LEGAL, board.makePlayerMove(5, 12));
+        assertEquals(Board.LEGAL, board.makePlayerMove(59, 43));
+        assertEquals(Board.LEGAL, board.makePlayerMove(6, 21));
+        assertEquals(Board.LEGAL, board.makePlayerMove(57, 42));
+        assertEquals(Board.LEGAL, board.makePlayerMove(4, 6));
+        assertEquals(Board.LEGAL, board.makePlayerMove(60, 58));
+        assertTrue(board.getPiecePositions().get(58) instanceof King);
+        assertFalse(board.getPiecePositions().get(58).getNotMoved());
+        assertTrue(board.getPiecePositions().get(59) instanceof Rook);
+        assertFalse(board.getPiecePositions().get(59).getNotMoved());
+        assertNull(board.getPiecePositions().get(56));
+
+    }
+
+
 /*
     @Test(timeout = 50)
     public void TestSlidingMove(){
