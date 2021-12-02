@@ -57,6 +57,35 @@ public class BoardTest {
     }
 
     @Test(timeout = 150)
+    public void TestGame(){
+        board.makePlayerMove(52, 36);
+        board.makePlayerMove(12,28);
+        board.makePlayerMove(57, 40);
+        board.makePlayerMove(11, 27);
+        assertEquals(Board.LEGAL, board.makePlayerMove(51, 35));
+        board.makePlayerMove(2, 38);
+        board.makePlayerMove(59, 43);
+        board.makePlayerMove(6, 21);
+        board.makePlayerMove(58, 44);
+        board.makePlayerMove(15, 23);
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(60, 58));
+        board.makePlayerMove(36, 27);
+        board.makePlayerMove(38, 29);
+        board.makePlayerMove(43, 46);
+        board.makePlayerMove(23, 31);
+        board.makePlayerMove(50, 34);
+        board.makePlayerMove(1, 16);
+        board.makePlayerMove(51, 44);
+        board.makePlayerMove(5, 33);
+        assertEquals(Board.ILLEGAL, board.makePlayerMove(60, 58));
+        board.makePlayerMove(44, 51);
+        assertEquals(Board.LEGAL, board.makePlayerMove(4, 6));
+        board.makePlayerMove(9, 17);
+        assertEquals(Board.LEGAL, board.makePlayerMove(60, 58));
+
+    }
+
+    @Test(timeout = 150)
     public void TestCastle1(){
         assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
         assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));

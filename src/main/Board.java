@@ -49,7 +49,6 @@ public class Board {
 
     public boolean checkMoveLegal(int origin, int destination) {
         if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
-            System.out.println("work");
             return false;
         }
         int[] moves = pieceTypeMoves(piecePositions.get(origin), turn);
@@ -98,6 +97,20 @@ public class Board {
         }
         if (piece.getNotMoved()) {
             for (int move : castleMoves(piece)) {
+                /*boolean throughCheck = false;
+                int min = Math.min(origin, move);
+                int max = Math.max(origin, move);
+                for(int i = min; i <=max; i++){
+                    Map<Integer, Piece> shallowPositions = piecePositions;
+                    piecePositions.put(i, piecePositions.remove(origin));
+                    if(inCheck(turn)){
+                        throughCheck = true;
+                    }
+                    piecePositions = shallowPositions;
+                }
+                if(!throughCheck){
+                    moves.add(move);
+                }*/
                 moves.add(move);
             }
         }
@@ -238,11 +251,7 @@ public class Board {
      * returns 3 if the move was stalemate
      * */
     public int makePlayerMove(int origin, int destination) {
-        //Parse CLI move input
         boolean move_valid = false;
-        /*String[] orDest = move.split(",");
-        int origin = algebraicToInt(orDest[0]);
-        int destination = algebraicToInt(orDest[1]);*/
 
         //Check that the origin is occupied
         if (checkMoveLegal(origin, destination)) {
@@ -377,7 +386,7 @@ public class Board {
      */
     public int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
-        if(turn) {
+        if(piece.getColor()) {
             if (castleHelper(whiteCastleIndecies[0], piece)) {
                 moves.add(58);
             }
