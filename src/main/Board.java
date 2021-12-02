@@ -9,7 +9,8 @@ public class Board {
     private final int[] bishopIndecies = {0, 2, 5, 7};
     private final int[] whitePawnOffsets = {-7, -8, -9};
     private final int[] blackPawnOffsets = {7, 8, 9};
-
+    private final int[][] whiteCastleIndecies = {{56, 57, 58, 59, 60}, {63, 100, 62, 61, 60}};
+    private final int[][] blackCastleIndecies = {{0, 1, 2, 3, 4}, {7, 100, 6, 5, 4}};
     private int[] lastMove = {0, 0};
     private boolean turn = true;
 
@@ -48,6 +49,7 @@ public class Board {
 
     public boolean checkMoveLegal(int origin, int destination) {
         if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
+            System.out.println("work");
             return false;
         }
         int[] moves = pieceTypeMoves(piecePositions.get(origin), turn);
@@ -91,6 +93,11 @@ public class Board {
         ArrayList<Integer> moves = new ArrayList<>();
         for (int move : piece.getValidMoves()) {
             if (!piecePositions.containsKey(move) || piecePositions.get(move).getColor() != piece.getColor()) {
+                moves.add(move);
+            }
+        }
+        if (piece.getNotMoved()) {
+            for (int move : castleMoves(piece)) {
                 moves.add(move);
             }
         }
@@ -239,6 +246,10 @@ public class Board {
 
         //Check that the origin is occupied
         if (checkMoveLegal(origin, destination)) {
+            if (piecePositions.get(origin) instanceof King && piecePositions.get(origin).getNotMoved()) {
+                castleMoveHelper(origin, destination);
+
+            }
             piecePositions.remove(destination);
             piecePositions.put(destination, piecePositions.remove(origin));
             piecePositions.get(destination).updatePosition(destination);
@@ -358,6 +369,77 @@ public class Board {
         }
         return false;
     }
+
+    /**
+     * Takes a piece and returns the possible castling moves it can make.
+     * @param piece The original piece (should be a King).
+     * @return A list of integer positions that the piece can castle to.
+     */
+    public int[] castleMoves(Piece piece) {
+        List<Integer> moves = new ArrayList<>();
+        if(turn) {
+            if (castleHelper(whiteCastleIndecies[0], piece)) {
+                moves.add(58);
+            }
+            if (castleHelper(whiteCastleIndecies[1], piece)) {
+                moves.add(62);
+            }
+        }
+        else {
+            if (castleHelper(blackCastleIndecies[0], piece)) {
+                moves.add(2);
+            }
+            if (castleHelper(blackCastleIndecies[1], piece)) {
+                moves.add(6);
+            }
+        }
+        return moves.stream().mapToInt(i -> i).toArray();
+    }
+
+    /**
+     * Helper method that checks conditions for which a castle can occur.
+     * @param indecies Either the black or white castle indecies to check
+     * @param piece The original piece (should be a King)
+     * @return true if a castle is possible, false if it isn't.
+     */
+    private boolean castleHelper(int[] indecies, Piece piece) {
+        if(piece.getNotMoved()) {
+            return piecePositions.get(indecies[0]) instanceof Rook && piecePositions.get(indecies[0]).getNotMoved() &&
+                    !(piecePositions.containsKey(indecies[1])) && !(piecePositions.containsKey(indecies[2])) &&
+                    !(piecePositions.containsKey(indecies[3])) && !inCheck(turn);
+        }
+        return false;
+    }
+
+    /**
+     * Helper method that moves the Rook when makePlayerMove is called on the King to castle.
+     * @param origin The origin of King before castle
+     * @param destination The destination of King after castle
+     */
+    private void castleMoveHelper(int origin, int destination) {
+        if (turn) {
+            if (destination == origin + 2) {
+                piecePositions.put(61, piecePositions.remove(63));
+                piecePositions.get(61).updatePosition(61);
+            }
+            if (destination == origin - 2) {
+                piecePositions.put(59, piecePositions.remove(56));
+                piecePositions.get(59).updatePosition(59);
+            }
+        }
+        else {
+            if (destination == origin - 2) {
+                piecePositions.put(3, piecePositions.remove(0));
+                piecePositions.get(3).updatePosition(3);
+            }
+            if (destination == origin + 2) {
+                piecePositions.put(5, piecePositions.remove(7));
+                piecePositions.get(5).updatePosition(5);
+            }
+        }
+
+    }
+
 }
 
 
