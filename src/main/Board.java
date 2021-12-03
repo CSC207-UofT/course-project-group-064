@@ -407,18 +407,18 @@ public class Board {
     private int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
         if(turn) {
-            if (castleHelper(whiteCastleIndecies[0], piece)) {
+            if (castleHelper(whiteCastleIndices[0], piece)) {
                 moves.add(58);
             }
-            if (castleHelper(whiteCastleIndecies[1], piece)) {
+            if (castleHelper(whiteCastleIndices[1], piece)) {
                 moves.add(62);
             }
         }
         else {
-            if (castleHelper(blackCastleIndecies[0], piece)) {
+            if (castleHelper(blackCastleIndices[0], piece)) {
                 moves.add(2);
             }
-            if (castleHelper(blackCastleIndecies[1], piece)) {
+            if (castleHelper(blackCastleIndices[1], piece)) {
                 moves.add(6);
             }
         }
@@ -432,9 +432,7 @@ public class Board {
                 !inCheck(turn)) {
             int king_file = indecies[3] % 8;
             int king_rank = 7 - ((indecies[3] - king_file) / 8);
-            if (!inCheckHelper(indecies[3], king_file, king_rank, turn)) {
-                return true;
-            }
+            return !inCheckHelper(indecies[3], king_file, king_rank, turn);
         }
         return false;
     }
