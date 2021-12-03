@@ -1,7 +1,6 @@
 package com.playchessgame.chessgame.Controllers;
 
 import com.playchessgame.chessgame.ContextService.MyListener;
-import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.GameService.GameGui;
@@ -10,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,11 +68,6 @@ public class UserController {
         return "loginPlayer.html";
     }
 
-    @GetMapping("/login2")
-    public String getLoginMaster(Model model){
-        model.addAttribute("user", new MasterUser());
-        return "loginMaster";
-    }
 
     @PostMapping("/login1")
     public String loginPlayer(@ModelAttribute(value="user") PlayerUser user, Model model, HttpServletRequest request) {
@@ -113,19 +108,6 @@ public class UserController {
         model.addAttribute("user", new PlayerUser());
         model.addAttribute("message", "Username or password is not correct, please try again!");
         return "loginPlayer";
-
-    }
-
-    @PostMapping("/login2")
-    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
-
-        if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
-            return "masterUserPage";
-        }
-
-        model.addAttribute("user", new PlayerUser());
-        model.addAttribute("message", "Username or password is not correct, please try again!");
-        return "loginMaster";
 
     }
 
@@ -183,13 +165,13 @@ public class UserController {
     public String playGame(@ModelAttribute(value="userToPlay") String userName, HttpServletRequest request){
 
         HttpSession httpSession = request.getSession(true);
-        PlayerUser user1 = (PlayerUser) httpSession.getAttribute("user");
+        PlayerUser white = (PlayerUser) httpSession.getAttribute("user");
 
-        PlayerUser user2 = MyListener.onlineUsers.get(userName);
-        GameGui gameGui = new GameGui(user1, user2);
+        PlayerUser black = MyListener.onlineUsers.get(userName);
+        GameGui gameGui = new GameGui(white, black);
 
-        System.out.println(user1.getName());
-        System.out.println(user2.getName());
+        System.out.println(white.getName());
+        System.out.println(black.getName());
 
         gameGui.run();
 

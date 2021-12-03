@@ -3,7 +3,7 @@ package com.playchessgame.chessgame.Entities;
 import java.util.ArrayList;
 
 public class Rook extends Piece{
-    private boolean not_moved;
+    private boolean notMoved;
     private final int[] offsets = {-8,-1, 1, 8};
     private final int[] checkSquares = {1, 3, 4, 6};
 
@@ -11,23 +11,10 @@ public class Rook extends Piece{
         super(color, file, rank);
     }
 
-    public int getRank(){
-        return super.getRank();
-    }
-
-    public int getFile(){
-        return super.getFile();
-    }
-
-    @Override
-    public int getPos() {
-        return super.getPos();
-    }
-
-    public boolean getColor(){
-        return super.getColor();
-    }
-
+    /**
+     * Loops over orthogonal directions until edge of board and adds to list.
+     * @return array of valid rook moves
+     */
     @Override
     public int[] getValidMoves(){
         ArrayList<Integer> temp = new ArrayList<>();
@@ -39,9 +26,13 @@ public class Rook extends Piece{
         return temp.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * Updates position and indicates piece has moved
+     * @param move integer index of square the piece has been moved to.
+     */
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
-        not_moved = false;
+        notMoved = false;
     }
 }

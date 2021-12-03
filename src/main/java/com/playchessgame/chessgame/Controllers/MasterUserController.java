@@ -7,13 +7,12 @@ import com.playchessgame.chessgame.UserService.MasterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A Masteruser Controller is reponsible for maintaining the database for onlineUsers
@@ -25,6 +24,25 @@ public class MasterUserController {
 
     @Autowired
     private MasterUserService masterUserService;
+
+    @GetMapping("/login2")
+    public String getLoginMaster(Model model){
+        model.addAttribute("user", new MasterUser());
+        return "loginMaster";
+    }
+
+    @PostMapping("/login2")
+    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
+
+        if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
+            return "masterUserPage";
+        }
+
+        model.addAttribute("user", new PlayerUser());
+        model.addAttribute("message", "Username or password is not correct, please try again!");
+        return "loginMaster";
+
+    }
 
 
     /**

@@ -3,12 +3,14 @@ package com.playchessgame.chessgame.GameService;
 import com.playchessgame.chessgame.Entities.Game;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.swing.*;
-import javax.transaction.Transactional;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Map;
 
 @Service

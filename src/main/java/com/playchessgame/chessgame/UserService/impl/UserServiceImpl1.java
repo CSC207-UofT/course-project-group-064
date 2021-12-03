@@ -3,11 +3,8 @@ package com.playchessgame.chessgame.UserService.impl;
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
-import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class UserServiceImpl1 implements UserService {
-
-    private JavaMailSender javaMailSender;
 
     @Autowired
     private Database database;

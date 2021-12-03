@@ -5,8 +5,6 @@ import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import com.playchessgame.chessgame.UserService.MasterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +15,6 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 
     private final String PASSWORD_RESET_SUCCESS = "Your Password Has Been Reset Successfully!";
     private final String PASSWORD_RESET_FAIL = "Your Password Fails to be Reset... Please Try Again!";
-
-    private JavaMailSender javaMailSender;
 
     private String masterUserEmail = "maryzhou0218@gmail.com";
 
