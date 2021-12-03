@@ -6,6 +6,8 @@ import java.util.Map;
 
 public interface MasterUserService {
 
-    public String resetPassword(Map message);
+    public String resetPassword(PlayerUser user);
+
+    public String deleteUser(PlayerUser user);
 
 }

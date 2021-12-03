@@ -1,27 +1,31 @@
 package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Entities.Game;
-import org.springframework.stereotype.Controller;
+import com.playchessgame.chessgame.Entities.PlayerUser;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.swing.*;
+import javax.transaction.Transactional;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.Map;
 
-//import org.springframework.boot.context.event.ApplicationReadyEvent;
-//import org.springframework.context.event.EventListener;
-//import org.springframework.stereotype.Component;
-
-@Controller
+@Service
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
     JPanel board;
     JLabel piece;
     int xAdjustment;
     int yAdjustment;
+
+    private PlayerUser user1;
+    private PlayerUser user2;
+
+    public GameGui(PlayerUser user1, PlayerUser user2){
+        this.user1 = user1;
+        this.user2 = user2;
+    }
 
     public GameGui(){
         //Add the pane for the board and mouse listeners for user interaction
@@ -58,7 +62,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             JPanel panel = (JPanel)board.getComponent(i);
             panel.add(piece);
         }
-
         for (int i = 48; i < 64; i++) {
             JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
             JPanel panel = (JPanel)board.getComponent(i);
@@ -75,12 +78,15 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-   public static void updateGui(Game game, GameGui gui) {
+    public static void updateGui(Game game, GameGui gui) {
         Map currentBoard = game.board.getPiecePositions();
         //gui.board = new JPanel();
         for (int i = 0; i < 64; i++) {
             if (currentBoard.containsKey(i)) {
-                String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + ".png";
+                String[] pieceNameList = currentBoard.get(i).toString().split("\\.");
+                String pieceName = pieceNameList[pieceNameList.length -1];
+//                String srcString = "/Users/kaixinrongzi0218/IdeaProjects/springboot/ChessGame/src/main/java/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + ".png";
+                String srcString = "/Users/kaixinrongzi0218/IdeaProjects/springboot/ChessGame/src/main/java/chessPieces/" + pieceName.substring(0,2) + ".png";
                 JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
                 JPanel panel = (JPanel)gui.board.getComponent(i);
                 panel.add(piece);
@@ -104,9 +110,11 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         pane.add(piece, JLayeredPane.DRAG_LAYER);
     }
 
-
     public void mouseDragged(MouseEvent me) {
         if (piece == null) return;
+
+        //TODO: to determine if the move is legal
+
         piece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
     }
 
@@ -151,7 +159,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-    @RequestMapping("/play")
     public static void main(String[] args) {
         Game game = new Game("Standard");
 
@@ -167,7 +174,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         String move = game.getMove();
         while (!move.equals("end")){
             frame.dispose();
-            game.updateDisplay(move);
+            //game.updateDisplay(move);
 
             GameGui frame1 = new GameGui();
             frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
@@ -181,5 +188,37 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             frame1.dispose();
         }
     }
-}
 
+    @Transactional
+    @RequestMapping("/play")
+    public void run() {
+        Game game = new Game("Standard");
+
+        GameGui frame = new GameGui();
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+        frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo( null );
+        updateGui(game, frame);
+        frame.setVisible(true);
+
+        game.standardDisplay();
+        String move = game.getMove();
+        while (!move.equals("end")){
+            frame.dispose();
+            //game.updateDisplay(move);
+
+            GameGui frame1 = new GameGui();
+            frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+            frame1.pack();
+            frame1.setResizable(false);
+            //frame1.setLocationRelativeTo( null );
+            updateGui(game, frame1);
+            frame1.setVisible(true);
+
+            move = game.getMove();
+            frame1.dispose();
+        }
+    }
+
+}

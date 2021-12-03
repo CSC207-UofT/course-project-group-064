@@ -11,5 +11,19 @@
     <span th:text="${message}"></span>
 </div>
 
+<div>
+    <form th:action="@{/resetPW}" th:method="get">
+        <input type="submit" value="resetpassword">
+    </form>
+</div>
+
+<div>
+    <form th:action="@{/deleteUser}">
+        <input type="submit" value="delete users">
+    </form>
+</div>
+
+
+
 </body>
 </html>

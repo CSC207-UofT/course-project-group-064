@@ -27,7 +27,7 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 
     @Override
     @Transactional
-    public String resetPassword(Map message){
+    public String resetPassword(PlayerUser user){
 
 //        try {this.database.updateUserPassword(user);
 //
@@ -38,10 +38,15 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 //        }catch (Exception e){
 //            return PASSWORD_RESET_FAIL;
 //        }
-        receiveEmail("To Update Password", message);
+//        receiveEmail("To Update Password", message);
 
-
-        return "updated!";
+        try {this.database.updateUserPassword(user);
+            return PASSWORD_RESET_SUCCESS;
+        }catch (UsernameDoesNotExist e){
+            return e.getMessage();
+        }catch (Exception e){
+            return PASSWORD_RESET_FAIL;
+        }
 
     };
 
@@ -60,6 +65,15 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 //        //TODO: to be listened and reflected on masterUserPage.html
 //        javaMailSender.send(mailMessage);
 
-
     }
+
+    @Override
+    @Transactional
+    public String deleteUser(PlayerUser user){
+        try {this.database.deleteUserInfo(user);
+            return "The User Has Been Deleted Successfully!";
+        }catch (Exception e){
+            return "The User Fails to be Deleted...";
+        }
+    };
 }

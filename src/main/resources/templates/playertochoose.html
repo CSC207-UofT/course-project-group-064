@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>playertochoose</title>
+</head>
+<body>
+<div>
+
+    <table border="1" width="50%">
+      <tr>
+          <td>Player Names</td>
+      </tr>
+      <tr th:each="username: ${users}">
+          <td th:text="${username}">
+      </tr>
+    </table>
+    </br>
+    </br>
+    <form th:action="@{/play}" th:object="${userToPlay}" th:method="post">
+        Please Enter The Player Name You Want to Play With: <input type="text" th:value="${userToPlay}" name="userToPlay" required>
+        <input type="submit" value="submit">
+    </form>
+
+
+</div>
+
+</body>
+</html>

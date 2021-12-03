@@ -4,6 +4,7 @@ import com.playchessgame.chessgame.ContextService.MyListener;
 import com.playchessgame.chessgame.Entities.MasterUser;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
+import com.playchessgame.chessgame.GameService.GameGui;
 import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -22,6 +26,11 @@ public class UserController {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private GameGui gameGui;
+
+    private MasterUserController masterUserController;
 
     @GetMapping("/register")
     public String getRegister(Model model){
@@ -88,9 +97,15 @@ public class UserController {
 //
 //            loginUsers.add(user);
 //
-            httpSession.setAttribute("username", user);
+            httpSession.setAttribute("user", user);
 
-            MyListener.onlineUsers.add(user);
+            MyListener.onlineUsers.put(user.getName(), user);
+
+            Set userNames = MyListener.onlineUsers.keySet();
+
+            for (Object username: userNames){
+                System.out.println(username);
+            }
 
             return "userinfo";
         }
@@ -122,6 +137,7 @@ public class UserController {
 
     }
 
+
 //    @PostMapping("/resetpassword")
 //    public String resetPassword(@ModelAttribute(value="user") PlayerUser user, Model model){
 //        model.addAttribute("message", this.userService.resetPassword(user));
@@ -136,18 +152,48 @@ public class UserController {
     public String Logout(HttpServletRequest request, Model model) {
         HttpSession httpSession = request.getSession(true);
 //
-        PlayerUser user = (PlayerUser) httpSession.getAttribute("username");
+        PlayerUser user = (PlayerUser) httpSession.getAttribute("user");
 
         model.addAttribute("userToLogout", user);
 
-        httpSession.removeAttribute("username");
+        httpSession.removeAttribute("user");
         httpSession.invalidate();
 
-//        MyListener.onlineUsers.remove(user);
+        MyListener.onlineUsers.remove(user.getName());
 //
         return "logout";
 
     }
 
+    @GetMapping("/play")
+    public String toChoosePlayer(Model model){
+
+        Map<String, PlayerUser> onlineUsers = MyListener.onlineUsers;
+
+        Set usernames = onlineUsers.keySet();
+
+        model.addAttribute("users", usernames);
+        model.addAttribute("userToPlay", null);
+
+        return "playertochoose";
+
+    }
+
+    @PostMapping("/play")
+    public String playGame(@ModelAttribute(value="userToPlay") String userName, HttpServletRequest request){
+
+        HttpSession httpSession = request.getSession(true);
+        PlayerUser user1 = (PlayerUser) httpSession.getAttribute("user");
+
+        PlayerUser user2 = MyListener.onlineUsers.get(userName);
+        GameGui gameGui = new GameGui(user1, user2);
+
+        System.out.println(user1.getName());
+        System.out.println(user2.getName());
+
+        gameGui.run();
+
+        return "userinfo";
+    }
 
 }

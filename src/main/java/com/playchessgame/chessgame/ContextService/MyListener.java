@@ -5,13 +5,15 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebListener
 public class MyListener implements HttpSessionListener {
 
     public static int online = 0;
-    public static List<PlayerUser> onlineUsers = new ArrayList<PlayerUser>();
+    public static Map<String, PlayerUser> onlineUsers = new HashMap<String, PlayerUser>();
 
     @Override
     public synchronized void sessionCreated(HttpSessionEvent event){

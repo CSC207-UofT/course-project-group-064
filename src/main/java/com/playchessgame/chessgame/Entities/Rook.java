@@ -3,6 +3,7 @@ package com.playchessgame.chessgame.Entities;
 import java.util.ArrayList;
 
 public class Rook extends Piece{
+    private boolean not_moved;
     private final int[] offsets = {-8,-1, 1, 8};
     private final int[] checkSquares = {1, 3, 4, 6};
 
@@ -41,5 +42,6 @@ public class Rook extends Piece{
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
+        not_moved = false;
     }
 }

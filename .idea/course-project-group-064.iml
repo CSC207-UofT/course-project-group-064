@@ -67,8 +67,6 @@
     <orderEntry type="library" name="mongodb-driver-3.12.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.7" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.7" level="project" />
@@ -163,5 +161,8 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:5.3.13" level="project" />
     <orderEntry type="library" name="Maven: com.sun.mail:jakarta.mail:1.6.7" level="project" />
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.6.0" level="project" />
   </component>
 </module>
