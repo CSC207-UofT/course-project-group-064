@@ -127,22 +127,8 @@ public class Board {
                 moves.add(move);
             }
         }
-        if (piece.getNotMoved()) {
+        if (piece.getNotMoved() && (piece.getPos() == 60 || piece.getPos() == 4)) {
             for (int move : castleMoves(piece)) {
-                /*boolean throughCheck = false;
-                int min = Math.min(origin, move);
-                int max = Math.max(origin, move);
-                for(int i = min; i <=max; i++){
-                    Map<Integer, Piece> shallowPositions = piecePositions;
-                    piecePositions.put(i, piecePositions.remove(origin));
-                    if(inCheck(turn)){
-                        throughCheck = true;
-                    }
-                    piecePositions = shallowPositions;
-                }
-                if(!throughCheck){
-                    moves.add(move);
-                }*/
                 moves.add(move);
             }
         }
@@ -225,35 +211,42 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    //checks if given board state is in check
+    /**
+     * Checks if the given player is in check by using inCheckHelper
+     * @param player the given player
+     * @return true if they are in check, false otherwise
+     */
     public boolean inCheck(boolean player) {
         for (int key : piecePositions.keySet()) {
-            Piece piece = piecePositions.get(key);
-            if (piece instanceof King && piece.getColor() == player) {
-                //declarations for easy access
+            if (piecePositions.get(key) instanceof King && piecePositions.get(key).getColor() == player) {
                 int king_file = key % 8;
                 int king_rank = 7 - ((key - king_file) / 8);
-                boolean king_color = piece.getColor();
-                Bishop bishop = new Bishop(king_color, king_file, king_rank);
-                Rook rook = new Rook(king_color, king_file, king_rank);
-                Queen queen = new Queen(king_color, king_file, king_rank);
-                //check pawns
-                int pawnOffset1 = king_color ? 7 : -7;
-                int pawnOffset2 = king_color ? 9 : -9;
-                for (int move : piece.getValidMoves()) {
-                    if ((piecePositions.get(move) instanceof Pawn && (move == (key - pawnOffset2) ||
-                            move == (key - pawnOffset1)) && piecePositions.get(move).getColor() != king_color)) {
-                        return true;
-                    }
-                }
-                //check for bishop, rook, queen, knight, king
-                if (checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
-                        checkSliding(king_color, key, queen) || checkKnights(king_color, king_file, king_rank) ||
-                        checkKing(king_color, piece)) {
-                    return true;
-                }
-
+                if (inCheckHelper(key, king_file, king_rank, player)) return true;
             }
+        }
+        return false;
+    }
+
+    private boolean inCheckHelper(int key, int king_file, int king_rank, boolean king_color) {
+        //declaring temp pieces
+        Bishop bishop = new Bishop(king_color, king_file, king_rank);
+        Rook rook = new Rook(king_color, king_file, king_rank);
+        Queen queen = new Queen(king_color, king_file, king_rank);
+        King king = new King(king_color, king_file, king_rank);
+        //check pawns
+        int pawnOffset1 = king_color ? 7 : -7;
+        int pawnOffset2 = king_color ? 9 : -9;
+        for (int move : king.getValidMoves()) {
+            if ((piecePositions.get(move) instanceof Pawn && (move == (key - pawnOffset2) ||
+                    move == (key - pawnOffset1)) && piecePositions.get(move).getColor() != king_color)) {
+                return true;
+            }
+        }
+        //check for bishop, rook, queen, knight, king
+        if (checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
+                checkSliding(king_color, key, queen) || checkKnights(king_color, king_file, king_rank) ||
+                checkKing(king_color, king)) {
+            return true;
         }
         return false;
     }
@@ -290,7 +283,6 @@ public class Board {
         if (checkMoveLegal(origin, destination)) {
             if (piecePositions.get(origin) instanceof King && piecePositions.get(origin).getNotMoved()) {
                 castleMoveHelper(origin, destination);
-
             }
             piecePositions.remove(destination);
             piecePositions.put(destination, piecePositions.remove(origin));
@@ -383,7 +375,7 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    public boolean checkSliding(boolean color, int king_pos, Piece piece) {
+    private boolean checkSliding(boolean color, int king_pos, Piece piece) {
         for (int move : inCheckSlidingMoves(king_pos, piece)){
             if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() ==
                     piece.getClass().getName() && piecePositions.get(move).getColor() != color) {
@@ -393,7 +385,7 @@ public class Board {
         return false;
     }
 
-    public boolean checkKing(boolean color, Piece king) {
+    private boolean checkKing(boolean color, Piece king) {
         for (int move : king.getValidMoves()) {
             if (piecePositions.get(move) instanceof King && (piecePositions.get(move).getColor() != color)) {
                 return true;
@@ -402,7 +394,7 @@ public class Board {
         return false;
     }
 
-    public boolean checkKnights(boolean color, int file, int rank) {
+    private boolean checkKnights(boolean color, int file, int rank) {
         Knight knight = new Knight(color, file, rank);
         for (int move : knight.getValidMoves()) {
             if (piecePositions.get(move) instanceof Knight && (piecePositions.get(move).getColor() != color)) {
@@ -412,52 +404,41 @@ public class Board {
         return false;
     }
 
-    /**
-     * Takes a piece and returns the possible castling moves it can make.
-     * @param piece The original piece (should be a King).
-     * @return A list of integer positions that the piece can castle to.
-     */
-    public int[] castleMoves(Piece piece) {
+    private int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
-        if(piece.getColor()) {
-            if (castleHelper(whiteCastleIndices[0], piece)) {
+        if(turn) {
+            if (castleHelper(whiteCastleIndecies[0], piece)) {
                 moves.add(58);
             }
-            if (castleHelper(whiteCastleIndices[1], piece)) {
+            if (castleHelper(whiteCastleIndecies[1], piece)) {
                 moves.add(62);
             }
         }
         else {
-            if (castleHelper(blackCastleIndices[0], piece)) {
+            if (castleHelper(blackCastleIndecies[0], piece)) {
                 moves.add(2);
             }
-            if (castleHelper(blackCastleIndices[1], piece)) {
+            if (castleHelper(blackCastleIndecies[1], piece)) {
                 moves.add(6);
             }
         }
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    /**
-     * Helper method that checks conditions for which a castle can occur.
-     * @param indecies Either the black or white castle indecies to check
-     * @param piece The original piece (should be a King)
-     * @return true if a castle is possible, false if it isn't.
-     */
     private boolean castleHelper(int[] indecies, Piece piece) {
-        if(piece.getNotMoved()) {
-            return piecePositions.get(indecies[0]) instanceof Rook && piecePositions.get(indecies[0]).getNotMoved() &&
-                    !(piecePositions.containsKey(indecies[1])) && !(piecePositions.containsKey(indecies[2])) &&
-                    !(piecePositions.containsKey(indecies[3])) && !inCheck(turn);
+        if(piece.getNotMoved() && piecePositions.get(indecies[0]) instanceof Rook &&
+                piecePositions.get(indecies[0]).getNotMoved() && !(piecePositions.containsKey(indecies[1])) &&
+                !(piecePositions.containsKey(indecies[2])) && !(piecePositions.containsKey(indecies[3])) &&
+                !inCheck(turn)) {
+            int king_file = indecies[3] % 8;
+            int king_rank = 7 - ((indecies[3] - king_file) / 8);
+            if (!inCheckHelper(indecies[3], king_file, king_rank, turn)) {
+                return true;
+            }
         }
         return false;
     }
 
-    /**
-     * Helper method that moves the Rook when makePlayerMove is called on the King to castle.
-     * @param origin The origin of King before castle
-     * @param destination The destination of King after castle
-     */
     private void castleMoveHelper(int origin, int destination) {
         if (turn) {
             if (destination == origin + 2) {
@@ -479,9 +460,7 @@ public class Board {
                 piecePositions.get(5).updatePosition(5);
             }
         }
-
     }
-
 }
 
 
