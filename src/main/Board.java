@@ -23,6 +23,9 @@ public class Board {
     public static final int CHECKMATE = 2;
     public static final int STALEMATE = 3;
 
+    public static final int WHITE_KING_START_SQUARE = 60;
+    public static final int BLACK_KING_START_SQUARE = 4;
+
     private Map<Integer, Piece> piecePositions; //Keys are integer positions of pieces on board.
 
     public Board(String gameMode) {
@@ -127,7 +130,7 @@ public class Board {
                 moves.add(move);
             }
         }
-        if (piece.getNotMoved() && (piece.getPos() == 60 || piece.getPos() == 4)) {
+        if (piece.getNotMoved() && (piece.getPos() == WHITE_KING_START_SQUARE || piece.getPos() == BLACK_KING_START_SQUARE)) {
             for (int move : castleMoves(piece)) {
                 moves.add(move);
             }
@@ -135,7 +138,11 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-
+    /**
+     *
+     * @param origin the pawn's current position
+     * @return array of pseudo-legal moves and captures including en passant.
+     */
     private int[] getPawnMoves(int origin) {
         Piece piece = piecePositions.get(origin);
         int[] offsets = piece.getColor() ? whitePawnOffsets : blackPawnOffsets;
@@ -162,13 +169,20 @@ public class Board {
         //Check capture diagonally right
         if (Utils.NUMSQUARESTOEDGE[origin][4] > 0) {
             destination = origin + offsets[2];
-            if ((piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor()) || canEnPassant(origin, false)) {
+            if ((piecePositions.containsKey(destination) && piecePositions.get(destination).getColor() != piece.getColor())
+                    || canEnPassant(origin, false)) {
                 moves.add(destination);
             }
         }
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     *
+     * @param origin pawn's current position
+     * @param left_right location of target piece. left = true, right = false
+     * @return true if the pawn can capture en passant, false otherwise.
+     */
     private boolean canEnPassant(int origin, boolean left_right) {
         int target = left_right ? origin - 1 : origin + 1; //Is the target piece to the left or the right of origin
         Piece targetPiece = piecePositions.get(target);
@@ -176,6 +190,11 @@ public class Board {
                 lastMove[1] == target && (lastMove[0] == target + 16 || lastMove[0] == target - 16));
     }
 
+    /**
+     *
+     * @param origin knight's current position
+     * @return array of pseudo-legal knight moves.
+     */
     public int[] getKnightMoves(int origin) {
         Piece piece = piecePositions.get(origin);
         ArrayList<Integer> moves = new ArrayList<>();
@@ -187,8 +206,14 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * gets moves for long range sliding pieces: Queen, Rook Biship
+     * Sliding piece moves are all checked the same way, so we use preset piece movement indices and loop over them to
+     * the edge of the board, stopping if we encounter a friendly piece or after capturing an unfriendly piece.
+     * @param origin sliding piece starting position
+     * @return int array of pseudo-legal moves
+     */
     public int[] getSlidingMoves(int origin) {
-        //Gets moves for long range sliding pieces: Queen, Rook, Bishop
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
@@ -310,6 +335,9 @@ public class Board {
         return piecePositions;
     }
 
+    /**
+     * Sets up pieces in standard chess starting position.
+     */
     private void standardPieceArangement() {
         //White back rank
         piecePositions.put(56, new Rook(true, 0, 0));
@@ -339,7 +367,11 @@ public class Board {
         }
     }
 
-    //Helper method that converts a string in algebraic notation to an integer location on the board
+    /**
+     * Currently unused but relevant for implementation of fen string reader.
+     * @param move square string in algebraic notation
+     * @return integer location of that square
+     */
     public int algebraicToInt(String move) {
         int file = Character.toUpperCase(move.charAt(0)) - 65;
         if (move.length() == 2 && 0 <= file && file < 8) {

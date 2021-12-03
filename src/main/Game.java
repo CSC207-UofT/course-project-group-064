@@ -23,7 +23,6 @@ public class Game {
     }
 
     public void updateDisplay(int origin, int destination){
-        //TODO parse move and update display based on new board state.
         int valid = board.makePlayerMove(origin, destination);
         if(valid == Board.LEGAL) {
             turn = !turn;
