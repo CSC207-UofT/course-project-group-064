@@ -85,7 +85,10 @@ public class UserInfoDB2 implements Database {
 //
 //    }
 
-    // get connection to mongodb
+    /**
+     *
+     * @return MongoClient which is the connection to MongoDB
+     */
     private MongoClient connect(){
 
         return (MongoClient) applicationContext.getBean("mongoclient");
@@ -102,8 +105,10 @@ public class UserInfoDB2 implements Database {
 
     }
 
+    /**
+     * Returns a new MongoDB databse
+     */
     @Override
-    //TODO: should we pass the argument of the collection name?
     public void createNewDatabase() {
         MongoClient mongoClient = connect();
         MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
@@ -114,8 +119,10 @@ public class UserInfoDB2 implements Database {
 
 
     /**
-     * Add an User to database: an User instance
-     * @param user
+     * Adds the specified player user's information into the database. Throws a UserAlreadyExistsException if the user
+     * is already in the database.
+     *
+     * @param user The user whose information is being inserted.
      */
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
@@ -139,6 +146,11 @@ public class UserInfoDB2 implements Database {
 
     }
 
+    /**
+     * Deletes the specified player use's information from the database.
+     *
+     * @param user The user whose information being deleted from the database
+     */
     @Override
     public void deleteUserInfo(PlayerUser user) {
         MongoCollection mongoCollection = getCollection();
@@ -147,6 +159,12 @@ public class UserInfoDB2 implements Database {
         mongoCollection.deleteOne(filter);
     }
 
+    /**
+     * Checks if the specified player user is already in the database (by looking at their username specifically).
+     *
+     *
+     * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
+     */
     @Override
     public boolean checkUserExistence(PlayerUser user) {
 
@@ -167,6 +185,11 @@ public class UserInfoDB2 implements Database {
 
     }
 
+    /**
+     * Updates the password of the specified player in the database to the specified new password.
+     *
+     * @param user The user whose password is being updated
+     */
     @Override
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
 
@@ -179,6 +202,12 @@ public class UserInfoDB2 implements Database {
 
     }
 
+    /**
+     * Updates the Elo rating of the specified player in the database to the specified new Elo rating.
+     *
+     * @param user The user whose Elo rating is being updated
+     * @param newElo The new Elo rating
+     */
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) {
 
@@ -190,6 +219,12 @@ public class UserInfoDB2 implements Database {
         mongoCollection.updateOne(filter, eloUpdate);
     }
 
+    /**
+     * check if the given password matches the one of the given user
+     * @param user
+     * @param password
+     * @return true if the given password matches th user's password stored in the MongoDB
+     */
     @Override
     public boolean checkUserPassword(PlayerUser user, String password) {
 
@@ -209,7 +244,13 @@ public class UserInfoDB2 implements Database {
         return false;
     }
 
-    public PlayerUser getUser(String username){
+    /**
+     * return the playeruser matching the given username
+     * @param username
+     * @return the playeruser matching the given username
+     */
+    @Override
+    public PlayerUser getPlayerUserByName(String username){
         MongoCollection mongoCollection = getCollection();
 
         Document document = new Document("name", username);
@@ -222,7 +263,6 @@ public class UserInfoDB2 implements Database {
             elo = Integer.valueOf((String) res.get("elo"));
         }
 
-        //TODO: to implement
         return new PlayerUser();
 
     }

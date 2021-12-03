@@ -2,9 +2,7 @@ package com.playchessgame.chessgame.Database.impl;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
-import com.playchessgame.chessgame.Entities.User;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
-import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 
@@ -177,7 +175,13 @@ public class UserInfoDB implements Database {
         }
     }
 
-    //TODO: to take a look at it
+    /**
+     * check if the given password matches the one of the given user
+     * @param user
+     * @param password
+     * @return true if the given password matches th user's password stored in the Sql database
+     */
+    @Override
     public boolean checkUserPassword(PlayerUser user, String password){
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
@@ -194,6 +198,17 @@ public class UserInfoDB implements Database {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * return the playeruser matching the given username
+     * @param username
+     * @return the playeruser matching the given username
+     */
+    @Override
+    //TODO: to implement
+    public PlayerUser getPlayerUserByName(String username){
+        return new PlayerUser();
     }
 
 }

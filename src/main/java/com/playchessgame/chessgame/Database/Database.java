@@ -1,6 +1,5 @@
 package com.playchessgame.chessgame.Database;
 
-import com.playchessgame.chessgame.Entities.User;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
@@ -20,5 +19,7 @@ public interface Database {
     public void updateUserElo(PlayerUser user, Integer newElo);
 
     public boolean checkUserPassword(PlayerUser user, String password);
+
+    public PlayerUser getPlayerUserByName(String username);
 
 }
