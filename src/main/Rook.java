@@ -9,20 +9,6 @@ public class Rook extends Piece{
         super(color, file, rank);
     }
 
-    //Getters
-    public int getRank(){
-        return super.getRank();
-    }
-    public int getFile(){
-        return super.getFile();
-    }
-    public int getPos() {
-        return super.getPos();
-    }
-    public boolean getColor(){
-        return super.getColor();
-    }
-
     /**
      * Loops over orthogonal directions until edge of board and adds to list.
      * @return array of valid rook moves

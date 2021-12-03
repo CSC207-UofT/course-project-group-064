@@ -6,21 +6,6 @@ public class Queen extends Piece{
     public Queen(boolean color, int file, int rank){
         super(color, file, rank);
     }
-
-    //Getters
-    public int getRank(){
-        return super.getRank();
-    }
-    public int getFile(){
-        return super.getFile();
-    }
-    public int getPos() {
-        return super.getPos();
-    }
-    public boolean getColor() {
-        return super.getColor();
-    }
-
     /**
      * Loops over every direction to the edge of the board
      * @return array of valid queen moves
@@ -35,9 +20,5 @@ public class Queen extends Piece{
             }
         }
         return temp.stream().mapToInt(i -> i).toArray();
-    }
-
-    public void updatePosition(int move) {
-        super.updatePosition(move);
     }
 }

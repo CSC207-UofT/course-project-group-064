@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Pawn extends Piece{
     private boolean notMoved = true;
     private final int[] offsets = {-9, -8, -7, -16};
-    private int[] indecies = new int[3];
+    private int[] indices;
 
     public Pawn(boolean color, int file, int rank){
         super(color, file, rank);
@@ -13,25 +13,8 @@ public class Pawn extends Piece{
             offsets[2] = 9;
             offsets[3] = 16;
         }
-        this.indecies = color ? new int[]{0, 1, 2} : new int[]{5, 6, 7};
+        this.indices = color ? new int[]{0, 1, 2} : new int[]{5, 6, 7};
     }
-
-    public boolean getNotMoved(){
-        return super.getNotMoved();
-    }
-    public int getRank() {
-        return super.getRank();
-    }
-    public int getFile() {
-        return super.getFile();
-    }
-    public int getPos() {
-        return super.getPos();
-    }
-    public boolean getColor() {
-        return super.getColor();
-    }
-
     /**
      * Uses notMoved to check if pawn can double move. Adds capture squares which are checked in Board.
      * @return array of valid pawn moves
@@ -40,7 +23,7 @@ public class Pawn extends Piece{
     public int[] getValidMoves() {
         ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 3; i++){
-            if(Utils.NUMSQUARESTOEDGE[getPos()][indecies[i]] >= 1){
+            if(Utils.NUMSQUARESTOEDGE[getPos()][indices[i]] >= 1){
                 temp.add(getPos() + offsets[i]);
             }
         }

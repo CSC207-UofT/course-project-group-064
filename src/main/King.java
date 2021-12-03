@@ -8,21 +8,6 @@ public class King extends Piece{
         super(color, file, rank);
         this.notMoved = true;
     }
-
-    //Getters
-    public int getRank(){
-        return super.getRank();
-    }
-    public int getFile(){
-        return super.getFile();
-    }
-    public int getPos() {
-        return super.getPos();
-    }
-    public boolean getColor(){
-        return super.getColor();
-    }
-
     /**
      * Checks each direction but only once and adds them to array.
      * @return array of valid king moves
