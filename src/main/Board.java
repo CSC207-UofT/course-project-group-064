@@ -15,8 +15,13 @@ public class Board {
         //TODO iterate through pieces list and determine their legal moves based on other pieces' positions
     }
 
-    public void checkMoveLegal(String move){
-        //TODO alternate to getLegalMoves, checks a specific input move.
+    public boolean checkMoveLegal(String move){
+        String [] orDest = move.split(",");
+        int origin = Integer.parseInt(orDest[0]);
+        int destination = Integer.parseInt(orDest[1]);
+        if (piecePositions.containsKey(destination))
+            return false;
+        return true;
     }
 
     public void makePlayerMove(String move, boolean color){
@@ -25,8 +30,8 @@ public class Board {
 
         //Parse CLI move input
         String [] orDest = move.split(",");
-        int origin = algebraicToInt(orDest[0]);
-        int destination = algebraicToInt(orDest[1]);
+        int origin = Integer.parseInt(orDest[0]);
+        int destination = Integer.parseInt(orDest[1]);
 
         //Check that the origin is occupied
         if (piecePositions.containsKey(origin)){

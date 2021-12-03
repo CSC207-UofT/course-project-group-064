@@ -49,26 +49,30 @@ public class Game {
         return console.nextLine();
     }
 
+    public String getMove(int origin, int destination){
+        return console.nextLine();
+    }
+
 
 
     //BELOW THIS LINE EXIST TEMPORARY METHODS TO FACILITATE PRINTING AN ASCII CHESSBOARD IN LIEU OF GRAPHICAL DISPLAY
     private String toDisplayString(){
         Map<Integer, Piece> pieceMap = board.getPiecePositions();
-       final StringBuilder builder = new StringBuilder();
-       for(int i = 0; i < 64; i++){
-           String tileText;
-           if (pieceMap.containsKey(i)){
-               tileText = typeToString(pieceMap.get(i));
-               }
-           else{
-               tileText = "-";
-           }
-           builder.append(String.format("%3s", tileText));
-           if ((i+1) % 8 == 0){
-               builder.append("\n");
-           }
-       }
-       return builder.toString();
+        final StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < 64; i++){
+            String tileText;
+            if (pieceMap.containsKey(i)){
+                tileText = typeToString(pieceMap.get(i));
+            }
+            else{
+                tileText = "-";
+            }
+            builder.append(String.format("%3s", tileText));
+            if ((i+1) % 8 == 0){
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
     }
 
     //converts piece type to string
