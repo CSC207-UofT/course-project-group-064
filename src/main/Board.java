@@ -2,18 +2,20 @@ import java.util.*;
 
 public class Board {
 
-    //Piece type offsets
+    //Piece type movement direction offsets
     private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
-    private final int[] queenIndecies = {0, 1, 2, 3, 4, 5, 6, 7};
-    private final int[] rookIndecies = {1, 3, 4, 6};
-    private final int[] bishopIndecies = {0, 2, 5, 7};
+    private final int[] queenIndices = {0, 1, 2, 3, 4, 5, 6, 7};
     private final int[] whitePawnOffsets = {-7, -8, -9};
     private final int[] blackPawnOffsets = {7, 8, 9};
-    private final int[][] whiteCastleIndecies = {{56, 57, 58, 59, 60}, {63, 100, 62, 61, 60}};
-    private final int[][] blackCastleIndecies = {{0, 1, 2, 3, 4}, {7, 100, 6, 5, 4}};
-    private int[] lastMove = {0, 0};
-    private boolean turn = true;
 
+    //Indices of concern for pieces in numSquaresToEdge
+    private final int[] rookIndices = {1, 3, 4, 6};
+    private final int[] bishopIndices = {0, 2, 5, 7};
+    private final int[][] whiteCastleIndices = {{56, 57, 58, 59, 60}, {63, 100, 62, 61, 60}};
+    private final int[][] blackCastleIndices = {{0, 1, 2, 3, 4}, {7, 100, 6, 5, 4}};
+
+    private int[] lastMove = {0, 0};
+    private boolean turn = true; //True if white's turn, false if black's turn
 
     //Move result indicators
     public static final int LEGAL = 0;
@@ -21,7 +23,7 @@ public class Board {
     public static final int CHECKMATE = 2;
     public static final int STALEMATE = 3;
 
-    private Map<Integer, Piece> piecePositions;
+    private Map<Integer, Piece> piecePositions; //Keys are integer positions of pieces on board.
 
     public Board(String gameMode) {
         this.piecePositions = new HashMap<>();
@@ -30,10 +32,13 @@ public class Board {
         }
     }
 
+    /**
+     *
+     * @param checkTurn boolean player whose moves we are looking at.
+     * @return 2d int array of every move that can be made. [piece][piece's moves]. The first element of each sub-array
+     * is the current position of the piece.
+     */
     public int[][] getLegalMoves(boolean checkTurn) {
-        /*Returns every legal move that can be made on this turn. The returned 2d array is a list of every move that
-        * can be made by the pieces currently availible to the active player. The first element of each piece's move
-        * array is the piece's current position.*/
         int[][] moves = new int[16][];
         int index = 0;
         HashMap<Integer, Piece> tempPositions = new HashMap<>(piecePositions);
@@ -47,6 +52,12 @@ public class Board {
         return moves;
     }
 
+    /**
+     * Checks if a given move is legal.
+     * @param origin the starting location of the piece being moved
+     * @param destination the ending location of the piece being moved
+     * @return boolean true if the move is legal, false if the move is illegal.
+     */
     public boolean checkMoveLegal(int origin, int destination) {
         if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
             return false;
@@ -55,8 +66,13 @@ public class Board {
         return Utils.contains(moves, destination);
     }
 
-    /**Helper method that returns a piece's legal moves regardless of type with the first element of the returned
-     * array being the piece's starting position.*/
+    /**
+     * Helper method to get list of legal moves for a specific piece by first filtering it by piece type and calling
+     * relevant sub-methods.
+     * @param piece the piece whose moves are being checked.
+     * @param checkTurn the player we are checking moves for, or their opponent if we are looking for check mate.
+     * @return int array of legal moves for a specific piece starting with that piece's current location.
+     */
     public int[] pieceTypeMoves(Piece piece, boolean checkTurn){
         int[] pseudoMoves; //Pseudo legal moves before check and mate checks
         int position = piece.getPos();
@@ -72,8 +88,21 @@ public class Board {
         else{
             pseudoMoves = getSlidingMoves(position);
         }
+        return filterLegalMoves(piece, pseudoMoves, checkTurn);
+    }
+
+    /**
+     *
+     * @param piece the piece whose moves are being checked
+     * @param pseudoMoves a list of pseudo legal moves for the piece. This method checks that those moves do not leave
+     *                    the king attacked.
+     * @param checkTurn the player whose king is being checked for attacks.
+     * @return int array of legal moves for piece beginning with its current location.
+     */
+    public int[] filterLegalMoves(Piece piece, int[] pseudoMoves, boolean checkTurn){
         ArrayList<Integer> moves = new ArrayList<>();
-        moves.add(piece.getPos());
+        int position = piece.getPos();
+        moves.add(position);
         for (int move : pseudoMoves){
             Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
             piecePositions.remove(move);
@@ -86,8 +115,11 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    //TODO make private once inside bigger method
-    public int[] getKingMoves(int origin) {
+    /**
+     * @param origin king's current position
+     * @return int list of moves the king can make that are not blocked by other pieces.
+     */
+    private int[] getKingMoves(int origin) {
         Piece piece = piecePositions.get(origin);
         ArrayList<Integer> moves = new ArrayList<>();
         for (int move : piece.getValidMoves()) {
@@ -117,7 +149,8 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    public int[] getPawnMoves(int origin) {
+
+    private int[] getPawnMoves(int origin) {
         Piece piece = piecePositions.get(origin);
         int[] offsets = piece.getColor() ? whitePawnOffsets : blackPawnOffsets;
         ArrayList<Integer> moves = new ArrayList<>();
@@ -171,7 +204,7 @@ public class Board {
     public int[] getSlidingMoves(int origin) {
         //Gets moves for long range sliding pieces: Queen, Rook, Bishop
         Piece piece = getPiecePositions().get(origin);
-        int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
+        int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
         if (origin==0){
             int k=0;
@@ -332,7 +365,7 @@ public class Board {
 
     //A copy of getSlidingMoves, with different args
     public int[] inCheckSlidingMoves(int origin, Piece piece) {
-        int[] offsets = (piece instanceof Queen) ? queenIndecies : (piece instanceof Rook) ? rookIndecies : bishopIndecies;
+        int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
         for (int offset : offsets) {
             for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offset]; j++) {
@@ -387,18 +420,18 @@ public class Board {
     public int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
         if(piece.getColor()) {
-            if (castleHelper(whiteCastleIndecies[0], piece)) {
+            if (castleHelper(whiteCastleIndices[0], piece)) {
                 moves.add(58);
             }
-            if (castleHelper(whiteCastleIndecies[1], piece)) {
+            if (castleHelper(whiteCastleIndices[1], piece)) {
                 moves.add(62);
             }
         }
         else {
-            if (castleHelper(blackCastleIndecies[0], piece)) {
+            if (castleHelper(blackCastleIndices[0], piece)) {
                 moves.add(2);
             }
-            if (castleHelper(blackCastleIndecies[1], piece)) {
+            if (castleHelper(blackCastleIndices[1], piece)) {
                 moves.add(6);
             }
         }

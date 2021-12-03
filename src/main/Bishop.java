@@ -12,25 +12,27 @@ public class Bishop extends Piece{
         super(color, file, rank);
     }
 
+    //Getters
     public int getRank(){
         return super.getRank();
     }
-
     public int getFile(){
         return super.getFile();
     }
-
-    @Override
     public int getPos() {
         return super.getPos();
     }
-
     public boolean getColor(){
         return super.getColor();
     }
 
+    /**
+     * Loops over the four diagonal directions until the edge of the board.
+     * @return array of valid bishop moves
+     */
+    @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
+        ArrayList<Integer> temp = new ArrayList<>();
         for (int i = 0; i < 4; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i]]; j++){
                 temp.add(getPos() + offsets[i] * (j + 1));
@@ -39,7 +41,6 @@ public class Bishop extends Piece{
         return temp.stream().mapToInt(i -> i).toArray();
     }
 
-    @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
     }

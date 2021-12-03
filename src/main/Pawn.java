@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Pawn extends Piece{
+    private boolean notMoved = true;
     private final int[] offsets = {-9, -8, -7, -16};
     private int[] indecies = new int[3];
 
@@ -15,30 +16,26 @@ public class Pawn extends Piece{
         this.indecies = color ? new int[]{0, 1, 2} : new int[]{5, 6, 7};
     }
 
-    @Override
     public boolean getNotMoved(){
         return super.getNotMoved();
     }
-    @Override
     public int getRank() {
         return super.getRank();
     }
-
-    @Override
     public int getFile() {
         return super.getFile();
     }
-
-    @Override
     public int getPos() {
         return super.getPos();
     }
-
-    @Override
     public boolean getColor() {
         return super.getColor();
     }
 
+    /**
+     * Uses notMoved to check if pawn can double move. Adds capture squares which are checked in Board.
+     * @return array of valid pawn moves
+     */
     @Override
     public int[] getValidMoves() {
         ArrayList<Integer> temp = new ArrayList<>();
@@ -47,12 +44,13 @@ public class Pawn extends Piece{
                 temp.add(getPos() + offsets[i]);
             }
         }
-        if (getNotMoved()){temp.add(getPos() + offsets[3]);}
+        if (notMoved){temp.add(getPos() + offsets[3]);}
         return temp.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
+        notMoved = false;
     }
 }

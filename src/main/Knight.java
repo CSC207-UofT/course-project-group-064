@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Knight extends Piece{
     private final int[] offsets = {-17, -15, -10, -6, 6, 10, 15, 17};
@@ -11,27 +10,28 @@ public class Knight extends Piece{
         super(color, file, rank);
     }
 
+    //Getters
     public int getRank(){
         return super.getRank();
     }
-
     public int getFile(){
         return super.getFile();
     }
-
     public boolean getNotMoved(){
         return super.getNotMoved();
     }
-
-    @Override
     public int getPos() {
         return super.getPos();
     }
-
     public boolean getColor(){
         return super.getColor();
     }
 
+    /**
+     * Knights have at most eight legal moves on each turn. We check each using integer offsets to those squares
+     * and using checkSquares and knightMoves to prevent the piece jumping from one side of the board to the other.
+     * @return array of knight moves.
+     */
     @Override
     public int[] getValidMoves(){
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -44,7 +44,6 @@ public class Knight extends Piece{
         return temp.stream().mapToInt(i -> i).toArray();
     }
 
-    @Override
     public void updatePosition(int move) {
         super.updatePosition(move);
     }
