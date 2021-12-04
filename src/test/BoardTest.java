@@ -1,5 +1,8 @@
 import Entities.Board;
-import org.junit.*;
+import Entities.King;
+import Entities.Rook;
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 

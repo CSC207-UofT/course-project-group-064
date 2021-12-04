@@ -1,3 +1,5 @@
+package Entities;
+
 public class Memento {
     private Board board;
 

@@ -4,23 +4,18 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
-    private String game_mode;
-    public boolean isWhitesTurn;
+    private String game_mode; //To be used later
     private String textBoardDisplay; //Temporary board display in text
-    private Board board;
+    public Board board;
     private Scanner console;
-    private boolean turn = true;
-    private User whitePlayer;
-    private User blackPlayer;
+    private boolean turn = true; //White = true, Black = false throughout the program
 
-    public Game(String game_mode, User white, User black){
-        this.game_mode = game_mode;
+    public Game(String gameMode, PlayerUser white, PlayerUser black){
+        this.game_mode = gameMode;
         //TODO implement initial game setup
         this.textBoardDisplay = "";
         this.board = new Board(game_mode);
         this.console = new Scanner(System.in);
-        this.whitePlayer = white;
-        this.blackPlayer = black;
     }
     public void initializeDisplay(){
         //TODO displays image of board and pieces in default positions depending on gamemode
@@ -29,31 +24,31 @@ public class Game {
         }
     }
 
-    public void endGame(int result){
-        if (result==3){
-            Utils.calculateElo(.5, whitePlayer, blackPlayer);
-        }
-        else{
-            result = turn ? 1 : 0;
-            Utils.calculateElo(result, whitePlayer, blackPlayer);
-        }
-    }
-
-    public void updateDisplay(String move){
-        //TODO parse move and update display based on new board state.
-        boolean valid = board.makePlayerMove(move, turn);
-        if(valid) {
+    public void updateDisplay(int origin, int destination){
+        int valid = board.makePlayerMove(origin, destination);
+        if(valid == Board.LEGAL) {
             turn = !turn;
             String boardString = toDisplayString();
             System.out.println(boardString);
+        }
+        else if (valid == Board.CHECKMATE){
+            endGame(true);
+        }
+        else if (valid == Board.STALEMATE){
+            endGame(false);
         }
         else {
             System.out.println("Illegal move, please input a legal move");
         }
     }
 
+    /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
+     * if passed false the game ended in a draw*/
+    public void endGame(boolean result){
+    }
+
     //Initializes display for a classic game of chess.
-    private void standardDisplay(){
+    public void standardDisplay(){
         String boardString = toDisplayString();
         System.out.println(boardString);
     }
@@ -68,21 +63,21 @@ public class Game {
     //BELOW THIS LINE EXIST TEMPORARY METHODS TO FACILITATE PRINTING AN ASCII CHESSBOARD IN LIEU OF GRAPHICAL DISPLAY
     private String toDisplayString(){
         Map<Integer, Piece> pieceMap = board.getPiecePositions();
-       final StringBuilder builder = new StringBuilder();
-       for(int i = 0; i < 64; i++){
-           String tileText;
-           if (pieceMap.containsKey(i)){
-               tileText = typeToString(pieceMap.get(i));
-               }
-           else{
-               tileText = "-";
-           }
-           builder.append(String.format("%3s", tileText));
-           if ((i+1) % 8 == 0){
-               builder.append("\n");
-           }
-       }
-       return builder.toString();
+        final StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < 64; i++){
+            String tileText;
+            if (pieceMap.containsKey(i)){
+                tileText = typeToString(pieceMap.get(i));
+            }
+            else{
+                tileText = "-";
+            }
+            builder.append(String.format("%3s", tileText));
+            if ((i+1) % 8 == 0){
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
     }
 
     //converts piece type to string
@@ -114,13 +109,13 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        User white = new PlayerUser("Test", 1000);
-        User black = new PlayerUser("test", 1000);
+        PlayerUser white = new PlayerUser("test1", 1000);
+        PlayerUser black = new PlayerUser("test2", 1000);
         Game game = new Game("Standard", white, black);
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){
-            game.updateDisplay(move);
+            //game.updateDisplay(origin, destination);
             move = game.getMove();
         }
     }

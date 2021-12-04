@@ -1,3 +1,5 @@
+package Entities;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -144,7 +146,9 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        PlayerUser white = new PlayerUser("p1", 1000);
+        PlayerUser black = new PlayerUser("p2", 1000);
+        Game game = new Game("Standard", white, black);
 
         GameGui frame = new GameGui(game);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
