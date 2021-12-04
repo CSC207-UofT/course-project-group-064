@@ -1,3 +1,5 @@
+package Entities;
+
 import java.util.ArrayList;
 
 public class Knight extends Piece{

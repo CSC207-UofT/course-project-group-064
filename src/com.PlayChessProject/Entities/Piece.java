@@ -1,3 +1,5 @@
+package Entities;
+
 public abstract class Piece {
     private int rank; //The y coordinate of the piece on the board
     private int file; //The x coordinate of the piece on the board

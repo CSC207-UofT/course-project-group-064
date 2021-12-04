@@ -1,3 +1,4 @@
+import Entities.Board;
 import org.junit.*;
 import static org.junit.Assert.*;
 

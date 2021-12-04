@@ -1,19 +1,26 @@
+package Entities;
+
 import java.util.Map;
 import java.util.Scanner;
 
 public class Game {
-    private String game_mode; //To be used later
+    private String game_mode;
+    public boolean isWhitesTurn;
     private String textBoardDisplay; //Temporary board display in text
-    public Board board;
+    private Board board;
     private Scanner console;
-    private boolean turn = true; //White = true, Black = false throughout the program
+    private boolean turn = true;
+    private User whitePlayer;
+    private User blackPlayer;
 
-    public Game(String game_mode){
+    public Game(String game_mode, User white, User black){
         this.game_mode = game_mode;
         //TODO implement initial game setup
         this.textBoardDisplay = "";
         this.board = new Board(game_mode);
         this.console = new Scanner(System.in);
+        this.whitePlayer = white;
+        this.blackPlayer = black;
     }
     public void initializeDisplay(){
         //TODO displays image of board and pieces in default positions depending on gamemode
@@ -22,31 +29,31 @@ public class Game {
         }
     }
 
-    public void updateDisplay(int origin, int destination){
-        int valid = board.makePlayerMove(origin, destination);
-        if(valid == Board.LEGAL) {
+    public void endGame(int result){
+        if (result==3){
+            Utils.calculateElo(.5, whitePlayer, blackPlayer);
+        }
+        else{
+            result = turn ? 1 : 0;
+            Utils.calculateElo(result, whitePlayer, blackPlayer);
+        }
+    }
+
+    public void updateDisplay(String move){
+        //TODO parse move and update display based on new board state.
+        boolean valid = board.makePlayerMove(move, turn);
+        if(valid) {
             turn = !turn;
             String boardString = toDisplayString();
             System.out.println(boardString);
-        }
-        else if (valid == Board.CHECKMATE){
-            endGame(true);
-        }
-        else if (valid == Board.STALEMATE){
-            endGame(false);
         }
         else {
             System.out.println("Illegal move, please input a legal move");
         }
     }
 
-    /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
-     * if passed false the game ended in a draw*/
-    public void endGame(boolean result){
-    }
-
     //Initializes display for a classic game of chess.
-    public void standardDisplay(){
+    private void standardDisplay(){
         String boardString = toDisplayString();
         System.out.println(boardString);
     }
@@ -107,11 +114,13 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        User white = new PlayerUser("Test", 1000);
+        User black = new PlayerUser("test", 1000);
+        Game game = new Game("Standard", white, black);
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){
-            //game.updateDisplay(origin, destination);
+            game.updateDisplay(move);
             move = game.getMove();
         }
     }
