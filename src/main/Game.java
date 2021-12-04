@@ -44,9 +44,6 @@ public class Game {
      * if passed false the game ended in a draw*/
     public void endGame(boolean result){
     }
-    public void calculateElo(double game_result, User white, User black){
-        //TODO update user elos based on game result
-    }
 
     //Initializes display for a classic game of chess.
     public void standardDisplay(){
