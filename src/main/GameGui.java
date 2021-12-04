@@ -47,16 +47,19 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-    public static void clearGui(Game game, GameGui gui){
+    public static void clearGui(GameGui gui, String pieceDestination){
         for (int j = 0; j < 64; j++) {
             JPanel panel = (JPanel)gui.board.getComponent(j);
             panel.removeAll();
+            if (pieceDestination != "null") {
+                gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
+                gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(true);
+            }
         }
     }
 
     public static void updateGui(Game game, GameGui gui) {
         Map currentBoard = game.board.getPiecePositions();
-        //gui.board = new JPanel();
         for (int i = 0; i < 64; i++) {
             if (currentBoard.containsKey(i)) {
                 boolean color = game.board.getPiecePositions().get(i).getColor();
@@ -76,7 +79,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         piece = null;
         Component c =  board.findComponentAt(e.getX(), e.getY());
         pieceOrigin = c.getParent().getName();
-        System.out.println(pieceOrigin);
 
         if (c instanceof JPanel)
             return;
@@ -104,7 +106,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         if (c instanceof JLabel){
             pieceDestination = c.getParent().getName();
-            //System.out.println(pieceDestination);
             Container parent = c.getParent();
             parent.remove(0);
             parent.add( piece );
@@ -112,7 +113,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         }
         else {
             pieceDestination = c.getName();
-            //System.out.println(pieceDestination);
             Container parent = (Container)c;
             parent.add( piece );
             moveMade = true;
@@ -151,7 +151,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo( null );
-        clearGui(game, frame);
+        clearGui(frame, frame.pieceDestination);
         updateGui(game, frame);
         frame.setVisible(true);
 
@@ -164,29 +164,16 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                 moveString = frame.pieceOrigin + "," + frame.pieceDestination;
             }
             moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            if (game.board.checkMoveLegal(moveString)) {
-                game.board.makePlayerMove(moveString, true);
-                game.updateDisplay(moveString);
+            String [] orDest = moveString.split(",");
+            int origin = Integer.parseInt(orDest[0]);
+            int destination = Integer.parseInt(orDest[1]);
+            if (game.board.checkMoveLegal(origin, destination)) {
+                game.board.makePlayerMove(origin, destination);
             }
-            clearGui(game, frame);
+            game.standardDisplay();
+            clearGui(frame, frame.pieceDestination);
             updateGui(game, frame);
             frame.setVisible(true);
         }
-        //String move = game.getMove();
-
-        /*while (!move.equals("end")){
-            frame.dispose();
-            game.updateDisplay(move);
-
-            GameGui frame1 = new GameGui(game);
-            frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-            frame1.pack();
-            frame1.setResizable(false);
-            //frame1.setLocationRelativeTo( null );
-            updateGui(game, frame1);
-            frame1.setVisible(true);
-            move = game.getMove();
-            frame1.dispose();
-        }*/
     }
 }
