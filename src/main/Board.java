@@ -311,7 +311,9 @@ public class Board {
      * */
     public int makePlayerMove(int origin, int destination) {
         boolean move_valid = false;
-
+        if (origin == destination){
+            return Board.ILLEGAL;
+        }
         //Check that the origin is occupied
         if (checkMoveLegal(origin, destination)) {
             if (piecePositions.get(origin) instanceof King && piecePositions.get(origin).getNotMoved()) {
