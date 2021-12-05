@@ -1,6 +1,8 @@
 package com.playchessgame.chessgame.Controllers;
 
+import com.playchessgame.chessgame.ContextService.MyListener;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -14,7 +16,8 @@ public class PageController {
      * @return the "masterUserPage" webpage
      */
     @RequestMapping("/showMasterUserPage")
-    public String showMasterUserPage(){
+    public String showMasterUserPage(Model model){
+        model.addAttribute("online", MyListener.online);
         return "masterUserPage";
     }
 
