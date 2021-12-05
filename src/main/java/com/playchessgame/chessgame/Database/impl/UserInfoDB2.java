@@ -57,6 +57,7 @@ public class UserInfoDB2 implements Database {
      * is already in the database.
      *
      * @param user The player whose information is being inserted.
+     * @param user The user whose information is being inserted.
      */
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
@@ -84,6 +85,7 @@ public class UserInfoDB2 implements Database {
      * Deletes the specified player use's information from the database.
      *
      * @param user The player whose information being deleted from the database
+     * @param user The user whose information being deleted from the database
      */
     @Override
     public void deleteUserInfo(PlayerUser user) {
@@ -94,10 +96,11 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Checks if the specified player is already in the database (by looking at their username specifically).
+     * Checks if the specified player user is already in the database (by looking at their username specifically).
      *
+     * @param username The user whose existence is being checked
      *
-     * @return A true or false value reflecting whether the player is in the database. True if they are, false if they aren't
+     * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
      */
     @Override
     public boolean checkUserExistence(PlayerUser user) {
@@ -140,7 +143,7 @@ public class UserInfoDB2 implements Database {
      * Updates the Elo rating of the specified player in the database to the specified new Elo rating.
      *
      * @param user The player whose Elo rating is being updated
-     * @param newElo The new Elo rating
+     * @param user The user whose Elo rating is being updated
      */
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) {

@@ -28,32 +28,58 @@ public class PlayerUser extends User {
         super();
     }
 
-    //TODO: do we need this?
-//    public PlayerUser(String username, int elo){
-//        this.name = username;
-//        this.elo = elo;
-//    }
+    /**
+     * Returns the player user's username.
+     *
+     * @return the player user's name
+     */
+    @Override
+    public String getName() {return name;}
 
-//    public String getName() {return name;}
-//
-//    public void setName(String name) {this.name = name;
-//    }
-//
-//    public String getPassword() {return password;}
-//
-//    public void setPassword(String password) {this.password = password;}
+    /**
+     * Sets the player user's username to the specified name.
+     *
+     * @param name The specified name
+     */
+    public void setName(String name) {this.name = name;
+    }
 
+    /**
+     * Returns the player user's password.
+     *
+     * @return the player user's password
+     */
+    public String getPassword() {return password;}
+
+    /**
+     * Sets the player user's password to the specified password.
+     *
+     * @param password The specified password
+     */
+    public void setPassword(String password) {this.password = password;}
+  
+    /**
+     * Returns the player user's elo.
+     *
+     * @return the player user's elo
+     */
     public int getElo(){
         return this.elo;
     }
 
-    public void setElo(int newElo) {
+    /**
+     * Sets the player user's elo to the specified elo.
+     *
+     * @param elo The specified elo
+     */
+     public void setElo(int newElo) {
         this.elo = newElo;
         if (this.games==10){
             kFactor = 10;
         }
         this.games++;
     }
+
 
     public int getkFactor(){
         return this.kFactor;
