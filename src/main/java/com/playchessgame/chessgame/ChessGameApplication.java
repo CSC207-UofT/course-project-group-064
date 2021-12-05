@@ -1,21 +1,22 @@
 package com.playchessgame.chessgame;
 
-import com.playchessgame.chessgame.ContextService.MyListener;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 
+/**
+ * The initialization class of the project (spring boot)
+ */
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @ServletComponentScan
 public class ChessGameApplication {
 
+    /**
+     * The starting point of the project
+     * @param args
+     */
     public static void main(String[] args) {
-
-//        SpringApplication.run(ChessGameApplication.class, args);
-//        System.setProperty("java.awt.headless", "false"); //Disables headless
 
         SpringApplicationBuilder builder = new SpringApplicationBuilder(ChessGameApplication.class);
         builder.headless(false);
