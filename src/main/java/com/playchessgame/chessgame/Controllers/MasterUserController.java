@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A Masteruser Controller is reponsible for maintaining the database for onlineUsers
@@ -32,9 +37,12 @@ public class MasterUserController {
     }
 
     @PostMapping("/login2")
-    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model) {
+    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model, HttpServletRequest request) {
 
         if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
+            HttpSession httpSession = request.getSession(true);
+            httpSession.setAttribute("masterUser", user);
+            model.addAttribute("online", MyListener.online);
             return "masterUserPage";
         }
 
@@ -45,20 +53,20 @@ public class MasterUserController {
     }
 
 
-    /**
-     * Check the total number of online players
-     * @return
-     */
-    @RequestMapping("/online")
-    public String checkOnlineUsersNumber(Model model) {
-
-        model.addAttribute("number", MyListener.online);
-
-        return "onlineusernumber";
-    }
+//    /**
+//     * Check the total number of online players
+//     * @return
+//     */
+//    @RequestMapping("/online")
+//    public String checkOnlineUsersNumber(Model model) {
+//
+//        model.addAttribute("number", MyListener.online);
+//
+//        return "onlineusernumber";
+//    }
 
     @GetMapping("/resetPW")
-    public String toResetPassword(@ModelAttribute(value="user") PlayerUser user, @ModelAttribute(value="email") String email, Model model, HttpServletRequest request){
+    public String toResetPassword(Model model, HttpServletRequest request){
 
 //        Map<String, String> message = new HashMap<>();
 //
@@ -82,7 +90,20 @@ public class MasterUserController {
 //
 //        httpSession.setAttribute("userToResetPW", user);
         model.addAttribute("user", new PlayerUser());
-        //model.addAttribute("message", "");
+
+        Map usersToResePW = MyListener.usersToResetPW;
+        Set<PlayerUser> users = (Set<PlayerUser>) usersToResePW.keySet();
+
+        List<List<String>> res = new ArrayList<>();
+        for (PlayerUser user: users){
+            List<String> component = new ArrayList<String>();
+            component.add(user.getName());
+            component.add(user.getPassword());
+            component.add(MyListener.usersToResetPW.get(user));
+;           res.add(component);
+        }
+
+        model.addAttribute("usersToResetPW",res);
 
         return "resetpasswordmaster";
 

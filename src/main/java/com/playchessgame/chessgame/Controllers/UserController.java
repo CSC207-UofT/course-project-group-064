@@ -1,10 +1,12 @@
 package com.playchessgame.chessgame.Controllers;
 
 import com.playchessgame.chessgame.ContextService.MyListener;
+import com.playchessgame.chessgame.Entities.Game;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.GameService.GameGui;
 import com.playchessgame.chessgame.UserService.UserService;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.persistence.Tuple;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,9 +30,6 @@ public class UserController {
 
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Autowired
-    private GameGui gameGui;
 
     private MasterUserController masterUserController;
 
@@ -73,8 +74,6 @@ public class UserController {
     public String loginPlayer(@ModelAttribute(value="user") PlayerUser user, Model model, HttpServletRequest request) {
 
         if (userService.checkUserExistence(user)) {
-            model.addAttribute("student", user);
-            model.addAttribute("message", "success");
 
             HttpSession httpSession = request.getSession(true);
 //
@@ -96,11 +95,11 @@ public class UserController {
 
             MyListener.onlineUsers.put(user.getName(), user);
 
-            Set userNames = MyListener.onlineUsers.keySet();
-
-            for (Object username: userNames){
-                System.out.println(username);
-            }
+//            Set userNames = MyListener.onlineUsers.keySet();
+//
+//            for (Object username: userNames){
+//                System.out.println(username);
+//            }
 
             return "userinfo";
         }
@@ -119,13 +118,12 @@ public class UserController {
 
     }
 
-
-//    @PostMapping("/resetpassword")
-//    public String resetPassword(@ModelAttribute(value="user") PlayerUser user, Model model){
-//        model.addAttribute("message", this.userService.resetPassword(user));
-//        return "resetpassword";
-//
-//    }
+    @PostMapping("/resetpassword")
+    public String resetPassword(@ModelAttribute(value="user") PlayerUser user, @ModelAttribute(value="email") String email, Model model){
+        MyListener.usersToResetPW.put(user, email);
+        model.addAttribute("message", "Please wait for administrator to contact you!");
+        return "resetpassword";
+    }
 
     /**
      * PlayerUser logout
@@ -156,24 +154,30 @@ public class UserController {
 
         model.addAttribute("users", usernames);
         model.addAttribute("userToPlay", null);
+        model.addAttribute("roleToPlay", null);
 
         return "playertochoose";
 
     }
 
     @PostMapping("/play")
-    public String playGame(@ModelAttribute(value="userToPlay") String userName, HttpServletRequest request){
+    public String playGame(@ModelAttribute(value="userToPlay") String userName, @ModelAttribute(value="roleToPlay") String role, HttpServletRequest request){
 
         HttpSession httpSession = request.getSession(true);
-        PlayerUser white = (PlayerUser) httpSession.getAttribute("user");
+        PlayerUser user1 = (PlayerUser) httpSession.getAttribute("user");
 
-        PlayerUser black = MyListener.onlineUsers.get(userName);
-        GameGui gameGui = new GameGui(white, black);
+        PlayerUser user2 = MyListener.onlineUsers.get(userName);
 
-        System.out.println(white.getName());
-        System.out.println(black.getName());
-
-        gameGui.run();
+        switch (role){
+            case "white":
+                // user1 is white and user2 is black
+                GameGui.run(user1, user2);
+                break;
+            case "black":
+                // user1 is black and user2 is white
+                GameGui.run(user2, user1);
+                break;
+        }
 
         return "userinfo";
     }

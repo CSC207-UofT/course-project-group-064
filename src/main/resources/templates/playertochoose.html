@@ -4,25 +4,29 @@
     <meta charset="UTF-8">
     <title>playertochoose</title>
 </head>
+<h3 th:align="center">Please Choose the opponent and the role</h3>
 <body>
-<div>
+<div th:align="center">
 
-    <table border="1" width="50%">
+    <table>
       <tr>
-          <td>Player Names</td>
+          <td>Player Names:</td>
       </tr>
       <tr th:each="username: ${users}">
           <td th:text="${username}">
       </tr>
     </table>
-    </br>
-    </br>
+</div>
+
+</br>
+</br>
+
+<div th:style="align">
     <form th:action="@{/play}" th:object="${userToPlay}" th:method="post">
-        Please Enter The Player Name You Want to Play With: <input type="text" th:value="${userToPlay}" name="userToPlay" required>
+        Please Enter The Player Name You Want to Play With: <input type="text" style="width: 300px;" th:value="${userToPlay}" name="userToPlay" data-required="true" placeholder="  Please enter the name of your opponent" /></br>
+        Please Enter The Role You Want to Play: <input type="text" style="width: 200px;" th:value="${roleToPlay}" name="roleToPlay" data-required="true" placeholder="  Please enter white or black" /></br>
         <input type="submit" value="submit">
     </form>
-
-
 </div>
 
 </body>

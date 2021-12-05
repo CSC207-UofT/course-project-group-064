@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <title>loginMaster</title>
 </head>
+<h3 th:align="center">Welcome, please login</h3>
 <body>
-<div>
+<div th:align="center">
     <form th:action="@{/login2}" th:object="${user}" th:method="post">
-        username: <input type="text" th:field="${user.name}" required><br/>
-        password: <input type="text" th:field="${user.password}" required><br/>
+        username: <input type="text" style="width: 300px;" th:field="${user.name}" placeholder="  Please enter your name" required><br/>
+        password: <input type="text" style="width: 300px;" th:field="${user.password}" placeholder="  Please enter your password" required><br/>
         <input type="submit" value="login">
     </form>
 </div>
 </hr>
-<div>
+<div th:align="center">
     <span th:text="${message}"></span>
 </div>
 

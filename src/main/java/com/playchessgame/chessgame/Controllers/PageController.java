@@ -12,27 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PageController {
 
-//    @Autowired
-//    private MongoClient mongoClient;
-
-    @Autowired
-    private UserServiceImpl1 userServiceImpl1;
-
-    @RequestMapping("/index2")
-    public String getIndex(){
-        return "index2";
+    @RequestMapping("/showMasterUserPage")
+    public String showMasterUserPage(){
+        return "masterUserPage";
     }
-
-//    @RequestMapping("/showuserinfo")
-//    public String getUserInfo(){
-//        return "userinfo";
-//    }
-
-//    @RequestMapping("/ok")
-//    public String getRegisterOK(){
-//        return "ok";
-//    }
-
 
 
 }

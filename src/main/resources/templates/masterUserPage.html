@@ -5,25 +5,30 @@
     <title>masterUserPage</title>
 </head>
 <body>
-<h2>This is master user page</h2>
+<h2 th:align="center">Master User Console</h2>
 
-<div>
+<div th:align="center">
     <span th:text="${message}"></span>
 </div>
 
-<div>
+<div th:align="center">
     <form th:action="@{/resetPW}" th:method="get">
         <input type="submit" value="resetpassword">
     </form>
 </div>
 
-<div>
+<div th:align="center">
     <form th:action="@{/deleteUser}">
         <input type="submit" value="delete users">
     </form>
 </div>
 
+</br>
+</hr>
 
+<div>
+    <span th:text="'***there are currently ' + ${online} + ' online players.***'"></span>
+</div>
 
 </body>
 </html>

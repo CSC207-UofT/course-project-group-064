@@ -10,8 +10,8 @@ public class Game {
     private Scanner console;
     private boolean turn = true; //White = true, Black = false throughout the program
 
-    public Game(String game_mode){
-        this.game_mode = game_mode;
+    public Game(String gameMode, PlayerUser white, PlayerUser black){
+        this.game_mode = gameMode;
         //TODO implement initial game setup
         this.textBoardDisplay = "";
         this.board = new Board(game_mode);
@@ -45,9 +45,6 @@ public class Game {
     /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
      * if passed false the game ended in a draw*/
     public void endGame(boolean result){
-    }
-    public void calculateElo(double game_result, User white, User black){
-        //TODO update user elos based on game result
     }
 
     //Initializes display for a classic game of chess.
@@ -112,7 +109,9 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        PlayerUser white = new PlayerUser("test1", "1000");
+        PlayerUser black = new PlayerUser("test2", "1000");
+        Game game = new Game("Standard", white, black);
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){

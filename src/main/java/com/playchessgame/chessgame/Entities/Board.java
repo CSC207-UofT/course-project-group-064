@@ -1,13 +1,16 @@
 package com.playchessgame.chessgame.Entities;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Board {
 
     //Piece type movement direction offsets
     private final int[] queenOffsets = {-9, -8, -7, -1, 1, 7, 8, 9};
     private final int[] queenIndices = {0, 1, 2, 3, 4, 5, 6, 7};
-    private final int[] whitePawnOffsets = {-7, -8, -9};
+    private final int[] whitePawnOffsets = {-9, -8, -7};
     private final int[] blackPawnOffsets = {7, 8, 9};
 
     //Indices of concern for pieces in numSquaresToEdge
@@ -162,7 +165,7 @@ public class Board {
         if (!piecePositions.containsKey(destination)) {
             moves.add(destination);
         }
-        if (piece.getNotMoved()) {
+        if (piece.getNotMoved() && !piecePositions.containsKey(destination)) {
             destination = origin + 2 * offsets[1];
             if (!piecePositions.containsKey(destination)) {
                 moves.add(destination);
@@ -281,8 +284,16 @@ public class Board {
     /**checks if a position is checkmate or stalemate.
      returns 0 if no mate
      returns 2 if checkmate
-     returns 3 if stalemate**/
+     returns 3 if stalemate or insufficient material**/
     public int checkMate(){
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for(int key : piecePositions.keySet())
+        {
+            pieces.add(piecePositions.get(key));
+        }
+        if (pieces.size() < 3){
+            return STALEMATE;
+        }
         int[][] moves = getLegalMoves(!turn);
         for (int[] piece : moves){
             if (piece != null && piece.length > 1){
@@ -305,7 +316,9 @@ public class Board {
      * */
     public int makePlayerMove(int origin, int destination) {
         boolean move_valid = false;
-
+        if (origin == destination){
+            return Board.ILLEGAL;
+        }
         //Check that the origin is occupied
         if (checkMoveLegal(origin, destination)) {
             if (piecePositions.get(origin) instanceof King && piecePositions.get(origin).getNotMoved()) {
