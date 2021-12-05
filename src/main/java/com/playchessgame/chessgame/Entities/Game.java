@@ -10,8 +10,8 @@ public class Game {
     private Scanner console;
     private boolean turn = true; //White = true, Black = false throughout the program
 
-    public Game(String game_mode){
-        this.game_mode = game_mode;
+    public Game(String gameMode, PlayerUser white, PlayerUser black){
+        this.game_mode = gameMode;
         //TODO implement initial game setup
         this.textBoardDisplay = "";
         this.board = new Board(game_mode);
@@ -24,21 +24,27 @@ public class Game {
         }
     }
 
-    public void updateDisplay(String move){
-        //TODO parse move and update display based on new board state.
-        boolean valid = board.makePlayerMove(move, turn);
-        if(valid) {
+    public void updateDisplay(int origin, int destination){
+        int valid = board.makePlayerMove(origin, destination);
+        if(valid == Board.LEGAL) {
             turn = !turn;
             String boardString = toDisplayString();
             System.out.println(boardString);
+        }
+        else if (valid == Board.CHECKMATE){
+            endGame(true);
+        }
+        else if (valid == Board.STALEMATE){
+            endGame(false);
         }
         else {
             System.out.println("Illegal move, please input a legal move");
         }
     }
 
-    public void calculateElo(boolean game_result, User white, User black){
-        //TODO update user elos based on game result
+    /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
+     * if passed false the game ended in a draw*/
+    public void endGame(boolean result){
     }
 
     //Initializes display for a classic game of chess.
@@ -57,21 +63,21 @@ public class Game {
     //BELOW THIS LINE EXIST TEMPORARY METHODS TO FACILITATE PRINTING AN ASCII CHESSBOARD IN LIEU OF GRAPHICAL DISPLAY
     private String toDisplayString(){
         Map<Integer, Piece> pieceMap = board.getPiecePositions();
-       final StringBuilder builder = new StringBuilder();
-       for(int i = 0; i < 64; i++){
-           String tileText;
-           if (pieceMap.containsKey(i)){
-               tileText = typeToString(pieceMap.get(i));
-               }
-           else{
-               tileText = "-";
-           }
-           builder.append(String.format("%3s", tileText));
-           if ((i+1) % 8 == 0){
-               builder.append("\n");
-           }
-       }
-       return builder.toString();
+        final StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < 64; i++){
+            String tileText;
+            if (pieceMap.containsKey(i)){
+                tileText = typeToString(pieceMap.get(i));
+            }
+            else{
+                tileText = "-";
+            }
+            builder.append(String.format("%3s", tileText));
+            if ((i+1) % 8 == 0){
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
     }
 
     //converts piece type to string
@@ -103,11 +109,13 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        PlayerUser white = new PlayerUser("test1", "1000");
+        PlayerUser black = new PlayerUser("test2", "1000");
+        Game game = new Game("Standard", white, black);
         game.standardDisplay();
         String move = game.getMove();
         while (!move.equals("end")){
-            game.updateDisplay(move);
+            //game.updateDisplay(origin, destination);
             move = game.getMove();
         }
     }

@@ -1,13 +1,14 @@
 package com.playchessgame.chessgame.Exceptions;
 
 /**
- * Representing an UserAlreadyExist Exception
+ * Representing an UsernameDoesNotExist Exception
  */
-public class UserAlreadyExistsException extends Exception{
+public class UsernameDoesNotExist extends Exception{
+
     private String message;
 
-    public UserAlreadyExistsException(){
-        this.message = "The User Already Exists in the System ><";
+    public UsernameDoesNotExist(){
+        this.message = "The username does not exist in the system.><";
     }
 
     /**

@@ -1,30 +1,26 @@
 package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Entities.Game;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.playchessgame.chessgame.Entities.PlayerUser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.util.Map;
-
-//import org.springframework.boot.context.event.ApplicationReadyEvent;
-//import org.springframework.context.event.EventListener;
-//import org.springframework.stereotype.Component;
-
-@Controller
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
     JPanel board;
     JLabel piece;
     int xAdjustment;
     int yAdjustment;
+    String pieceOrigin = "null";
+    String pieceDestination = "null";
+    boolean moveMade = false;
 
-    public GameGui(){
+
+    public GameGui(Game game){
         //Add the pane for the board and mouse listeners for user interaction
+        Game currentGame = game;
         pane = new JLayeredPane();
         getContentPane().add(pane);
         pane.addMouseListener(this);
@@ -44,6 +40,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         //Use a loop to add square panels to the board
         for (int i = 0; i < 64; i++) {
             JPanel square = new JPanel( new BorderLayout() );
+            square.setName(String.valueOf(i));
             board.add(square);
 
             int row = (i / 8) % 2;
@@ -53,34 +50,32 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                 square.setBackground(i % 2 == 0 ? Color.white : Color.GRAY);
         }
 
-        /*for (int i = 0; i < 16; i++) {
-            JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-            JPanel panel = (JPanel)board.getComponent(i);
-            panel.add(piece);
-        }
-
-        for (int i = 48; i < 64; i++) {
-            JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-            JPanel panel = (JPanel)board.getComponent(i);
-            panel.add(piece);
-        }*/
-
-        /*for(int i = 0; i < 64; i++) {
-            Map currentBoard = game.board.getPiecePositions();
-            if (currentBoard.containsKey(i)) {
-                JLabel piece = new JLabel(new ImageIcon(new ImageIcon("src/chess.png").getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-                JPanel panel = (JPanel)board.getComponent(i);
-                panel.add(piece);
-            }*/
-
     }
 
-   public static void updateGui(Game game, GameGui gui) {
+    public static void clearGui(GameGui gui, String pieceDestination){
+        for (int j = 0; j < 64; j++) {
+            JPanel panel = (JPanel)gui.board.getComponent(j);
+            panel.removeAll();
+            if (pieceDestination != "null") {
+                gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
+                gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(true);
+            }
+        }
+    }
+
+    public static void updateGui(Game game, GameGui gui) {
         Map currentBoard = game.board.getPiecePositions();
-        //gui.board = new JPanel();
         for (int i = 0; i < 64; i++) {
             if (currentBoard.containsKey(i)) {
-                String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + ".png";
+                boolean color = game.board.getPiecePositions().get(i).getColor();
+                char colorString = 'B';
+                if (!color){
+                    colorString = 'W';
+                }
+
+                String[] pieceNameList = currentBoard.get(i).toString().split("\\.");
+                String pieceName = pieceNameList[pieceNameList.length-1].substring(0,2);
+                String srcString = "src/main/java/chessPieces/" + pieceName + ".png";
                 JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
                 JPanel panel = (JPanel)gui.board.getComponent(i);
                 panel.add(piece);
@@ -91,6 +86,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     public void mousePressed(MouseEvent e){
         piece = null;
         Component c =  board.findComponentAt(e.getX(), e.getY());
+        pieceOrigin = c.getParent().getName();
 
         if (c instanceof JPanel)
             return;
@@ -117,13 +113,17 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         Component c =  board.findComponentAt(e.getX(), e.getY());
 
         if (c instanceof JLabel){
+            pieceDestination = c.getParent().getName();
             Container parent = c.getParent();
             parent.remove(0);
             parent.add( piece );
+            moveMade = true;
         }
         else {
+            pieceDestination = c.getName();
             Container parent = (Container)c;
             parent.add( piece );
+            moveMade = true;
         }
 
         piece.setVisible(true);
@@ -151,35 +151,75 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-    @RequestMapping("/play")
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        PlayerUser white = new PlayerUser("p1", "1000");
+        PlayerUser black = new PlayerUser("p2", "1000");
+        Game game = new Game("Standard", white, black);
 
-        GameGui frame = new GameGui();
+        GameGui frame = new GameGui(game);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo( null );
+        clearGui(frame, frame.pieceDestination);
         updateGui(game, frame);
         frame.setVisible(true);
 
         game.standardDisplay();
-        String move = game.getMove();
-        while (!move.equals("end")){
-            frame.dispose();
-            game.updateDisplay(move);
 
-            GameGui frame1 = new GameGui();
-            frame1.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-            frame1.pack();
-            frame1.setResizable(false);
-            //frame1.setLocationRelativeTo( null );
-            updateGui(game, frame1);
-            frame1.setVisible(true);
+        String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+        while(moveString != "end") {
+            frame.moveMade = false;
+            while (!frame.moveMade) {
+                moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            }
+            moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            String [] orDest = moveString.split(",");
+            int origin = Integer.parseInt(orDest[0]);
+            int destination = Integer.parseInt(orDest[1]);
+            if (game.board.checkMoveLegal(origin, destination)) {
+                game.board.makePlayerMove(origin, destination);
+            }
+            game.standardDisplay();
+            clearGui(frame, frame.pieceDestination);
+            updateGui(game, frame);
+            frame.setVisible(true);
+        }
+    }
 
-            move = game.getMove();
-            frame1.dispose();
+    public static void run(PlayerUser white, PlayerUser black) {
+
+        Game game = new Game("Standard", white, black);
+
+        GameGui frame = new GameGui(game);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
+        frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo( null );
+        clearGui(frame, frame.pieceDestination);
+        updateGui(game, frame);
+        frame.setVisible(true);
+
+        game.standardDisplay();
+
+        String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+        while(moveString != "end") {
+            frame.moveMade = false;
+            while (!frame.moveMade) {
+                moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            }
+            moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            String [] orDest = moveString.split(",");
+            int origin = Integer.parseInt(orDest[0]);
+            int destination = Integer.parseInt(orDest[1]);
+            if (game.board.checkMoveLegal(origin, destination)) {
+                game.board.makePlayerMove(origin, destination);
+            }
+            game.standardDisplay();
+            clearGui(frame, frame.pieceDestination);
+            updateGui(game, frame);
+            frame.setVisible(true);
+
         }
     }
 }
-

@@ -4,22 +4,32 @@
     <meta charset="UTF-8">
     <title>UserInfo</title>
 </head>
+<h2 th:align="center">Welcome to board</h2>
 <body>
-<h2 th:text="${message}"></h2>
-<table>
-    <tr>
-        <td>username</td>
-        <td>elo</td>
-    </tr>
-    <tr>
-        <td th:text="${user.getName()}"></td>
-        <td th:text="${user.getElo()}"></td>
-    </tr>
-</table>
+<div th:align="center">
+    <table>
+        <tr>
+            <td>username</td>
+            <td>elo</td>
+        </tr>
+        <tr>
+            <td th:text="${user.getName()}"></td>
+            <td th:text="${user.getElo()}"></td>
+        </tr>
+    </table>
+</div>
 
-<form th:action="@{/play}" th:method="post">
-    <input type="submit" value="hit me to play">
+<div th:align="center">
+    <form th:action="@{/play}" th:method="get">
+        <input type="submit" value="hit me to play">
 </form>
+</div>
+
+<div th:align="center">
+    <form th:action="@{/logout}" th:method="post">
+        <input type="submit" value="logout">
+</form>
+</div>
 
 </body>
 </html>

@@ -4,26 +4,29 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+
 @Entity
 public class PlayerUser extends User {
     @Id
     private String name;
     @Column
+    private String password;
+    @Column
     private int elo;
     @Column
-    // TODO: should we add password to the User?
-    private String password;
+    private int kFactor;
+    @Column
+    private int games;
 
-//    public PlayerUser(String username, int elo) {
-//        super(username);
-//        this.elo = elo;
-//    }
+    public PlayerUser(String username, String password){
+        super(username, password);
+        this.kFactor = 50;
+        this.games = 0;
+    }
 
-    // TODO: do we have a default elo score?
-//    public PlayerUser(String username) {
-//        super(username);
-//        this.elo = 0;
-//    }
+    public PlayerUser() {
+        super();
+    }
 
     /**
      * Returns the player user's username.
@@ -42,6 +45,20 @@ public class PlayerUser extends User {
     }
 
     /**
+     * Returns the player user's password.
+     *
+     * @return the player user's password
+     */
+    public String getPassword() {return password;}
+
+    /**
+     * Sets the player user's password to the specified password.
+     *
+     * @param password The specified password
+     */
+    public void setPassword(String password) {this.password = password;}
+  
+    /**
      * Returns the player user's elo.
      *
      * @return the player user's elo
@@ -55,24 +72,16 @@ public class PlayerUser extends User {
      *
      * @param elo The specified elo
      */
-    public void setElo(int elo) {this.elo = elo;}
-
-    /**
-     * Returns the player user's password.
-     *
-     * @return the player user's password
-     */
-    public String getPassword() {return password;}
-
-    /**
-     * Sets the player user's password to the specified password.
-     *
-     * @param password The specified password
-     */
-    public void setPassword(String password) {this.password = password;}
+     public void setElo(int newElo) {
+        this.elo = newElo;
+        if (this.games==10){
+            kFactor = 10;
+        }
+        this.games++;
+    }
 
 
-    public void updateElo(int new_elo){
-        this.elo = new_elo;
+    public int getkFactor(){
+        return this.kFactor;
     }
 }

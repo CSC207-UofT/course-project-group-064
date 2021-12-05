@@ -1,39 +1,21 @@
 package com.playchessgame.chessgame.Controllers;
 
-import com.mongodb.client.MongoClient;
-import com.playchessgame.chessgame.Entities.PlayerUser;
-import com.playchessgame.chessgame.UserService.impl.UserServiceImpl1;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * This class is directing webpages
+ */
 @Controller
 public class PageController {
 
-//    @Autowired
-//    private MongoClient mongoClient;
-
-    @Autowired
-    private UserServiceImpl1 userServiceImpl1;
-
-    @RequestMapping("/index")
-    public String getIndex(){
-        return "index";
-    }
-
-    @RequestMapping("/showuserinfo")
-    public String getUserInfo(){
-        return "userinfo";
-    }
-
-
-
-
-    @RequestMapping("/ok")
-    public String getRegisterOK(){
-        return "ok";
+    /**
+     * shows the "masterUserPage" webpage when the request "/showMasterUserPage" is sent
+     * @return the "masterUserPage" webpage
+     */
+    @RequestMapping("/showMasterUserPage")
+    public String showMasterUserPage(){
+        return "masterUserPage";
     }
 
 }
