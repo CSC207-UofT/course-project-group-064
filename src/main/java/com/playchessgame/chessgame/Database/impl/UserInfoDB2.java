@@ -13,7 +13,6 @@ import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
-
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
@@ -24,71 +23,6 @@ public class UserInfoDB2 implements Database {
     @Autowired
     private ApplicationContext applicationContext;
 
-//    public static void main(String[] args) throws UserAlreadyExistsException {
-//
-////        // connect to mongoDB
-////        String uri = "mongodb+srv://kaixinrongzi:kaixinrongzi123456@cluster0.c8qyn.mongodb.net/test";
-////        MongoClientURI mongoClientURI = new MongoClientURI(uri);
-////        MongoClient mongoClient = new MongoClient(mongoClientURI);
-////
-////        // get into the MongoDB database
-////        MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
-////        MongoCollection mongoCollection = mongoDatabase.getCollection("ChessGameUsers");
-////
-////        // create a document
-////        Document document = new Document();
-////        document.append("name", "Jason");
-////        document.append("password", "123456");
-////        document.append("elo", 55);
-////
-////        // insert the document to the mongodb
-////        mongoCollection.insertOne(document);
-////
-////        // find data
-////        Document found = (Document) mongoCollection.find(new Document("name", "Jason")).first();
-//
-//        UserInfoDB2 userInfoDB2 = new UserInfoDB2();
-//
-//        // create a mongoDB collection
-//        // userInfoDB2.createNewDatabase();
-//
-//        // add user into it
-//        Scanner reader = new Scanner(System.in);
-//
-//        while (true) {
-//
-//            System.out.println("Enter your username or 0 to exist");
-//            String username = reader.nextLine();
-//
-//            if (username.equals("0")){break;}
-//
-//            System.out.println("Enter your password ");
-//            String password = reader.nextLine();
-//
-//            userInfoDB2.addUserInfo(new User(username, "0"), password);
-//
-//        }
-//
-//        // read user from it
-//        while(true) {
-//            System.out.println("Enter your username or 0 to exist");
-//            String username2 = reader.nextLine();
-//
-//            if (username2.equals("0")){break;}
-//
-//            System.out.println("Enter your password ");
-//            String password2 = reader.nextLine();
-//
-//            int res = userInfoDB2.readUserInfo(username2, password2);
-//            System.out.println(res);
-//        }
-//
-//    }
-
-    /**
-     *
-     * @return MongoClient which is the connection to MongoDB
-     */
     private MongoClient connect(){
 
         return (MongoClient) applicationContext.getBean("mongoclient");
@@ -106,7 +40,7 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Returns a new MongoDB databse
+     * create a new database in the MongoDB
      */
     @Override
     public void createNewDatabase() {
@@ -122,7 +56,7 @@ public class UserInfoDB2 implements Database {
      * Adds the specified player user's information into the database. Throws a UserAlreadyExistsException if the user
      * is already in the database.
      *
-     * @param user The user whose information is being inserted.
+     * @param user The player whose information is being inserted.
      */
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
@@ -149,7 +83,7 @@ public class UserInfoDB2 implements Database {
     /**
      * Deletes the specified player use's information from the database.
      *
-     * @param user The user whose information being deleted from the database
+     * @param user The player whose information being deleted from the database
      */
     @Override
     public void deleteUserInfo(PlayerUser user) {
@@ -160,10 +94,10 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Checks if the specified player user is already in the database (by looking at their username specifically).
+     * Checks if the specified player is already in the database (by looking at their username specifically).
      *
      *
-     * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
+     * @return A true or false value reflecting whether the player is in the database. True if they are, false if they aren't
      */
     @Override
     public boolean checkUserExistence(PlayerUser user) {
@@ -188,7 +122,7 @@ public class UserInfoDB2 implements Database {
     /**
      * Updates the password of the specified player in the database to the specified new password.
      *
-     * @param user The user whose password is being updated
+     * @param user The player whose password is being updated
      */
     @Override
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
@@ -205,7 +139,7 @@ public class UserInfoDB2 implements Database {
     /**
      * Updates the Elo rating of the specified player in the database to the specified new Elo rating.
      *
-     * @param user The user whose Elo rating is being updated
+     * @param user The player whose Elo rating is being updated
      * @param newElo The new Elo rating
      */
     @Override
@@ -221,8 +155,8 @@ public class UserInfoDB2 implements Database {
 
     /**
      * check if the given password matches the one of the given user
-     * @param user
-     * @param password
+     * @param user: the PlayerUser whose password needs to be compared to the database
+     * @param password: the password provided by the Player
      * @return true if the given password matches th user's password stored in the MongoDB
      */
     @Override
@@ -245,9 +179,9 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * return the playeruser matching the given username
-     * @param username
-     * @return the playeruser matching the given username
+     * return the PlayerUser matching the given username
+     * @param username: the username of the PlayerUser
+     * @return the PlayerUser matching the given username
      */
     @Override
     public PlayerUser getPlayerUserByName(String username){

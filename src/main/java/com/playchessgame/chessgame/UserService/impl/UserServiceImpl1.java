@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * User Management Class
+ * A use case class providing services for PlayerUser implementing UserService
  */
 @Service
 public class UserServiceImpl1 implements UserService {
@@ -19,7 +19,7 @@ public class UserServiceImpl1 implements UserService {
 
     /**
      * Add an User to database
-     * @param user
+     * @param user: the PlayerUser who is applying to register for the game
      */
     @Override
     @Transactional
@@ -28,27 +28,14 @@ public class UserServiceImpl1 implements UserService {
     }
 
     /**
-     * Check if the User exists in the database
-     * @param user: a user of the game
-     * @return true if the user exists or false if the user does not exist
+     * Check if the Player exists in the database
+     * @param user: the PlayerUser of the game
+     * @return true if the player exists or false if the player does not exist
      */
     @Override
     @Transactional
     public boolean checkUserExistence(PlayerUser user){
         return this.database.checkUserExistence(user);
     }
-
-//    @Override
-//    @Transactional
-//    public String resetPassword(PlayerUser user){
-//        try {this.database.updateUserPassword(user);
-//            return PASSWORD_RESET_SUCCESS;
-//        }catch (UsernameDoesNotExist e){
-//            return e.getMessage();
-//        }catch (Exception e){
-//            return PASSWORD_RESET_FAIL;
-//        }
-//    };
-
 
 }

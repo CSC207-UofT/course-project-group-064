@@ -7,20 +7,25 @@ import com.playchessgame.chessgame.UserService.MasterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Map;
 
+/**
+ * A use case class providing services for MasterUser implementing MasterUserService
+ */
 @Service
 public class MasterUserServiceImpl1 implements MasterUserService {
 
     private final String PASSWORD_RESET_SUCCESS = "Your Password Has Been Reset Successfully!";
     private final String PASSWORD_RESET_FAIL = "Your Password Fails to be Reset... Please Try Again!";
 
-    private String masterUserEmail = "maryzhou0218@gmail.com";
-
     @Autowired
     private Database database;
 
+    /**
+     * reset the password for the given PlayerUser
+     * @param user: PlayerUser who is applying to reset her password
+     * @return the result to the MasterUser about the password reset
+     */
     @Override
     @Transactional
     public String resetPassword(PlayerUser user){
@@ -46,23 +51,11 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 
     };
 
-    private void receiveEmail(String subject, Map message) {
-
-//        var mailMessage = new SimpleMailMessage();
-//
-//        String sentFrom = (String) message.get("email");
-//
-//        mailMessage.setTo(masterUserEmail);
-//        mailMessage.setSubject(subject);
-//        mailMessage.setText(message.toString());
-//
-//        mailMessage.setFrom(sentFrom);
-//
-//        //TODO: to be listened and reflected on masterUserPage.html
-//        javaMailSender.send(mailMessage);
-
-    }
-
+    /**
+     * delete the given PlayerUser from the database
+     * @param user: the PlayerUser who is no long active for the game
+     * @return the result to the MasterUser when the deletion is executed
+     */
     @Override
     @Transactional
     public String deleteUser(PlayerUser user){
