@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+<h2 th:align="center">Welcome to Play Chess Game</h2>
+<body>
+<div th:align="center">
+    <form th:action="@{/register}" th:method="get">
+        <input type="submit" value="register"></input></br>
+    </form>
+
+    <form th:action="@{/login1}" th:method="get">
+        <input type="submit" value="login as a player"></input></br>
+    </form>
+
+    <form th:action="@{/login2}" th:method="get">
+        <input type="submit" value="login as a master user"></input></br>
+    </form>
+</div>
+
+
+
+</body>
+</html>
