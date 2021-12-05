@@ -53,7 +53,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         for (int j = 0; j < 64; j++) {
             JPanel panel = (JPanel)gui.board.getComponent(j);
             panel.removeAll();
-            if (pieceDestination != "null") {
+            if (!pieceDestination.equals("null")) {
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(true);
             }
@@ -69,7 +69,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                 if (color){
                     colorString = 'W';
                 }
-                String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + colorString + ".png";
+                String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(9, 11) + colorString + ".png";
                 JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
                 JPanel panel = (JPanel)gui.board.getComponent(i);
                 panel.add(piece);
@@ -162,7 +162,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         game.standardDisplay();
 
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while(moveString != "end") {
+        while(!moveString.equals("end")) {
             frame.moveMade = false;
             while (!frame.moveMade) {
                 moveString = frame.pieceOrigin + "," + frame.pieceDestination;
