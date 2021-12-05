@@ -66,7 +66,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             if (currentBoard.containsKey(i)) {
                 boolean color = game.board.getPiecePositions().get(i).getColor();
                 char colorString = 'B';
-                if (!color){
+                if (color){
                     colorString = 'W';
                 }
                 String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + colorString + ".png";
