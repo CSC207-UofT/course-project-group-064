@@ -273,12 +273,9 @@ public class Board {
             }
         }
         //check for bishop, rook, queen, knight, king
-        if (checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
+        return checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
                 checkSliding(king_color, key, queen) || checkKnights(king_color, king_file, king_rank) ||
-                checkKing(king_color, king)) {
-            return true;
-        }
-        return false;
+                checkKing(king_color, king);
     }
 
     /**checks if a position is checkmate or stalemate.
@@ -424,8 +421,8 @@ public class Board {
 
     private boolean checkSliding(boolean color, int king_pos, Piece piece) {
         for (int move : inCheckSlidingMoves(king_pos, piece)){
-            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() ==
-                    piece.getClass().getName() && piecePositions.get(move).getColor() != color) {
+            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName().
+                    equals(piece.getClass().getName()) && piecePositions.get(move).getColor() != color) {
                 return true;
             }
         }
@@ -472,14 +469,14 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    private boolean castleHelper(int[] indecies, Piece piece) {
-        if(piece.getNotMoved() && piecePositions.get(indecies[0]) instanceof Rook &&
-                piecePositions.get(indecies[0]).getNotMoved() && !(piecePositions.containsKey(indecies[1])) &&
-                !(piecePositions.containsKey(indecies[2])) && !(piecePositions.containsKey(indecies[3])) &&
+    private boolean castleHelper(int[] indices, Piece piece) {
+        if(piece.getNotMoved() && piecePositions.get(indices[0]) instanceof Rook &&
+                piecePositions.get(indices[0]).getNotMoved() && !(piecePositions.containsKey(indices[1])) &&
+                !(piecePositions.containsKey(indices[2])) && !(piecePositions.containsKey(indices[3])) &&
                 !inCheck(turn)) {
-            int king_file = indecies[3] % 8;
-            int king_rank = 7 - ((indecies[3] - king_file) / 8);
-            return !inCheckHelper(indecies[3], king_file, king_rank, turn);
+            int king_file = indices[3] % 8;
+            int king_rank = 7 - ((indices[3] - king_file) / 8);
+            return !inCheckHelper(indices[3], king_file, king_rank, turn);
         }
         return false;
     }
