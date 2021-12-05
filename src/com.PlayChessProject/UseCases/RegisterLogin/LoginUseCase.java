@@ -1,13 +1,11 @@
 package UseCases.RegisterLogin;
 
-import Database.UserInfoDB;
-
-import ReadWriter.ReadWriter;
+//import ReadWriter.ReadWriter;
 
 public class LoginUseCase {
 
     //private final List<User> users;
-    private ReadWriter readWriter;
+    //private ReadWriter readWriter;
 
     // Constructor
 //    public LoginUseCase(String filePath) {

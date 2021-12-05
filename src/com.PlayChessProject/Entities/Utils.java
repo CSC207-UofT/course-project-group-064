@@ -3,6 +3,12 @@ package Entities;
 public class Utils {
     public static final int[][] NUMSQUARESTOEDGE = fillNumSquares();
 
+    /**
+     * Fills the number of squares to the edge of the board in each direction from each square. Runs on startup
+     * and stores list for use throughout play. Used to calculate all piece move legality.
+     * @return 2d array [i][j] where first index is the square on the board and second corresponds to a direction of the
+     * number of squares to the edge of the board from i in direction j is the returned integer.
+     */
     public static int[][] fillNumSquares(){
         int[][] ret = new int[64][];
         for (int file = 0; file < 8; file++){
@@ -30,6 +36,12 @@ public class Utils {
         return ret;
     }
 
+    /**
+     * Array containment helper
+     * @param array any integer array
+     * @param num number checked for containment
+     * @return true if number is in the array and false otherwise.
+     */
     public static boolean contains(int[] array, int num)
     {
         for (int token : array){
@@ -61,7 +73,12 @@ public class Utils {
         black.setElo((int)finalp2Elo);
     }
 
-    //First Part of Calculation
+    /**
+     * Calculates the expected score of a game based on the players' respective elos.
+     * @param elo1 elo of the first player
+     * @param elo2 elo of second player
+     * @return double representing expected score.
+     */
     public static double adjustedDifference(double elo1, double elo2) {
         double exp1 = elo1/400.0;
         double exp2 = elo2/400.0;
