@@ -64,7 +64,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             if (currentBoard.containsKey(i)) {
                 boolean color = game.board.getPiecePositions().get(i).getColor();
                 char colorString = 'B';
-                if (!color){
+                if (color){
                     colorString = 'W';
                 }
                 String srcString = "src/chessPieces/" + currentBoard.get(i).toString().substring(0, 2) + colorString + ".png";
@@ -168,7 +168,21 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             int origin = Integer.parseInt(orDest[0]);
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
-                game.board.makePlayerMove(origin, destination);
+                int moveResult = game.board.makePlayerMove(origin, destination);
+                if (moveResult == 2){
+                    JOptionPane.showMessageDialog(frame,
+                            "Check!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(true);
+                }
+                else if (moveResult == 3){
+                    JOptionPane.showMessageDialog(frame,
+                            "Stalemate!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(false);
+                }
             }
             game.standardDisplay();
             clearGui(frame, frame.pieceDestination);
