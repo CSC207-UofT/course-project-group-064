@@ -257,6 +257,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * Helper method for inCheck that does most of the work. Declares temp pieces at the kings location and uses
+     * the valid moves of those pieces to check the corresponding spaces. Uses helpers to check for each type of
+     * attacking piece.
+     * @param key pos of King
+     * @param king_file King's file
+     * @param king_rank King's rank
+     * @param king_color King's color
+     * @return returns true if a check is detected, false otherwise.
+     */
     private boolean inCheckHelper(int key, int king_file, int king_rank, boolean king_color) {
         //declaring temp pieces
         Bishop bishop = new Bishop(king_color, king_file, king_rank);
@@ -402,7 +412,12 @@ public class Board {
         }
     }
 
-    //A copy of getSlidingMoves, with different args
+    /**
+     * A copy of getSlidingMoves with different arguments. Helper method for inCheck.
+     * @param origin Origin of piece
+     * @param piece Piece to be checked for
+     * @return an int array of spaces to check for inCheck
+     */
     public int[] inCheckSlidingMoves(int origin, Piece piece) {
         int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
@@ -422,6 +437,13 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * Checks sliding moves by iterating through inCheckSlidingMoves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param king_pos king's position
+     * @param piece temporary piece (sliding pieces)
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkSliding(boolean color, int king_pos, Piece piece) {
         for (int move : inCheckSlidingMoves(king_pos, piece)){
             if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() ==
@@ -432,6 +454,12 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks king moves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param king temporary piece (king)
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkKing(boolean color, Piece king) {
         for (int move : king.getValidMoves()) {
             if (piecePositions.get(move) instanceof King && (piecePositions.get(move).getColor() != color)) {
@@ -441,6 +469,13 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks knights moves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param file file of king
+     * @param rank rank of king
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkKnights(boolean color, int file, int rank) {
         Knight knight = new Knight(color, file, rank);
         for (int move : knight.getValidMoves()) {
@@ -451,6 +486,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * Finds the possible castling moves a King can make. Uses castleHelper to figure it out.
+     * @param piece The original King
+     * @return an integer array of positions the King can castle to.
+     */
     private int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
         if(turn) {
@@ -472,6 +512,12 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * Helper method for castleMoves. Checks the requirements for a King to castle.
+     * @param indecies the indecies to check
+     * @param piece the original king
+     * @return true if a castle is possible on a specific side.
+     */
     private boolean castleHelper(int[] indecies, Piece piece) {
         if(piece.getNotMoved() && piecePositions.get(indecies[0]) instanceof Rook &&
                 piecePositions.get(indecies[0]).getNotMoved() && !(piecePositions.containsKey(indecies[1])) &&
@@ -484,6 +530,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * Helper method to move the rook when a castle is made.
+     * @param origin Origin of King
+     * @param destination destination of king
+     */
     private void castleMoveHelper(int origin, int destination) {
         if (turn) {
             if (destination == origin + 2) {
