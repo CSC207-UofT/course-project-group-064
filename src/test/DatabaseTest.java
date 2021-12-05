@@ -2,7 +2,7 @@ import Database.UserInfoDB;
 import Entities.PlayerUser;
 
 public class BoardTest {
-    UserInfoDB database = new UserInfoDB();
+    UserInfoDB database = new UserInfoDB2();
     @Test(timeout = 50)
     public void TestAddUserInfo(){
         PlayerUser player = new PlayerUser("testplayer");
@@ -24,7 +24,7 @@ public class BoardTest {
         PlayerUser player = new PlayerUser("testplayer", "testpassword");
         database.addUser(player);
         database.updateUserPassword(player, "newpassword");
-        assertEquals("newpassword", database.getUser(player.getName()).getPassword());
+        assertEquals("newpassword", database.getPlayerUserByName(player.getName()).getPassword());
         database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
     }
 
@@ -33,7 +33,7 @@ public class BoardTest {
         PlayerUser player = new PlayerUser("testplayer", 1000);
         database.addUser(player);
         database.updateUserElo(player, 1500);
-        assertEquals(1500, database.getUser(player.getName()).getElo());
+        assertEquals(1500, database.getPlayerUserByName(player.getName()).getElo());
         database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
     }   
 }

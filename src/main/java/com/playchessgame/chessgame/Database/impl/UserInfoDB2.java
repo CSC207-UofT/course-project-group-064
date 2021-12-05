@@ -88,7 +88,14 @@ public class UserInfoDB2 implements Database {
      * @param user The user whose information being deleted from the database
      */
     @Override
-    public void deleteUserInfo(PlayerUser user) {
+    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist {
+        boolean res = checkUserExistence(user.getName());
+
+        if (!res){
+            // the user with the username is not in the database
+            throw new UsernameDoesNotExist();
+        }
+
         MongoCollection mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
@@ -129,6 +136,12 @@ public class UserInfoDB2 implements Database {
      */
     @Override
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
+        boolean res = checkUserExistence(user.getName());
+
+        if (!res){
+            // the user with the username is not in the database
+            throw new UsernameDoesNotExist();
+        }
 
         MongoCollection mongoCollection = getCollection();
 
@@ -146,7 +159,13 @@ public class UserInfoDB2 implements Database {
      * @param user The user whose Elo rating is being updated
      */
     @Override
-    public void updateUserElo(PlayerUser user, Integer newElo) {
+    public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist{
+        boolean res = checkUserExistence(user.getName());
+
+        if (!res){
+            // the user with the username is not in the database
+            throw new UsernameDoesNotExist();
+        }
 
         MongoCollection mongoCollection = getCollection();
 
@@ -187,7 +206,14 @@ public class UserInfoDB2 implements Database {
      * @return the PlayerUser matching the given username
      */
     @Override
-    public PlayerUser getPlayerUserByName(String username){
+    public PlayerUser getPlayerUserByName(String username) throws UserAlreadyExistsException{
+        boolean res = checkUserExistence(username);
+
+        if (!res){
+            // the user with the username is not in the database
+            throw new UsernameDoesNotExist();
+        }
+
         MongoCollection mongoCollection = getCollection();
 
         Document document = new Document("name", username);
