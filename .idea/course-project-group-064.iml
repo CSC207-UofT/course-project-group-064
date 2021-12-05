@@ -24,12 +24,7 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/java/com/playchessgame/chessgame/Config/MongoDBConfig.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/playchessgame/chessgame/ChessGameApplication.java</file>
-        </fileset>
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
@@ -58,7 +53,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
-    <orderEntry type="library" name="mongodb-driver-3.12.10" level="project" />
+    <orderEntry type="library" exported="" name="mongodb-driver-3.12.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.5.6" level="project" />
@@ -155,7 +150,6 @@
     <orderEntry type="library" name="Maven: org.mongodb:bson:3.12.10" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:3.12.10" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:3.10.2" level="project" />
-    <orderEntry type="library" name="Maven: javax.persistence:javax.persistence-api:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:3.12.6" level="project" />
   </component>
 </module>
