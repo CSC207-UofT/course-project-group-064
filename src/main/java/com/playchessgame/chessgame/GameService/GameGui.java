@@ -75,7 +75,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
                 String[] pieceNameList = currentBoard.get(i).toString().split("\\.");
                 String pieceName = pieceNameList[pieceNameList.length-1].substring(0,2);
-                String srcString = "src/main/java/chessPieces/" + pieceName + ".png";
+                String srcString = "src/main/java/chessPieces/" + pieceName + colorString + ".png";
                 JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
                 JPanel panel = (JPanel)gui.board.getComponent(i);
                 panel.add(piece);

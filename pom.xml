@@ -16,6 +16,8 @@
     <properties>
         <java.version>17</java.version>
         <mongodb.version>3.12.10</mongodb.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
