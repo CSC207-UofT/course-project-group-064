@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loginPlayer</title>
+</head>
+<h3 th:align="center">Welcome, please login</h3>
+<body>
+<div th:align="center">
+    <form th:action="@{/login1}" th:object="${user}" th:method="post">
+        username: <input type="text" style="width: 300px;" th:field="${user.name}" placeholder="  Please enter your name" required><br/>
+        password: <input type="text" style="width: 300px;" th:field="${user.password}" placeholder="  Please enter your password" required><br/>
+        <input type="submit" value="login">
+    </form>
+</div>
+</hr>
+<div th:align="center">
+    <span th:text="${message}"></span>
+</div>
+
+<div th:align="center">
+    <form th:action="@{/resetpassword}" th:object="${user}" th:method="get">
+        <input type="submit" value="reset password">
+    </form>
+</div>
+
+</body>
+</html>
