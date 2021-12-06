@@ -41,7 +41,6 @@ public class Board {
     }
 
     /**
-     *
      * @param checkTurn boolean player whose moves we are looking at.
      * @return 2d int array of every move that can be made. [piece][piece's moves]. The first element of each sub-array
      * is the current position of the piece.
@@ -312,6 +311,10 @@ public class Board {
         }
     }
 
+    public boolean isEnPassant(int origin, int destination){
+        return piecePositions.get(origin) instanceof Pawn && destination != origin - 8 && destination != origin+8
+                && destination != origin + 16 && destination != origin - 16 &&!piecePositions.containsKey(destination);
+    }
     /**Makes players move
      * returns 0 if the move was valid and the game continues
      * returns 1 if the move was illegal
@@ -328,6 +331,10 @@ public class Board {
             if (piecePositions.get(origin) instanceof King && piecePositions.get(origin).getNotMoved()) {
                 castleMoveHelper(origin, destination);
             }
+            /*if (isEnPassant(origin, destination)){
+                int removeOffset = turn ? destination+8 : destination-8;
+                piecePositions.remove(removeOffset);
+            }*/
             piecePositions.remove(destination);
             piecePositions.put(destination, piecePositions.remove(origin));
             piecePositions.get(destination).updatePosition(destination);
