@@ -1,6 +1,6 @@
-import Entities.Board;
-import Entities.King;
-import Entities.Rook;
+import com.playchessgame.chessgame.Entities.Board;
+import com.playchessgame.chessgame.Entities.King;
+import com.playchessgame.chessgame.Entities.Rook;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

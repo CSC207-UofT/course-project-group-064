@@ -18,20 +18,31 @@ public class PlayerUser extends User {
     @Column
     private int games;
 
+    public PlayerUser() {
+        super();
+    }
+
+    public PlayerUser(String username){
+        this.name = username;
+        this.kFactor = 50;
+        this.games = 0;
+        this.elo = 1000;
+    }
+
     public PlayerUser(String username, String password){
         super(username, password);
         this.kFactor = 50;
         this.games = 0;
-    }
-
-    public PlayerUser() {
-        super();
+        this.elo = 1000;
     }
 
     public PlayerUser(String username, String password, int elo){
         super(username, password);
         this.elo = elo;
+        this.kFactor = 50;
+        this.games = 0;
     }
+
 
 //    /**
 //     * Returns the player user's username.

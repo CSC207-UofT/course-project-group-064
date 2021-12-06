@@ -212,7 +212,7 @@ public class Board {
     }
 
     /**
-     * gets moves for long range sliding pieces: Queen, Rook Biship
+     * gets moves for long range sliding pieces: Queen, Rook Bishop
      * Sliding piece moves are all checked the same way, so we use preset piece movement indices and loop over them to
      * the edge of the board, stopping if we encounter a friendly piece or after capturing an unfriendly piece.
      * @param origin sliding piece starting position
@@ -222,9 +222,6 @@ public class Board {
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
-        if (origin==0){
-            int k=0;
-        }
         for (int offset : offsets) {
             for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offset]; j++) {
                 int move = origin + queenOffsets[offset] * j;
@@ -257,6 +254,16 @@ public class Board {
         return false;
     }
 
+    /**
+     * Helper method for inCheck that does most of the work. Declares temp pieces at the kings location and uses
+     * the valid moves of those pieces to check the corresponding spaces. Uses helpers to check for each type of
+     * attacking piece.
+     * @param key pos of King
+     * @param king_file King's file
+     * @param king_rank King's rank
+     * @param king_color King's color
+     * @return returns true if a check is detected, false otherwise.
+     */
     private boolean inCheckHelper(int key, int king_file, int king_rank, boolean king_color) {
         //declaring temp pieces
         Bishop bishop = new Bishop(king_color, king_file, king_rank);
@@ -273,12 +280,9 @@ public class Board {
             }
         }
         //check for bishop, rook, queen, knight, king
-        if (checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
+        return checkSliding(king_color, key, bishop) || checkSliding(king_color, key, rook) ||
                 checkSliding(king_color, key, queen) || checkKnights(king_color, king_file, king_rank) ||
-                checkKing(king_color, king)) {
-            return true;
-        }
-        return false;
+                checkKing(king_color, king);
     }
 
     /**checks if a position is checkmate or stalemate.
@@ -310,7 +314,7 @@ public class Board {
 
     /**Makes players move
      * returns 0 if the move was valid and the game continues
-     * retunrs 1 if the move was illegal
+     * returns 1 if the move was illegal
      * returns 2 if the move was checkmate
      * returns 3 if the move was stalemate
      * */
@@ -402,7 +406,12 @@ public class Board {
         }
     }
 
-    //A copy of getSlidingMoves, with different args
+    /**
+     * A copy of getSlidingMoves with different arguments. Helper method for inCheck.
+     * @param origin Origin of piece
+     * @param piece Piece to be checked for
+     * @return an int array of spaces to check for inCheck
+     */
     public int[] inCheckSlidingMoves(int origin, Piece piece) {
         int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
@@ -422,16 +431,29 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
+    /**
+     * Checks sliding moves by iterating through inCheckSlidingMoves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param king_pos king's position
+     * @param piece temporary piece (sliding pieces)
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkSliding(boolean color, int king_pos, Piece piece) {
         for (int move : inCheckSlidingMoves(king_pos, piece)){
-            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName() ==
-                    piece.getClass().getName() && piecePositions.get(move).getColor() != color) {
+            if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName().
+                    equals(piece.getClass().getName()) && piecePositions.get(move).getColor() != color) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Checks king moves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param king temporary piece (king)
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkKing(boolean color, Piece king) {
         for (int move : king.getValidMoves()) {
             if (piecePositions.get(move) instanceof King && (piecePositions.get(move).getColor() != color)) {
@@ -441,6 +463,13 @@ public class Board {
         return false;
     }
 
+    /**
+     * Checks knights moves for check. Helper for inCheck.
+     * @param color color of original king
+     * @param file file of king
+     * @param rank rank of king
+     * @return true if a check is detected, false otherwise.
+     */
     private boolean checkKnights(boolean color, int file, int rank) {
         Knight knight = new Knight(color, file, rank);
         for (int move : knight.getValidMoves()) {
@@ -451,6 +480,11 @@ public class Board {
         return false;
     }
 
+    /**
+     * Finds the possible castling moves a King can make. Uses castleHelper to figure it out.
+     * @param piece The original King
+     * @return an integer array of positions the King can castle to.
+     */
     private int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
         if(turn) {
@@ -472,18 +506,29 @@ public class Board {
         return moves.stream().mapToInt(i -> i).toArray();
     }
 
-    private boolean castleHelper(int[] indecies, Piece piece) {
-        if(piece.getNotMoved() && piecePositions.get(indecies[0]) instanceof Rook &&
-                piecePositions.get(indecies[0]).getNotMoved() && !(piecePositions.containsKey(indecies[1])) &&
-                !(piecePositions.containsKey(indecies[2])) && !(piecePositions.containsKey(indecies[3])) &&
+    /**
+     * Helper method for castleMoves. Checks the requirements for a King to castle.
+     * @param indices the indices to check
+     * @param piece the original king
+     * @return true if a castle is possible on a specific side.
+     */
+    private boolean castleHelper(int[] indices, Piece piece) {
+        if(piece.getNotMoved() && piecePositions.get(indices[0]) instanceof Rook &&
+                piecePositions.get(indices[0]).getNotMoved() && !(piecePositions.containsKey(indices[1])) &&
+                !(piecePositions.containsKey(indices[2])) && !(piecePositions.containsKey(indices[3])) &&
                 !inCheck(turn)) {
-            int king_file = indecies[3] % 8;
-            int king_rank = 7 - ((indecies[3] - king_file) / 8);
-            return !inCheckHelper(indecies[3], king_file, king_rank, turn);
+            int king_file = indices[3] % 8;
+            int king_rank = 7 - ((indices[3] - king_file) / 8);
+            return !inCheckHelper(indices[3], king_file, king_rank, turn);
         }
         return false;
     }
 
+    /**
+     * Helper method to move the rook when a castle is made.
+     * @param origin Origin of King
+     * @param destination destination of king
+     */
     private void castleMoveHelper(int origin, int destination) {
         if (turn) {
             if (destination == origin + 2) {

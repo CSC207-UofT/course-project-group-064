@@ -19,8 +19,8 @@ public class Knight extends Piece{
      */
     @Override
     public int[] getValidMoves(){
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-        for (int i = 0; i < 8; i++){
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i = 0; i < offsets.length; i++){
             if (Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][0]] >= knightMoves[i][0] &&
                     Utils.NUMSQUARESTOEDGE[getPos()][checkSquares[i][1]] >= knightMoves[i][1]){
                 temp.add(getPos() + offsets[i]);

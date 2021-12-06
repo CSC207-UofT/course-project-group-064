@@ -16,7 +16,7 @@ public class Queen extends Piece{
     @Override
     public int[] getValidMoves(){
         ArrayList<Integer> temp = new ArrayList<Integer>();
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < offsets.length; i++){
             for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++){
                 temp.add(getPos() + offsets[i] * (j + 1));
             }

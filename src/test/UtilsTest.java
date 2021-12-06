@@ -1,6 +1,7 @@
-import Entities.PlayerUser;
-import Entities.User;
-import Entities.Utils;
+
+import com.playchessgame.chessgame.Entities.PlayerUser;
+import com.playchessgame.chessgame.Entities.User;
+import com.playchessgame.chessgame.Entities.Utils;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -19,8 +20,8 @@ public class UtilsTest {
 
     @Test(timeout = 50)
     public void TestCalcElo(){
-        User white = new PlayerUser("testwhite", 1000);
-        User black = new PlayerUser("testblack", 1000);
+        PlayerUser white = new PlayerUser("testwhite", "1000");
+        PlayerUser black = new PlayerUser("testblack", "1000");
         Utils.calculateElo(.5, white, black);
         assertEquals(white.getElo(), 1000);
         assertEquals(black.getElo(), 1000);
