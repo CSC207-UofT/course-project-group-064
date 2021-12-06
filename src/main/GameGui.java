@@ -184,6 +184,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             null,
                             choices,
                             choices[0]);
+                    //Restart
                     if (n == 1){
                         game = new Game("Standard");
                         clearGui(frame, frame.pieceDestination);
@@ -208,6 +209,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             null,
                             choices,
                             choices[0]);
+                    //Restart
                     if (n == 1){
                         game = new Game("Standard");
                         clearGui(frame, frame.pieceDestination);
