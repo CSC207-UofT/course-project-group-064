@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<h3 th:align="center">Welcome to register!</h3>
 <body>
-<div>
+<div th:align="center">
     <form th:action="@{/register}" th:object="${user}" th:method="post">
         username: <input type="text" th:field="${user.name}" required><br/>
         password: <input type="text" th:field="${user.password}" required><br/>
@@ -13,7 +14,7 @@
     </form>
 </div>
 </hr>
-<div>
+<div th:align="center">
     <span th:text="${message}"></span>
 </div>
 

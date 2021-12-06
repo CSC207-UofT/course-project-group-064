@@ -4,17 +4,22 @@
     <meta charset="UTF-8">
     <title>deleteusermaster</title>
 </head>
+<h3 th:align="center">Please enter the user information to delete</h3>
 <body>
-<div>
+<div th:align="center">
     <form th:action="@{/deleteusermaster}" th:object= "${user}" th:method="post">
         username: <input type="text" th:field="${user.name}" required><br/>
         password: <input type="text" th:field="${user.password}" required><br/>
-        <input type="submit" value="reset password">
+        <input type="submit" value="delete user">
     </form>
 </div>
 
-<div>
+<div th:align="center">
     <span th:text="${message}"></span>
 </div>
+
+<hr>
+</br>
+<a th:href="@{/showMasterUserPage}">Return to Console</a>
 </body>
 </html>

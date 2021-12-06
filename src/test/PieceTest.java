@@ -1,7 +1,7 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
 import Entities.*;
+import org.junit.*;
 
+import static org.junit.Assert.*;
 
 public class PieceTest {
 

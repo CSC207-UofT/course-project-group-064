@@ -26,11 +26,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    private MasterUserController masterUserController;
-
     /**
      * returns the "addUser" webpage when the get request "/register" is sent
      * @param model
@@ -53,7 +48,7 @@ public class UserController {
 
         try {
             userService.addUser(user);
-            return "redirect:/ok";
+            return "ok";
         } catch (UserAlreadyExistsException e){
             model.addAttribute("message", e.getMessage() + "\nPlease try another username~~~");
             return "addUser";
@@ -112,6 +107,7 @@ public class UserController {
     public String getResetPassword(Model model){
         model.addAttribute("user", new PlayerUser());
         model.addAttribute("email", "");
+
         return "resetpassword";
 
     }
@@ -189,7 +185,7 @@ public class UserController {
 
         PlayerUser user2 = MyListener.onlineUsers.get(userName);
 
-        switch (role){
+        switch (role.toLowerCase()){
             case "white":
                 // user1 is white and user2 is black
                 GameGui.run(user1, user2);

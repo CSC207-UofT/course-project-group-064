@@ -35,5 +35,5 @@ public class BoardTest {
         database.updateUserElo(player, 1500);
         assertEquals(1500, database.getPlayerUserByName(player.getName()).getElo());
         database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
-    }   
+    }
 }

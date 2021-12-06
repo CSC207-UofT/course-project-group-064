@@ -1,9 +1,9 @@
 package com.playchessgame.chessgame.Database.impl;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
@@ -18,25 +18,19 @@ import static com.mongodb.client.model.Updates.set;
 
 @Repository
 public class UserInfoDB2 implements Database {
-    private FindIterable result;
 
     @Autowired
     private ApplicationContext applicationContext;
 
     private MongoClient connect(){
-
         return (MongoClient) applicationContext.getBean("mongoclient");
     }
 
     private MongoCollection getCollection(){
-
         MongoClient mongoClient = connect();
-
         MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
         MongoCollection mongoCollection = mongoDatabase.getCollection("ChessGameUsers");
-
         return mongoCollection;
-
     }
 
     /**
@@ -82,14 +76,15 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Deletes the specified player use's information from the database.
+     * Deletes the specified player user's information from the database. Throws a UsernameDoesNotExist Exception if the
+     * user is not in the database.
      *
-     * @param user The player whose information being deleted from the database
-     * @param user The user whose information being deleted from the database
+     * @param user The player whose information is being deleted from the database
      */
     @Override
-    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist {
-        boolean res = checkUserExistence(user.getName());
+    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist{
+
+        boolean res = checkUserNameExistence(user);
 
         if (!res){
             // the user with the username is not in the database
@@ -99,13 +94,16 @@ public class UserInfoDB2 implements Database {
         MongoCollection mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
-        mongoCollection.deleteOne(filter);
+        Bson filter2 = eq("password", user.getPassword());
+
+        mongoCollection.deleteOne(Filters.and(filter, filter2));
+
     }
 
     /**
      * Checks if the specified player user is already in the database (by looking at their username specifically).
      *
-     * @param username The user whose existence is being checked
+     * @param user The player whose existence is being checked
      *
      * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
      */
@@ -130,7 +128,8 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Updates the password of the specified player in the database to the specified new password.
+     * Updates the password of the specified player user in the database to the specified new password. Throws a
+     * UsernameDoesNotExist Exception if the user is not in the database.
      *
      * @param user The player whose password is being updated
      */
@@ -146,21 +145,22 @@ public class UserInfoDB2 implements Database {
         MongoCollection mongoCollection = getCollection();
 
         checkUserNameExistence(user);
-        Bson username = eq("name", user.getName());
-        Bson password = eq("password", user.getPassword());
-        mongoCollection.updateOne(username, password);
 
+        Bson username = eq("name", user.getName());
+        Bson password = set("password", user.getPassword());
+        mongoCollection.updateOne(username, password);
     }
 
     /**
-     * Updates the Elo rating of the specified player in the database to the specified new Elo rating.
+     * Updates the Elo rating of the specified player in the database to the specified new Elo rating. Throws a
+     * UsernameDoesNotExist Exception if the user is not in the database.
      *
      * @param user The player whose Elo rating is being updated
-     * @param user The user whose Elo rating is being updated
+     * @param newElo The player's new Elo rating
      */
     @Override
-    public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist{
-        boolean res = checkUserExistence(user.getName());
+    public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist {
+        boolean res = checkUserNameExistence(user);
 
         if (!res){
             // the user with the username is not in the database
@@ -178,16 +178,15 @@ public class UserInfoDB2 implements Database {
     /**
      * check if the given password matches the one of the given user
      * @param user: the PlayerUser whose password needs to be compared to the database
-     * @param password: the password provided by the Player
      * @return true if the given password matches th user's password stored in the MongoDB
      */
     @Override
-    public boolean checkUserPassword(PlayerUser user, String password) {
+    public boolean checkUserPassword(PlayerUser user) {
 
         MongoCollection mongoCollection = getCollection();
 
         Document document = new Document("name", user.getName());
-        document.append("password", password);
+        document.append("password", user.getPassword());
 
         Object res = mongoCollection.find(document).first();
 
@@ -206,27 +205,21 @@ public class UserInfoDB2 implements Database {
      * @return the PlayerUser matching the given username
      */
     @Override
-    public PlayerUser getPlayerUserByName(String username) throws UserAlreadyExistsException{
-        boolean res = checkUserExistence(username);
-
-        if (!res){
-            // the user with the username is not in the database
-            throw new UsernameDoesNotExist();
-        }
+    public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist{
 
         MongoCollection mongoCollection = getCollection();
 
         Document document = new Document("name", username);
-        FindIterable<Document> results = mongoCollection.find(document);
+        Document res = (Document)mongoCollection.find(document).first();
 
-        String password = "";
-        int elo = 0;
-        for (Document res: results) {
-            password = (String) res.get("password");
-            elo = Integer.valueOf((String) res.get("elo"));
+        if (res == null) {
+            throw new UsernameDoesNotExist();
         }
 
-        return new PlayerUser();
+        String password = (String) res.get("password");
+        int elo = Integer.valueOf((String) res.get("elo"));
+
+        return new PlayerUser(password, password, elo);
 
     }
 

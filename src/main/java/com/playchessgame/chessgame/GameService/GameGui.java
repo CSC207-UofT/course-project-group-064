@@ -56,7 +56,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         for (int j = 0; j < 64; j++) {
             JPanel panel = (JPanel)gui.board.getComponent(j);
             panel.removeAll();
-            if (pieceDestination != "null") {
+            if (!pieceDestination.equals("null")) {
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(true);
             }
@@ -69,7 +69,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             if (currentBoard.containsKey(i)) {
                 boolean color = game.board.getPiecePositions().get(i).getColor();
                 char colorString = 'B';
-                if (!color){
+                if (color){
                     colorString = 'W';
                 }
 
@@ -168,7 +168,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         game.standardDisplay();
 
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while(moveString != "end") {
+        while(!moveString.equals("end")) {
             frame.moveMade = false;
             while (!frame.moveMade) {
                 moveString = frame.pieceOrigin + "," + frame.pieceDestination;
@@ -178,7 +178,21 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             int origin = Integer.parseInt(orDest[0]);
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
-                game.board.makePlayerMove(origin, destination);
+                int moveResult = game.board.makePlayerMove(origin, destination);
+                if (moveResult == 2){
+                    JOptionPane.showMessageDialog(frame,
+                            "Checkmate!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(true);
+                }
+                else if (moveResult == 3){
+                    JOptionPane.showMessageDialog(frame,
+                            "Stalemate!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(false);
+                }
             }
             game.standardDisplay();
             clearGui(frame, frame.pieceDestination);
@@ -222,4 +236,5 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         }
     }
+
 }

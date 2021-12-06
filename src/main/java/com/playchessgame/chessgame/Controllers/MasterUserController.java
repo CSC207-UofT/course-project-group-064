@@ -23,8 +23,6 @@ import java.util.Set;
 @Controller
 public class MasterUserController {
 
-    private String masterUserEmail = "maryzhou0218@gmail.com";
-
     @Autowired
     private MasterUserService masterUserService;
 
