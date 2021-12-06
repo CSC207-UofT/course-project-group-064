@@ -7,7 +7,6 @@ import com.playchessgame.chessgame.UserService.MasterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Map;
 
 /**
  * A use case class providing services for MasterUser implementing MasterUserService
@@ -17,6 +16,8 @@ public class MasterUserServiceImpl1 implements MasterUserService {
 
     private final String PASSWORD_RESET_SUCCESS = "Your Password Has Been Reset Successfully!";
     private final String PASSWORD_RESET_FAIL = "Your Password Fails to be Reset... Please Try Again!";
+    private final String DELETE_USER_SUCCESS = "The player has been successfully deleted";
+    private final String DELETE_USER_FAIL = "The player fails to be deleted, please try later";
 
     @Autowired
     private Database database;
@@ -29,17 +30,6 @@ public class MasterUserServiceImpl1 implements MasterUserService {
     @Override
     @Transactional
     public String resetPassword(PlayerUser user){
-
-//        try {this.database.updateUserPassword(user);
-//
-//
-//            return PASSWORD_RESET_SUCCESS;
-//        }catch (UsernameDoesNotExist e){
-//            return e.getMessage();
-//        }catch (Exception e){
-//            return PASSWORD_RESET_FAIL;
-//        }
-//        receiveEmail("To Update Password", message);
 
         try {this.database.updateUserPassword(user);
             return PASSWORD_RESET_SUCCESS;
@@ -60,9 +50,15 @@ public class MasterUserServiceImpl1 implements MasterUserService {
     @Transactional
     public String deleteUser(PlayerUser user){
         try {this.database.deleteUserInfo(user);
-            return "The User Has Been Deleted Successfully!";
-        }catch (Exception e){
-            return "The User Fails to be Deleted...";
+            // check if the user is still in database
+            try {
+                PlayerUser player = database.getPlayerUserByName(user.getName());
+                return DELETE_USER_FAIL;
+            }catch (UsernameDoesNotExist e){
+                return DELETE_USER_SUCCESS;
+            }
+        }catch (UsernameDoesNotExist e){
+            return e.getMessage();
         }
     };
 }

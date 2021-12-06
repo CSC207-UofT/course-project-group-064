@@ -2,6 +2,7 @@ package com.playchessgame.chessgame.Database.impl;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
+import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 
 import java.sql.*;
@@ -57,7 +58,7 @@ public class UserInfoDB implements Database {
      * @param user The user whose information is being inserted
      */
     @Override
-    public void addUserInfo(PlayerUser user) {
+    public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
             String sql = "INSERT INTO " + TABLE_NAME + " (username,password,elo) " +
@@ -76,7 +77,7 @@ public class UserInfoDB implements Database {
      * @param user The user who is being deleted from the SQLite database and table
      */
     @Override
-    public void deleteUserInfo(PlayerUser user) {
+    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist{
         String sql = "DELETE FROM" + TABLE_NAME +  "WHERE username = ?";
 
         try (Connection conn = this.connect();
@@ -160,7 +161,7 @@ public class UserInfoDB implements Database {
      * @param user The user whose elo rationg is being updated
      * @param newElo The new elo rating
      */
-    public void updateUserElo(PlayerUser user, Integer newElo) {
+    public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist {
         String sql = "UPDATE " + TABLE_NAME + " SET elo = ? "
                 + "WHERE username = ?";
 
@@ -178,15 +179,14 @@ public class UserInfoDB implements Database {
     /**
      * check if the given password matches the one of the given user
      * @param user
-     * @param password
      * @return true if the given password matches th user's password stored in the Sql database
      */
     @Override
-    public boolean checkUserPassword(PlayerUser user, String password){
+    public boolean checkUserPassword(PlayerUser user){
         try(Connection conn = this.connect();) {
             Statement statement = conn.createStatement();
 
-            String sql = "SELECT username FROM " + TABLE_NAME + " WHERE password = " + password;
+            String sql = "SELECT username FROM " + TABLE_NAME + " WHERE password = " + user.getPassword();
             try (ResultSet rs    = statement.executeQuery(sql)) {
                 if (rs != null) {
                     return true;
@@ -206,8 +206,7 @@ public class UserInfoDB implements Database {
      * @return the playeruser matching the given username
      */
     @Override
-    //TODO: to implement
-    public PlayerUser getPlayerUserByName(String username){
+    public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist{
         return new PlayerUser();
     }
 

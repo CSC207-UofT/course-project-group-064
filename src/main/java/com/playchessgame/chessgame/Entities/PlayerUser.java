@@ -28,35 +28,40 @@ public class PlayerUser extends User {
         super();
     }
 
-    /**
-     * Returns the player user's username.
-     *
-     * @return the player user's name
-     */
-    @Override
-    public String getName() {return name;}
-
-    /**
-     * Sets the player user's username to the specified name.
-     *
-     * @param name The specified name
-     */
-    public void setName(String name) {this.name = name;
+    public PlayerUser(String username, String password, int elo){
+        super(username, password);
+        this.elo = elo;
     }
 
-    /**
-     * Returns the player user's password.
-     *
-     * @return the player user's password
-     */
-    public String getPassword() {return password;}
+//    /**
+//     * Returns the player user's username.
+//     *
+//     * @return the player user's name
+//     */
+//    @Override
+//    public String getName() {return name;}
+//
+//    /**
+//     * Sets the player user's username to the specified name.
+//     *
+//     * @param name The specified name
+//     */
+//    public void setName(String name) {this.name = name;
+//    }
 
-    /**
-     * Sets the player user's password to the specified password.
-     *
-     * @param password The specified password
-     */
-    public void setPassword(String password) {this.password = password;}
+//    /**
+//     * Returns the player user's password.
+//     *
+//     * @return the player user's password
+//     */
+//    public String getPassword() {return password;}
+
+//    /**
+//     * Sets the player user's password to the specified password.
+//     *
+//     * @param password The specified password
+//     */
+//    public void setPassword(String password) {this.password = password;}
   
     /**
      * Returns the player user's elo.
@@ -70,7 +75,7 @@ public class PlayerUser extends User {
     /**
      * Sets the player user's elo to the specified elo.
      *
-     * @param elo The specified elo
+     * @param newElo The specified elo
      */
      public void setElo(int newElo) {
         this.elo = newElo;

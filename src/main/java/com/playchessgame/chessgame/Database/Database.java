@@ -20,11 +20,12 @@ public interface Database {
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException;
 
     /**
-     * Deletes the specified player use's information from the database.
+     * Deletes the specified player use's information from the database and throws a UsernameDoesNotExist Exception if
+     * player does not exist.
      *
      * @param user The player whose information being deleted from the database
      */
-    public void deleteUserInfo(PlayerUser user);
+    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist;
 
     /**
      * Checks if the specified player is already in the database (by looking at their username specifically).
@@ -34,33 +35,36 @@ public interface Database {
     public boolean checkUserExistence(PlayerUser user);
 
     /**
-     * Updates the password of the specified player in the database to the specified new password.
+     * Updates the password of the specified player in the database to the specified new password throws a
+     * UsernameDoesNotExist Exception if the player does not exist.
      *
      * @param user The player whose password is being updated
      */
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist;
 
     /**
-     * Updates the specified player user's elo rating to the specified new elo rating.
+     * Updates the Elo rating of the specified player in the database to the specified new Elo rating. Throws a
+     * UsernameDoesNotExist Exception if the player is not in the database.
      *
-     * @param user The user whose elo rationg is being updated
-     * @param newElo The new elo rating
+     * @param user The player whose Elo rating is being updated
+     * @param newElo The player's new Elo rating
      */
-    public void updateUserElo(PlayerUser user, Integer newElo);
+    public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist;
 
     /**
      * check if the given password matches the one of the given user
      * @param user: the PlayerUser whose password needs to be compared to the database
-     * @param password: the password provided by the Player
      * @return true if the given password matches th user's password stored in the MongoDB
      */
-    public boolean checkUserPassword(PlayerUser user, String password);
+    public boolean checkUserPassword(PlayerUser user);
 
     /**
-     * return the PlayerUser matching the given username
-     * @param username: the username of the PlayerUser
+     * Returns the PlayerUser matching the given username. Throws a UserDoesNotExistException if the user
+     * is not in the database.
+     *
+     * @param username the username of the PlayerUser
      * @return the PlayerUser matching the given username
      */
-    public PlayerUser getPlayerUserByName(String username);
+    public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist;
 
 }
