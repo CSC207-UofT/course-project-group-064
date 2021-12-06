@@ -175,6 +175,23 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(true);
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    if (n == 1){
+                        game = new Game("Standard");
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
+
                 }
                 else if (moveResult == 3){
                     JOptionPane.showMessageDialog(frame,
@@ -182,6 +199,23 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(false);
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    if (n == 1){
+                        game = new Game("Standard");
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
+
                 }
             }
             game.standardDisplay();
