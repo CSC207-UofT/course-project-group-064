@@ -20,6 +20,9 @@ public class PlayerUser extends User {
 
     public PlayerUser() {
         super();
+        this.elo = 1000;
+        this.kFactor = 50;
+        this.games = 0;
     }
 
     public PlayerUser(String username){
