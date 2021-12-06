@@ -135,7 +135,7 @@ public class UserInfoDB2 implements Database {
      */
     @Override
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
-        boolean res = checkUserExistence(user.getName());
+        boolean res = checkUserExistence(user);
 
         if (!res){
             // the user with the username is not in the database
