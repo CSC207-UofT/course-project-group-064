@@ -52,4 +52,5 @@ public class User{
     public int getkFactor(){
         return this.kFactor;
     }
+    public String getPassword(){return this.password;}
 }

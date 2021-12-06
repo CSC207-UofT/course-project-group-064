@@ -5,22 +5,36 @@ import java.util.Scanner;
 
 public class Game {
     private String game_mode; //To be used later
-    private String textBoardDisplay; //Temporary board display in text
     public Board board;
-    private Scanner console;
+    private final Scanner console;
     private boolean turn = true; //White = true, Black = false throughout the program
+    private final User whitePlayer;
+    private final User blackPlayer;
 
     public Game(String gameMode, PlayerUser white, PlayerUser black){
         this.game_mode = gameMode;
         //TODO implement initial game setup
-        this.textBoardDisplay = "";
+        //Temporary board display in text
+        String textBoardDisplay = "";
         this.board = new Board(game_mode);
         this.console = new Scanner(System.in);
+        this.whitePlayer = white;
+        this.blackPlayer = black;
     }
     public void initializeDisplay(){
         //TODO displays image of board and pieces in default positions depending on gamemode
         if (this.game_mode.equals("Standard")){
             this.standardDisplay();
+        }
+    }
+
+    public void endGame(int result){
+        if (result==3){
+            Utils.calculateElo(.5, whitePlayer, blackPlayer);
+        }
+        else{
+            result = turn ? 1 : 0;
+            Utils.calculateElo(result, whitePlayer, blackPlayer);
         }
     }
 

@@ -182,4 +182,28 @@ public class BoardTest {
         board.makePlayerMove(29, 37);
         assertEquals(Board.STALEMATE, board.makePlayerMove(38, 37));
     }
+
+    @Test(timeout = 50)
+    public void TestSlidingMove() {
+        board.makePlayerMove(52, 36);
+        board.makePlayerMove(12, 28);
+        board.makePlayerMove(59, 45);
+        int[] moves = board.getSlidingMoves(45);
+        assertArrayEquals(new int[]{37, 29, 21, 13, 38, 31, 44, 43, 42, 41, 40, 46, 47, 52, 59}, moves);
+        moves = board.getSlidingMoves(0);
+        assertArrayEquals(new int[]{}, moves);
+        board.makePlayerMove(3, 21);
+        moves = board.getSlidingMoves(21);
+        assertArrayEquals(new int[]{12, 3, 20, 19, 18, 17, 16, 22, 23, 29, 37, 45, 30, 39}, moves);
+        board.makePlayerMove(48, 32);
+        board.makePlayerMove(8, 24);
+        board.makePlayerMove(56, 40);
+        moves = board.getSlidingMoves(40);
+        assertArrayEquals(new int[]{41, 42, 43, 44, 48, 56}, moves);
+        moves = board.getSlidingMoves(5);
+        assertArrayEquals(new int[]{12, 19, 26, 33, 40}, moves);
+        board.makePlayerMove(5, 40);
+        moves = board.getSlidingMoves(40);
+        assertArrayEquals(new int[]{33, 26, 19, 12, 5, 49}, moves);
+    }
 }

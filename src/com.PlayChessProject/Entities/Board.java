@@ -212,7 +212,7 @@ public class Board {
     }
 
     /**
-     * gets moves for long range sliding pieces: Queen, Rook Biship
+     * gets moves for long range sliding pieces: Queen, Rook Bishop
      * Sliding piece moves are all checked the same way, so we use preset piece movement indices and loop over them to
      * the edge of the board, stopping if we encounter a friendly piece or after capturing an unfriendly piece.
      * @param origin sliding piece starting position
@@ -222,9 +222,6 @@ public class Board {
         Piece piece = getPiecePositions().get(origin);
         int[] offsets = (piece instanceof Queen) ? queenIndices : (piece instanceof Rook) ? rookIndices : bishopIndices;
         ArrayList<Integer> moves = new ArrayList<>();
-        if (origin==0){
-            int k=0;
-        }
         for (int offset : offsets) {
             for (int j = 1; j <= Utils.NUMSQUARESTOEDGE[origin][offset]; j++) {
                 int move = origin + queenOffsets[offset] * j;
@@ -317,7 +314,7 @@ public class Board {
 
     /**Makes players move
      * returns 0 if the move was valid and the game continues
-     * retunrs 1 if the move was illegal
+     * returns 1 if the move was illegal
      * returns 2 if the move was checkmate
      * returns 3 if the move was stalemate
      * */
@@ -511,7 +508,7 @@ public class Board {
 
     /**
      * Helper method for castleMoves. Checks the requirements for a King to castle.
-     * @param indices the indecies to check
+     * @param indices the indices to check
      * @param piece the original king
      * @return true if a castle is possible on a specific side.
      */

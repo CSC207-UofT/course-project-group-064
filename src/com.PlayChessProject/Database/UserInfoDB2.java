@@ -2,12 +2,15 @@ package Database;
 
 import Entities.PlayerUser;
 import Exceptions.UserAlreadyExistsException;
+import Exceptions.UserDoesNotExistException;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
@@ -258,9 +261,9 @@ public class UserInfoDB2 implements Database{
 
         String password = "";
         int elo = 0;
-        for (Document res: results) {
-            password = (String) res.get("password");
-            elo = Integer.valueOf((String) res.get("elo"));
+        for (Document result : results) {
+            password = (String) result.get("password");
+            elo = Integer.valueOf((String) result.get("elo"));
         }
 
         return new PlayerUser(username, elo);

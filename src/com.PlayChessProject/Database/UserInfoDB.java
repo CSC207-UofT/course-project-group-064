@@ -1,15 +1,10 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
-
 import Entities.PlayerUser;
 
-public class UserInfoDB implements Database{
+import java.sql.*;
+
+public abstract class UserInfoDB implements Database{
     public static final String DATABASE_NAME = "userinfodatabase.db";
     public static final String TABLE_NAME = "userinformation";
 
