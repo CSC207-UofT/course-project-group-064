@@ -157,6 +157,43 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         game.standardDisplay();
 
+        JFrame frame2 = new JFrame("Chess");
+        frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        JPanel contentPanel = new JPanel();
+
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        frame2.setContentPane(contentPanel);
+
+        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
+                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
+                "you want to play a 'real' game with no undo, just close this window!" +
+                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
+        frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
+        JButton undoButton = new JButton("Undo");
+        undoButton.setBounds(50,100,100,50);
+        undoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (undo)");
+            }
+        });
+
+        JButton redoButton = new JButton("Redo");
+        redoButton.setBounds(50,100,100,50);
+        redoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (redo).");
+            }
+        });
+
+        frame2.getContentPane().add(undoButton);
+        frame2.getContentPane().add(redoButton);
+        frame2.setSize(500, 500);
+        frame2.pack();
+        frame2.setLocationRelativeTo(frame);
+        frame2.setVisible(true);
+
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
         while(moveString != "end") {
             frame.moveMade = false;
