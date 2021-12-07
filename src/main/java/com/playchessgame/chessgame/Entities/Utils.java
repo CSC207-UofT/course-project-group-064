@@ -1,6 +1,14 @@
 package com.playchessgame.chessgame.Entities;
 
+import com.playchessgame.chessgame.ContextService.MyListener;
+import com.playchessgame.chessgame.Database.Database;
+import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Utils {
+
+    private Database database = new UserInfoDB2();
+
     public static final int[][] NUMSQUARESTOEDGE = fillNumSquares();
 
     public static int[][] fillNumSquares(){

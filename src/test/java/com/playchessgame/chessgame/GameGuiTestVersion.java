@@ -1,16 +1,19 @@
-package com.playchessgame.chessgame.GameService;
+package com.playchessgame.chessgame;
 
 import com.playchessgame.chessgame.Database.Database;
-import com.playchessgame.chessgame.Entities.Game;
-import com.playchessgame.chessgame.Entities.PlayerUser;
+import com.playchessgame.chessgame.Entities.*;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
+import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
-public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
+import java.util.Random;
+
+
+public class GameGuiTestVersion extends JFrame implements MouseMotionListener, MouseListener {
+
     JLayeredPane pane;
     JPanel board;
     JLabel piece;
@@ -23,7 +26,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     @Autowired
     Database database;
 
-    public GameGui(Game game){
+    public GameGuiTestVersion(Game game) {
         //Add the pane for the board and mouse listeners for user interaction
         Game currentGame = game;
         pane = new JLayeredPane();
@@ -37,14 +40,14 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         //Create the chess board grid
         //Set the size of the board on the screen, hopefully resizable in the future
-        board.setLayout( new GridLayout(8, 8) );
+        board.setLayout(new GridLayout(8, 8));
         Dimension boardDimensions = new Dimension(800, 800);
         pane.setPreferredSize(boardDimensions);
-        board.setPreferredSize( boardDimensions );
+        board.setPreferredSize(boardDimensions);
         board.setBounds(0, 0, boardDimensions.width, boardDimensions.height);
         //Use a loop to add square panels to the board
         for (int i = 0; i < 64; i++) {
-            JPanel square = new JPanel( new BorderLayout() );
+            JPanel square = new JPanel(new BorderLayout());
             square.setName(String.valueOf(i));
             board.add(square);
 
@@ -57,9 +60,9 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-    public static void clearGui(GameGui gui, String pieceDestination){
+    public static void clearGui(GameGuiTestVersion gui, String pieceDestination) {
         for (int j = 0; j < 64; j++) {
-            JPanel panel = (JPanel)gui.board.getComponent(j);
+            JPanel panel = (JPanel) gui.board.getComponent(j);
             panel.removeAll();
             if (!pieceDestination.equals("null")) {
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
@@ -68,29 +71,29 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         }
     }
 
-    public static void updateGui(Game game, GameGui gui) {
+    public static void updateGui(Game game, GameGuiTestVersion gui) {
         Map currentBoard = game.board.getPiecePositions();
         for (int i = 0; i < 64; i++) {
             if (currentBoard.containsKey(i)) {
                 boolean color = game.board.getPiecePositions().get(i).getColor();
                 char colorString = 'B';
-                if (color){
+                if (color) {
                     colorString = 'W';
                 }
 
                 String[] pieceNameList = currentBoard.get(i).toString().split("\\.");
-                String pieceName = pieceNameList[pieceNameList.length-1].substring(0,2);
+                String pieceName = pieceNameList[pieceNameList.length - 1].substring(0, 2);
                 String srcString = "src/main/java/chessPieces/" + pieceName + colorString + ".png";
                 JLabel piece = new JLabel(new ImageIcon(new ImageIcon(srcString).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)));
-                JPanel panel = (JPanel)gui.board.getComponent(i);
+                JPanel panel = (JPanel) gui.board.getComponent(i);
                 panel.add(piece);
             }
         }
     }
 
-    public void mousePressed(MouseEvent e){
+    public void mousePressed(MouseEvent e) {
         piece = null;
-        Component c =  board.findComponentAt(e.getX(), e.getY());
+        Component c = board.findComponentAt(e.getX(), e.getY());
         pieceOrigin = c.getParent().getName();
 
         if (c instanceof JPanel)
@@ -99,7 +102,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         Point parentLocation = c.getParent().getLocation();
         xAdjustment = parentLocation.x - e.getX();
         yAdjustment = parentLocation.y - e.getY();
-        piece = (JLabel)c;
+        piece = (JLabel) c;
         piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
         piece.setSize(piece.getWidth(), piece.getHeight());
         pane.add(piece, JLayeredPane.DRAG_LAYER);
@@ -112,22 +115,21 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(piece == null) return;
+        if (piece == null) return;
 
         piece.setVisible(false);
-        Component c =  board.findComponentAt(e.getX(), e.getY());
+        Component c = board.findComponentAt(e.getX(), e.getY());
 
-        if (c instanceof JLabel){
+        if (c instanceof JLabel) {
             pieceDestination = c.getParent().getName();
             Container parent = c.getParent();
             parent.remove(0);
-            parent.add( piece );
+            parent.add(piece);
             moveMade = true;
-        }
-        else {
+        } else {
             pieceDestination = c.getName();
-            Container parent = (Container)c;
-            parent.add( piece );
+            Container parent = (Container) c;
+            parent.add(piece);
             moveMade = true;
         }
 
@@ -161,56 +163,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         PlayerUser black = new PlayerUser("p2", "1000");
         Game game = new Game("Standard", white, black);
 
-        GameGui frame = new GameGui(game);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo( null );
-        clearGui(frame, frame.pieceDestination);
-        updateGui(game, frame);
-        frame.setVisible(true);
-
-        game.standardDisplay();
-
-        String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while(!moveString.equals("end")) {
-            frame.moveMade = false;
-            while (!frame.moveMade) {
-                moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            }
-            moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            String [] orDest = moveString.split(",");
-            int origin = Integer.parseInt(orDest[0]);
-            int destination = Integer.parseInt(orDest[1]);
-            if (game.board.checkMoveLegal(origin, destination)) {
-                int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 2){
-                    JOptionPane.showMessageDialog(frame,
-                            "Checkmate!",
-                            "Game End",
-                            JOptionPane.PLAIN_MESSAGE);
-                    game.endGame(true);
-                }
-                else if (moveResult == 3){
-                    JOptionPane.showMessageDialog(frame,
-                            "Stalemate!",
-                            "Game End",
-                            JOptionPane.PLAIN_MESSAGE);
-                    game.endGame(false);
-                }
-            }
-            game.standardDisplay();
-            clearGui(frame, frame.pieceDestination);
-            updateGui(game, frame);
-            frame.setVisible(true);
-        }
-    }
-
-    public static void run(PlayerUser white, PlayerUser black, Database database) throws UsernameDoesNotExist {
-
-        Game game = new Game("Standard", white, black);
-
-        GameGui frame = new GameGui(game);
+        GameGuiTestVersion frame = new GameGuiTestVersion(game);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setResizable(false);
@@ -239,19 +192,12 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(true);
-                    // update users elo
-                    database.updateUserElo(white, white.getElo());
-                    database.updateUserElo(black, white.getElo());
-
                 } else if (moveResult == 3) {
                     JOptionPane.showMessageDialog(frame,
                             "Stalemate!",
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(false);
-                    // update users elo
-                    database.updateUserElo(white, white.getElo());
-                    database.updateUserElo(black, white.getElo());
                 }
             }
             game.standardDisplay();
@@ -261,4 +207,65 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         }
     }
 
+    public static String run(PlayerUser white, PlayerUser black, Database database, int testingMoveRes)
+            throws UsernameDoesNotExist {
+
+        Game game = new Game("Standard", white, black);
+
+        GameGuiTestVersion frame = new GameGuiTestVersion(game);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        clearGui(frame, frame.pieceDestination);
+        updateGui(game, frame);
+        frame.setVisible(true);
+
+        game.standardDisplay();
+
+        String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+        while (!moveString.equals("end")) {
+            frame.moveMade = false;
+            while (!frame.moveMade) {
+                moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            }
+            moveString = frame.pieceOrigin + "," + frame.pieceDestination;
+            String[] orDest = moveString.split(",");
+            int origin = Integer.parseInt(orDest[0]);
+            int destination = Integer.parseInt(orDest[1]);
+            if (game.board.checkMoveLegal(origin, destination)) {
+                // For testing purpose
+                int moveResult = game.board.makePlayerMove(origin, destination);
+                if (testingMoveRes == 2) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Checkmate!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(2);
+                    // update users elo
+                    database.updateUserElo(white, white.getElo());
+                    database.updateUserElo(black, black.getElo());
+                    return "elo have been updated for both players";
+
+                } else if (testingMoveRes == 3) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Stalemate!",
+                            "Game End",
+                            JOptionPane.PLAIN_MESSAGE);
+                    game.endGame(3);
+                    // update users elo
+                    database.updateUserElo(white, white.getElo());
+                    database.updateUserElo(black, black.getElo());
+                    return "elo have been updated for both players";
+                }
+            }
+            game.standardDisplay();
+            clearGui(frame, frame.pieceDestination);
+            updateGui(game, frame);
+            frame.setVisible(true);
+        }
+
+        return "";
+    }
 }
+

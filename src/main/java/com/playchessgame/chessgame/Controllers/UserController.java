@@ -3,10 +3,8 @@ package com.playchessgame.chessgame.Controllers;
 import com.playchessgame.chessgame.ContextService.MyListener;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
-import com.playchessgame.chessgame.GameService.GameGui;
 import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -178,23 +176,15 @@ public class UserController {
      * @return the "userinfo" webpage once the game is over
      */
     @PostMapping("/play")
-    public String playGame(@ModelAttribute(value="userToPlay") String userName, @ModelAttribute(value="roleToPlay") String role, HttpServletRequest request){
+    public String playGame(@ModelAttribute(value="userToPlay") String userName, @ModelAttribute(value="roleToPlay")
+            String role, HttpServletRequest request, Model model){
 
         HttpSession httpSession = request.getSession(true);
         PlayerUser user1 = (PlayerUser) httpSession.getAttribute("user");
 
         PlayerUser user2 = MyListener.onlineUsers.get(userName);
 
-        switch (role.toLowerCase()){
-            case "white":
-                // user1 is white and user2 is black
-                GameGui.run(user1, user2);
-                break;
-            case "black":
-                // user1 is black and user2 is white
-                GameGui.run(user2, user1);
-                break;
-        }
+        model.addAttribute("errorMsg", userService.play(user1, user2, role));
 
         return "userinfo";
     }

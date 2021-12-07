@@ -2,6 +2,7 @@ package com.playchessgame.chessgame.UserService;
 
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
+import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 
 public interface UserService {
 
@@ -16,5 +17,7 @@ public interface UserService {
      * @return true if the user exists or false if the user does not exist
      */
     public boolean checkUserExistence(PlayerUser user);
+
+    public String play(PlayerUser user1, PlayerUser user2, String role);
 
 }
