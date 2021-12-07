@@ -7,14 +7,17 @@ import com.playchessgame.chessgame.UserService.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+
+import java.awt.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-public class RegisterTest {
+@org.springframework.boot.test.context.SpringBootTest
+public class SpringBootTest {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl1TestVersion userService;
 
     @Autowired
     MasterUserService masterUserService;
@@ -79,5 +82,15 @@ public class RegisterTest {
         assertEquals("The username does not exist in the system.><", masterUserService.deleteUser(player));
     }
 
+    @Test
+    public void updateUserEloTest() {
+        PlayerUser kaixinrongzi = new PlayerUser("kaixinrongzi", "123456");
+        PlayerUser Mary = new PlayerUser("Mary", "999999");
+
+        System.setProperty("java.awt.headless", "false");
+
+        assertEquals("elo have been updated for both players", userService.play(kaixinrongzi, Mary,"white", 2));
+
+    }
 
 }

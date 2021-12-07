@@ -217,7 +217,7 @@ public class UserInfoDB2 implements Database {
         }
 
         String password = (String) res.get("password");
-        int elo = Integer.valueOf((String) res.get("elo"));
+        int elo = (int)res.get("elo");
 
         return new PlayerUser(password, password, elo);
 
