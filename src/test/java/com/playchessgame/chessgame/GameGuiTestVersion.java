@@ -11,7 +11,9 @@ import java.awt.event.*;
 import java.util.Map;
 import java.util.Random;
 
-
+/**
+ * This is the GameGui class in test version
+ */
 public class GameGuiTestVersion extends JFrame implements MouseMotionListener, MouseListener {
 
     JLayeredPane pane;

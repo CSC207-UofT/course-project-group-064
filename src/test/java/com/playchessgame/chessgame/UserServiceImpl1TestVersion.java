@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * This is the UserServiceImpl1 class in test version
+ */
 @Service
 public class UserServiceImpl1TestVersion{
 
