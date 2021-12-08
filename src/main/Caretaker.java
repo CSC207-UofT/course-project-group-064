@@ -1,16 +1,49 @@
-import java.util.ArrayList;
+import java.util.Stack;
 
+/**
+ * Caretaker class in which stacks of the undo and redo boards are saved.
+ */
 public class Caretaker {
-    // Where all mementos are saved
+    Stack<Memento> savedBoardsRedo = new Stack<>();
+    Stack<Memento> savedBoardsUndo = new Stack<>();
 
-    ArrayList<Memento> savedBoards = new ArrayList<Memento>();
+    /**
+     * Pushes a memento on the undo stack
+     * @param m the memento
+     */
+    public void addMementoUndo(Memento m) {
+        savedBoardsUndo.push(m);
+    }
 
-    // Adds memento to the ArrayList
+    /**
+     * Pushes a memento on the redo stack
+     * @param m the memento
+     */
+    public void addMementoRedo(Memento m) {
+        savedBoardsRedo.push(m);
+    }
 
-    public void addMemento(Memento m) { savedBoards.add(m); }
+    /**
+     * Pops off the memento at the top of the undo stack
+     * @return the memento at the top of the undo stack
+     */
+    public Memento getMementoUndo() {
+        return savedBoardsUndo.pop();
+    }
 
-    // Gets the memento requested from the ArrayList
+    /**
+     * Pops off the memento at the top of the redo stack
+     * @return the memento at the top of the redo stack
+     */
+    public Memento getMementoRedo() {
+        return savedBoardsRedo.pop();
+    }
 
-    public Memento getMemento(int index) { return savedBoards.get(index); }
+    /**
+     * Clears the redo stack
+     */
+    public void clearRedo() {
+        savedBoardsRedo.clear();
+    }
 
 }

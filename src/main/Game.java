@@ -22,6 +22,14 @@ public class Game {
         }
     }
 
+    public void resetGame(String game_mode){
+        this.game_mode = game_mode;
+        //TODO implement initial game setup
+        this.textBoardDisplay = "";
+        this.board = new Board(game_mode);
+        this.console = new Scanner(System.in);
+    }
+
     public void updateDisplay(int origin, int destination){
         int valid = board.makePlayerMove(origin, destination);
         if(valid == Board.LEGAL) {

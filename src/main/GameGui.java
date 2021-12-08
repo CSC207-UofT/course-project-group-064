@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
+
+
     JLayeredPane pane;
     JPanel board;
     JLabel piece;
@@ -11,6 +13,11 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     String pieceOrigin = "null";
     String pieceDestination = "null";
     boolean moveMade = false;
+    private static Caretaker caretaker = new Caretaker();
+    private static Originator originator = new Originator();
+    private static int saveBoards = 0;
+    private static int currentBoard = 0;
+
 
 
     public GameGui(Game game){
@@ -44,7 +51,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             else
                 square.setBackground(i % 2 == 0 ? Color.white : Color.GRAY);
         }
-
     }
 
     public static void clearGui(GameGui gui, String pieceDestination){
@@ -147,7 +153,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public static void main(String[] args) {
-        Game game = new Game("Standard");
+        final Game game = new Game("Standard");
 
         GameGui frame = new GameGui(game);
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
@@ -159,6 +165,9 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         frame.setVisible(true);
 
         game.standardDisplay();
+
+        originator.set(game.board);
+        caretaker.addMementoUndo(originator.storeInMemento());
 
         JFrame frame2 = new JFrame("Chess");
         frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -176,17 +185,59 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
         JButton undoButton = new JButton("Undo");
         undoButton.setBounds(50,100,100,50);
+        JButton redoButton = new JButton("Redo");
+        redoButton.setBounds(50,100,100,50);
+        undoButton.setEnabled(false);
+        redoButton.setEnabled(false);
         undoButton.addActionListener(new ActionListener(){
+            /**
+             * When clicked, the undo button will add a memento to the redo stack and revert the current board state
+             * to the last move.
+             * @param e when Clicked
+             */
             public void actionPerformed(ActionEvent e){
-                System.out.println("The button is working (undo)");
+                if(caretaker.savedBoardsUndo.size() > 1) {
+
+                    caretaker.addMementoRedo(caretaker.getMementoUndo());
+                    Memento tempMem = caretaker.savedBoardsUndo.peek();
+                    game.board.copy(originator.restoreFromMemento(tempMem));
+
+                    redoButton.setEnabled(true);
+
+                    game.standardDisplay();
+                    clearGui(frame, frame.pieceDestination);
+                    updateGui(game, frame);
+                    frame.pieceDestination = frame.pieceOrigin;
+                    frame.setVisible(true);
+
+                }
+                if(caretaker.savedBoardsUndo.size() <= 1) {
+                    undoButton.setEnabled(false);
+                }
             }
         });
 
-        JButton redoButton = new JButton("Redo");
-        redoButton.setBounds(50,100,100,50);
         redoButton.addActionListener(new ActionListener(){
+            /**
+             * When clicked, the redo button will revert the last undo to the board state before the undo.
+             * @param e Clicked.
+             */
             public void actionPerformed(ActionEvent e){
-                System.out.println("The button is working (redo).");
+                if (!caretaker.savedBoardsRedo.empty()){
+                    Memento tempMem = caretaker.getMementoRedo();
+                    game.board.copy(originator.restoreFromMemento(tempMem));
+                    caretaker.addMementoUndo(tempMem);
+
+                    game.standardDisplay();
+                    clearGui(frame, frame.pieceDestination);
+                    updateGui(game, frame);
+                    frame.pieceOrigin = frame.pieceDestination;
+                    frame.setVisible(true);
+                    undoButton.setEnabled(true);
+                }
+                if (caretaker.savedBoardsRedo.empty()) {
+                    redoButton.setEnabled(false);
+                }
             }
         });
 
@@ -209,7 +260,16 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
                 int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 2){
+                if (moveResult == 0) {
+
+                    undoButton.setEnabled(true);
+
+                    originator.set(game.board);
+                    caretaker.addMementoUndo(originator.storeInMemento());
+                    caretaker.clearRedo();
+
+                }
+                else if (moveResult == 2){
                     JOptionPane.showMessageDialog(frame,
                             "Check!",
                             "Game End",
@@ -226,13 +286,13 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             choices[0]);
                     //Restart
                     if (n == 1){
-                        game = new Game("Standard");
+                        game.resetGame("Standard");
+//                        game = new Game("Standard");
                         clearGui(frame, frame.pieceDestination);
                         updateGui(game, frame);
                         frame.setVisible(false);
                         frame.setVisible(true);
                     }
-
                 }
                 else if (moveResult == 3){
                     JOptionPane.showMessageDialog(frame,
@@ -251,7 +311,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             choices[0]);
                     //Restart
                     if (n == 1){
-                        game = new Game("Standard");
+                        game.resetGame("Standard");
+//                        game = new Game("Standard");
                         clearGui(frame, frame.pieceDestination);
                         updateGui(game, frame);
                         frame.setVisible(false);
