@@ -40,7 +40,8 @@ public class DatabaseTest {
     public void TestUpdateUserPassword() throws UserAlreadyExistsException, UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer", "testpassword");
         database.addUserInfo(player);
-        database.updateUserPassword(player, "newpassword");
+        player.setPassword("newpassword");
+        database.updateUserPassword(player);
         assertEquals("newpassword", database.getPlayerUserByName(player.getName()).getPassword());
         database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
     }
@@ -48,7 +49,8 @@ public class DatabaseTest {
     @Test(expected = UsernameDoesNotExist.class, timeout = 50)
     public void TestUpdateUserPasswordException() throws UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer");
-        database.updateUserPassword(player, "newpassword"); //attempts to update a player not already in the database
+        player.setPassword("newpassword");
+        database.updateUserPassword(player); //attempts to update a player not already in the database
     }
 
     @Test(timeout = 50)
@@ -64,5 +66,18 @@ public class DatabaseTest {
     public void TestUpdateUserEloException() throws UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer", "testpassword", 1000);
         database.updateUserElo(player, 1500); //attempts to update a player not already in the database
+    }
+
+    @Test(timeout = 50)
+    public void TestGetPlayerUserByName() throws UserAlreadyExistsException, UsernameDoesNotExist {
+        PlayerUser player = new PlayerUser("testplayer", "testpassword", 1000);
+        database.addUserInfo(player);
+        assertEquals(player, database.getPlayerUserByName(player.getName()));
+        database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
+    }
+
+    @Test(expected = UsernameDoesNotExist.class, timeout = 50)
+    public void TestGetPlayerUserByNameException() throws UsernameDoesNotExist {
+        database.getPlayerUserByName("testplayer"); //attempts to get a player not in the database
     }
 }
