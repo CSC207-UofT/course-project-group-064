@@ -76,20 +76,22 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public void mousePressed(MouseEvent e){
-        piece = null;
-        Component c =  board.findComponentAt(e.getX(), e.getY());
-        pieceOrigin = c.getParent().getName();
+        if (e.getButton() == 1) {
+            piece = null;
+            Component c = board.findComponentAt(e.getX(), e.getY());
+            pieceOrigin = c.getParent().getName();
 
-        if (c instanceof JPanel)
-            return;
+            if (c instanceof JPanel)
+                return;
 
-        Point parentLocation = c.getParent().getLocation();
-        xAdjustment = parentLocation.x - e.getX();
-        yAdjustment = parentLocation.y - e.getY();
-        piece = (JLabel)c;
-        piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-        piece.setSize(piece.getWidth(), piece.getHeight());
-        pane.add(piece, JLayeredPane.DRAG_LAYER);
+            Point parentLocation = c.getParent().getLocation();
+            xAdjustment = parentLocation.x - e.getX();
+            yAdjustment = parentLocation.y - e.getY();
+            piece = (JLabel) c;
+            piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+            piece.setSize(piece.getWidth(), piece.getHeight());
+            pane.add(piece, JLayeredPane.DRAG_LAYER);
+        }
     }
 
 
@@ -99,26 +101,27 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(piece == null) return;
+        if (e.getButton() == 1) {
+            if (piece == null) return;
 
-        piece.setVisible(false);
-        Component c =  board.findComponentAt(e.getX(), e.getY());
+            piece.setVisible(false);
+            Component c = board.findComponentAt(e.getX(), e.getY());
 
-        if (c instanceof JLabel){
-            pieceDestination = c.getParent().getName();
-            Container parent = c.getParent();
-            parent.remove(0);
-            parent.add( piece );
-            moveMade = true;
+            if (c instanceof JLabel) {
+                pieceDestination = c.getParent().getName();
+                Container parent = c.getParent();
+                parent.remove(0);
+                parent.add(piece);
+                moveMade = true;
+            } else {
+                pieceDestination = c.getName();
+                Container parent = (Container) c;
+                parent.add(piece);
+                moveMade = true;
+            }
+
+            piece.setVisible(true);
         }
-        else {
-            pieceDestination = c.getName();
-            Container parent = (Container)c;
-            parent.add( piece );
-            moveMade = true;
-        }
-
-        piece.setVisible(true);
     }
 
     @Override
