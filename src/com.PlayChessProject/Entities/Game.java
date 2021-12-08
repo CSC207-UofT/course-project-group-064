@@ -1,5 +1,3 @@
-package Entities;
-
 import java.util.Map;
 import java.util.Scanner;
 
@@ -26,6 +24,14 @@ public class Game {
         if (this.game_mode.equals("Standard")){
             this.standardDisplay();
         }
+    }
+
+    public void resetGame(String game_mode){
+        this.game_mode = game_mode;
+        //TODO implement initial game setup
+        this.textBoardDisplay = "";
+        this.board = new Board(game_mode);
+        this.console = new Scanner(System.in);
     }
 
     public void endGame(int result){
@@ -59,6 +65,9 @@ public class Game {
     /**Handles game result. If passed true, the player whose turn it is achieved checkmate.
      * if passed false the game ended in a draw*/
     public void endGame(boolean result){
+    }
+    public void calculateElo(double game_result, User white, User black){
+        //TODO update user elos based on game result
     }
 
     //Initializes display for a classic game of chess.
