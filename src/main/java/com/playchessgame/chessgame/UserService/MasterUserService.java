@@ -21,4 +21,6 @@ public interface MasterUserService {
      */
     public String deleteUser(PlayerUser user);
 
+    PlayerUser getPlayerUserByName(String username);
+
 }

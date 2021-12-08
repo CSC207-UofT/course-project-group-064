@@ -127,7 +127,7 @@ public class UserInfoDB2 implements Database {
      */
     @Override
     public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
-        boolean res = checkUserExistence(user);
+        boolean res = checkUserNameExistence(user);
 
         if (!res){
             // the user with the username is not in the database
@@ -205,7 +205,7 @@ public class UserInfoDB2 implements Database {
         String password = (String) res.get("password");
         int elo = (int)res.get("elo");
 
-        return new PlayerUser(password, password, elo);
+        return new PlayerUser(username, password, elo);
 
     }
 
