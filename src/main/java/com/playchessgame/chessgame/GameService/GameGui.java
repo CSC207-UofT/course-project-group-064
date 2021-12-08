@@ -17,10 +17,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     String pieceOrigin = "null";
     String pieceDestination = "null";
     boolean moveMade = false;
-    private static Caretaker caretaker = new Caretaker();
-    private static Originator originator = new Originator();
-    private static int saveBoards = 0;
-    private static int currentBoard = 0;
+    private static final Caretaker caretaker = new Caretaker();
+    private static final Originator originator = new Originator();
 
     public GameGui(Game game){
         //Add the pane for the board and mouse listeners for user interaction

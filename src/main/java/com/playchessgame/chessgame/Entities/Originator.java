@@ -24,9 +24,9 @@ public class Originator{
     }
 
     /**
-     *
-     * @param memento
-     * @return
+     * Pulls up the saved memento
+     * @param memento the memento
+     * @return the board saved in the memento
      */
     public Board restoreFromMemento(Memento memento) {
         board = memento.getSavedBoard();

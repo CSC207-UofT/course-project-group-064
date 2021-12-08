@@ -3,7 +3,7 @@ package com.playchessgame.chessgame.Entities;
  * Memento class to create and return board mementos.
  */
 public class Memento {
-    private Board board;
+    private final Board board;
 
     /**
      * Memento initializer
