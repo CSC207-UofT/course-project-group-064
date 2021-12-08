@@ -45,37 +45,6 @@ public class PlayerUser extends User {
         this.kFactor = 50;
         this.games = 0;
     }
-
-
-//    /**
-//     * Returns the player user's username.
-//     *
-//     * @return the player user's name
-//     */
-//    @Override
-//    public String getName() {return name;}
-//
-//    /**
-//     * Sets the player user's username to the specified name.
-//     *
-//     * @param name The specified name
-//     */
-//    public void setName(String name) {this.name = name;
-//    }
-
-//    /**
-//     * Returns the player user's password.
-//     *
-//     * @return the player user's password
-//     */
-//    public String getPassword() {return password;}
-
-//    /**
-//     * Sets the player user's password to the specified password.
-//     *
-//     * @param password The specified password
-//     */
-//    public void setPassword(String password) {this.password = password;}
   
     /**
      * Returns the player user's elo.
@@ -99,7 +68,11 @@ public class PlayerUser extends User {
         this.games++;
     }
 
-
+    /**
+     * Returns the player user's K factor.
+     *
+     * @return the player user's K factor
+     */
     public int getkFactor(){
         return this.kFactor;
     }
