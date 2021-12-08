@@ -1,3 +1,4 @@
+package Entities;
 /**
  * Memento class to create and return board mementos.
  */

@@ -1,3 +1,4 @@
+package Entities;
 /**
  * Originator class for getting and setting mementos for the undo/redo function.
  */
