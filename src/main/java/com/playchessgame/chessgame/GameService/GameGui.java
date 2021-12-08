@@ -2,8 +2,7 @@ package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
-import com.playchessgame.chessgame.Entities.Game;
-import com.playchessgame.chessgame.Entities.PlayerUser;
+import com.playchessgame.chessgame.Entities.*;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,10 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     String pieceOrigin = "null";
     String pieceDestination = "null";
     boolean moveMade = false;
+    private static Caretaker caretaker = new Caretaker();
+    private static Originator originator = new Originator();
+    private static int saveBoards = 0;
+    private static int currentBoard = 0;
 
     public GameGui(Game game){
         //Add the pane for the board and mouse listeners for user interaction
@@ -89,20 +92,22 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public void mousePressed(MouseEvent e){
-        piece = null;
-        Component c =  board.findComponentAt(e.getX(), e.getY());
-        pieceOrigin = c.getParent().getName();
+        if (e.getButton() == 1) {
+            piece = null;
+            Component c = board.findComponentAt(e.getX(), e.getY());
+            pieceOrigin = c.getParent().getName();
 
-        if (c instanceof JPanel)
-            return;
+            if (c instanceof JPanel)
+                return;
 
-        Point parentLocation = c.getParent().getLocation();
-        xAdjustment = parentLocation.x - e.getX();
-        yAdjustment = parentLocation.y - e.getY();
-        piece = (JLabel)c;
-        piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
-        piece.setSize(piece.getWidth(), piece.getHeight());
-        pane.add(piece, JLayeredPane.DRAG_LAYER);
+            Point parentLocation = c.getParent().getLocation();
+            xAdjustment = parentLocation.x - e.getX();
+            yAdjustment = parentLocation.y - e.getY();
+            piece = (JLabel) c;
+            piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
+            piece.setSize(piece.getWidth(), piece.getHeight());
+            pane.add(piece, JLayeredPane.DRAG_LAYER);
+        }
     }
 
 
@@ -112,26 +117,27 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(piece == null) return;
+        if (e.getButton() == 1) {
+            if (piece == null) return;
 
-        piece.setVisible(false);
-        Component c =  board.findComponentAt(e.getX(), e.getY());
+            piece.setVisible(false);
+            Component c = board.findComponentAt(e.getX(), e.getY());
 
-        if (c instanceof JLabel){
-            pieceDestination = c.getParent().getName();
-            Container parent = c.getParent();
-            parent.remove(0);
-            parent.add( piece );
-            moveMade = true;
+            if (c instanceof JLabel) {
+                pieceDestination = c.getParent().getName();
+                Container parent = c.getParent();
+                parent.remove(0);
+                parent.add(piece);
+                moveMade = true;
+            } else {
+                pieceDestination = c.getName();
+                Container parent = (Container) c;
+                parent.add(piece);
+                moveMade = true;
+            }
+
+            piece.setVisible(true);
         }
-        else {
-            pieceDestination = c.getName();
-            Container parent = (Container)c;
-            parent.add( piece );
-            moveMade = true;
-        }
-
-        piece.setVisible(true);
     }
 
     @Override
@@ -171,6 +177,87 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         frame.setVisible(true);
 
         game.standardDisplay();
+        originator.set(game.board);
+        caretaker.addMementoUndo(originator.storeInMemento());
+
+        JFrame frame2 = new JFrame("Chess");
+        frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        JPanel contentPanel = new JPanel();
+
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        frame2.setContentPane(contentPanel);
+
+        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
+                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
+                "you want to play a 'real' game with no undo, just close this window!" +
+                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
+        frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
+        JButton undoButton = new JButton("Undo");
+        undoButton.setBounds(50,100,100,50);
+        JButton redoButton = new JButton("Redo");
+        redoButton.setBounds(50,100,100,50);
+        undoButton.setEnabled(false);
+        redoButton.setEnabled(false);
+        undoButton.addActionListener(new ActionListener(){
+            /**
+             * When clicked, the undo button will add a memento to the redo stack and revert the current board state
+             * to the last move.
+             * @param e when Clicked
+             */
+            public void actionPerformed(ActionEvent e){
+                if(caretaker.undoStack().size() > 1) {
+
+                    caretaker.addMementoRedo(caretaker.getMementoUndo());
+                    Memento tempMem = caretaker.undoStack().peek();
+                    game.board.copy(originator.restoreFromMemento(tempMem));
+
+                    redoButton.setEnabled(true);
+
+                    game.standardDisplay();
+                    clearGui(frame, frame.pieceDestination);
+                    updateGui(game, frame);
+                    frame.pieceDestination = frame.pieceOrigin;
+                    frame.setVisible(true);
+
+                }
+                if(caretaker.undoStack().size() <= 1) {
+                    undoButton.setEnabled(false);
+                }
+            }
+        });
+
+        redoButton.addActionListener(new ActionListener(){
+            /**
+             * When clicked, the redo button will revert the last undo to the board state before the undo.
+             * @param e Clicked.
+             */
+            public void actionPerformed(ActionEvent e){
+                if (!caretaker.redoStack().empty()){
+                    Memento tempMem = caretaker.getMementoRedo();
+                    game.board.copy(originator.restoreFromMemento(tempMem));
+                    caretaker.addMementoUndo(tempMem);
+
+                    game.standardDisplay();
+                    clearGui(frame, frame.pieceDestination);
+                    updateGui(game, frame);
+                    frame.pieceOrigin = frame.pieceDestination;
+                    frame.setVisible(true);
+                    undoButton.setEnabled(true);
+                }
+                if (caretaker.redoStack().empty()) {
+                    redoButton.setEnabled(false);
+                }
+            }
+        });
+
+        frame2.getContentPane().add(undoButton);
+        frame2.getContentPane().add(redoButton);
+        frame2.setSize(500, 500);
+        frame2.pack();
+        frame2.setLocationRelativeTo(frame);
+        frame2.setVisible(true);
 
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
         while(!moveString.equals("end")) {
@@ -184,7 +271,14 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
                 int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 2){
+                if (moveResult == 0) {
+                    undoButton.setEnabled(true);
+                    originator.set(game.board);
+                    caretaker.addMementoUndo(originator.storeInMemento());
+                    caretaker.clearRedo();
+
+                }
+                else if (moveResult == 2){
                     JOptionPane.showMessageDialog(frame,
                             "Checkmate!",
                             "Game End",

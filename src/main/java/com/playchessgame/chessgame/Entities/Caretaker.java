@@ -1,4 +1,4 @@
-package Entities;
+package com.playchessgame.chessgame.Entities;
 import java.util.Stack;
 
 /**
@@ -38,6 +38,22 @@ public class Caretaker {
      */
     public Memento getMementoRedo() {
         return savedBoardsRedo.pop();
+    }
+
+    /**
+     * returns undo Stack
+     * @return savedBoardsUndo
+     */
+    public Stack<Memento> undoStack() {
+        return savedBoardsUndo;
+    }
+
+    /**
+     * returns redo Stack
+     * @return savedBoardsRedo
+     */
+    public Stack<Memento> redoStack() {
+        return savedBoardsRedo;
     }
 
     /**

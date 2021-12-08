@@ -1,4 +1,4 @@
-package Entities;
+package com.playchessgame.chessgame.Entities;
 /**
  * Memento class to create and return board mementos.
  */

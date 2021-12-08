@@ -1,4 +1,4 @@
-package Entities;
+package com.playchessgame.chessgame.Entities;
 /**
  * Originator class for getting and setting mementos for the undo/redo function.
  */

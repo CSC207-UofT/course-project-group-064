@@ -551,4 +551,51 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Reinitializes the board class with a given board.
+     * @param board the given board that needs to be copied from
+     */
+    public void copy(Board board) {
+        this.piecePositions = new HashMap<>();
+        for(int key : board.getPiecePositions().keySet()){
+            boolean color = board.getPiecePositions().get(key).getColor();
+            int file = key % 8;
+            int rank = 7 - ((key - file) / 8);
+            copyHelper(board, key, color, file, rank);
+        }
+        this.lastMove[0] = board.lastMove[0];
+        this.lastMove[1] = board.lastMove[1];
+        this.turn = board.turn;
+    }
+
+    /**
+     * helper method for copy. Creates and places the respective pieces at the locations that are in the other board.
+     * @param board the given board to be copied
+     * @param key the given key in which the piece is to be placed
+     * @param color the color of the piece
+     * @param file the file in which the piece should be placed
+     * @param rank the rank in which the piece should be placed
+     */
+    private void copyHelper(Board board, int key, boolean color, int file, int rank) {
+        if(board.getPiecePositions().get(key) instanceof Pawn) {
+            Pawn pawn = new Pawn(color, file, rank);
+            this.piecePositions.put(key, pawn);
+        } else if (board.getPiecePositions().get(key) instanceof Bishop){
+            Bishop bishop = new Bishop(color, file, rank);
+            this.piecePositions.put(key, bishop);
+        } else if (board.getPiecePositions().get(key) instanceof Rook) {
+            Rook rook = new Rook(color, file, rank);
+            this.piecePositions.put(key, rook);
+        } else if (board.getPiecePositions().get(key) instanceof Knight) {
+            Knight knight = new Knight(color, file, rank);
+            this.piecePositions.put(key, knight);
+        } else if (board.getPiecePositions().get(key) instanceof King) {
+            King king = new King(color, file, rank);
+            this.piecePositions.put(key, king);
+        } else if (board.getPiecePositions().get(key) instanceof Queen) {
+            Queen queen = new Queen(color, file, rank);
+            this.piecePositions.put(key, queen);
+        }
+    }
 }
