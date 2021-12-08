@@ -1,12 +1,8 @@
 package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Database.Database;
-import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
 import com.playchessgame.chessgame.Entities.*;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -300,6 +296,13 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         }
     }
 
+    /**
+     *
+     * @param white: PlayerUser who moves first
+     * @param black: PlayerUser who moves next
+     * @param database: Database
+     * @throws UsernameDoesNotExist
+     */
     public static void run(PlayerUser white, PlayerUser black, Database database) throws UsernameDoesNotExist {
 
         Game game = new Game("Standard", white, black);
