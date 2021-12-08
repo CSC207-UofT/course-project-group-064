@@ -1,15 +1,18 @@
 package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Database.Database;
+import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
 import com.playchessgame.chessgame.Entities.Game;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
+
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
     JPanel board;
@@ -19,9 +22,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     String pieceOrigin = "null";
     String pieceDestination = "null";
     boolean moveMade = false;
-
-    @Autowired
-    Database database;
 
     public GameGui(Game game){
         //Add the pane for the board and mouse listeners for user interaction

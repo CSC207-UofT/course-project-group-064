@@ -14,7 +14,7 @@ public class ChessGameApplication {
 
     /**
      * The starting point of the project
-     * @param args
+     * @param args: parameter to run the method
      */
     public static void main(String[] args) {
 

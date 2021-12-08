@@ -26,11 +26,10 @@ public class UserInfoDB2 implements Database {
         return (MongoClient) applicationContext.getBean("mongoclient");
     }
 
-    private MongoCollection getCollection(){
+    private MongoCollection<Document> getCollection(){
         MongoClient mongoClient = connect();
         MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
-        MongoCollection mongoCollection = mongoDatabase.getCollection("ChessGameUsers");
-        return mongoCollection;
+        return mongoDatabase.getCollection("ChessGameUsers");
     }
 
     /**
@@ -51,7 +50,6 @@ public class UserInfoDB2 implements Database {
      * is already in the database.
      *
      * @param user The player whose information is being inserted.
-     * @param user The user whose information is being inserted.
      */
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
@@ -60,7 +58,7 @@ public class UserInfoDB2 implements Database {
             System.out.println("The Username Has Been Used!");
             throw new UserAlreadyExistsException();}
         catch(UsernameDoesNotExist e){
-            MongoCollection mongoCollection = getCollection();
+            MongoCollection<Document> mongoCollection = getCollection();
 
             Document document = new Document();
             document.append("name", user.getName());
@@ -91,7 +89,7 @@ public class UserInfoDB2 implements Database {
             throw new UsernameDoesNotExist();
         }
 
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
         Bson filter2 = eq("password", user.getPassword());
@@ -110,20 +108,14 @@ public class UserInfoDB2 implements Database {
     @Override
     public boolean checkUserExistence(PlayerUser user) {
 
-        MongoCollection collection = getCollection();
+        MongoCollection<Document> collection = getCollection();
 
         Document document = new Document("name", user.getName());
         document.append("password", user.getPassword());
 
         Object res = collection.find(document).first();
 
-        if (res != null) {
-            // the username exists
-            return true;
-        }
-
-        // the username does not exist
-        return false;
+        return res != null;
 
     }
 
@@ -142,7 +134,7 @@ public class UserInfoDB2 implements Database {
             throw new UsernameDoesNotExist();
         }
 
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
 
         checkUserNameExistence(user);
 
@@ -167,7 +159,7 @@ public class UserInfoDB2 implements Database {
             throw new UsernameDoesNotExist();
         }
 
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
 
         Bson filter = eq("name", user.getName());
         Bson eloUpdate = set("elo", newElo);
@@ -183,20 +175,14 @@ public class UserInfoDB2 implements Database {
     @Override
     public boolean checkUserPassword(PlayerUser user) {
 
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
 
         Document document = new Document("name", user.getName());
         document.append("password", user.getPassword());
 
         Object res = mongoCollection.find(document).first();
 
-        if (res != null) {
-            // the username exists
-            return true;
-        }
-
-        // the username does not exist
-        return false;
+        return res != null;
     }
 
     /**
@@ -207,10 +193,10 @@ public class UserInfoDB2 implements Database {
     @Override
     public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist{
 
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
 
         Document document = new Document("name", username);
-        Document res = (Document)mongoCollection.find(document).first();
+        Document res = mongoCollection.find(document).first();
 
         if (res == null) {
             throw new UsernameDoesNotExist();
@@ -224,7 +210,7 @@ public class UserInfoDB2 implements Database {
     }
 
     private boolean checkUserNameExistence(PlayerUser user) throws UsernameDoesNotExist{
-        MongoCollection mongoCollection = getCollection();
+        MongoCollection<Document> mongoCollection = getCollection();
         Document document = new Document();
         document.append("name", user.getName());
         Object res = mongoCollection.find(document).first();

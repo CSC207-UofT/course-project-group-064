@@ -3,13 +3,9 @@ package com.playchessgame.chessgame;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.UserService.MasterUserService;
-import com.playchessgame.chessgame.UserService.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-
-import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
