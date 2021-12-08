@@ -6,7 +6,6 @@ import com.playchessgame.chessgame.UserService.MasterUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @org.springframework.boot.test.context.SpringBootTest
@@ -87,6 +86,17 @@ public class SpringBootTest {
 
         assertEquals("elo have been updated for both players", userService.play(kaixinrongzi, Mary,"white", 2));
 
+    }
+
+    @Test
+    public void getPlayerByNameSuccessTest(){
+        assertEquals("kaixinrongzi", masterUserService.getPlayerUserByName("kaixinrongzi").getName());
+        assertEquals("123456", masterUserService.getPlayerUserByName("kaixinrongzi").getPassword());
+    }
+
+    @Test
+    public void getPlayerByNameSuccessFailure(){
+        assertEquals(null, masterUserService.getPlayerUserByName("lemonTree"));
     }
 
 }

@@ -61,4 +61,11 @@ public class MasterUserServiceImpl1 implements MasterUserService {
             return e.getMessage();
         }
     };
+
+    public PlayerUser getPlayerUserByName(String username){
+        try {return database.getPlayerUserByName(username);
+        } catch(UsernameDoesNotExist e){
+            return null;
+        }
+    }
 }

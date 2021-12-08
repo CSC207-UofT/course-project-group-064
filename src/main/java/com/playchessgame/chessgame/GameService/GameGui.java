@@ -1,18 +1,14 @@
 package com.playchessgame.chessgame.GameService;
 
 import com.playchessgame.chessgame.Database.Database;
-import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
 import com.playchessgame.chessgame.Entities.Game;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
-
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
     JPanel board;
@@ -22,6 +18,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     String pieceOrigin = "null";
     String pieceDestination = "null";
     boolean moveMade = false;
+
 
     public GameGui(Game game){
         //Add the pane for the board and mouse listeners for user interaction
@@ -61,7 +58,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         for (int j = 0; j < 64; j++) {
             JPanel panel = (JPanel)gui.board.getComponent(j);
             panel.removeAll();
-            if (!pieceDestination.equals("null")) {
+            if (pieceDestination != "null") {
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(false);
                 gui.board.getComponent(Integer.parseInt(pieceDestination)).setVisible(true);
             }
@@ -157,8 +154,10 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     public static void main(String[] args) {
-        PlayerUser white = new PlayerUser("p1", "1000");
-        PlayerUser black = new PlayerUser("p2", "1000");
+
+        PlayerUser white = new PlayerUser("white", "1000");
+        PlayerUser black = new PlayerUser("black", "1000");
+
         Game game = new Game("Standard", white, black);
 
         GameGui frame = new GameGui(game);
@@ -172,8 +171,45 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         game.standardDisplay();
 
+        JFrame frame2 = new JFrame("Chess");
+        frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        JPanel contentPanel = new JPanel();
+
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        frame2.setContentPane(contentPanel);
+
+        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
+                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
+                "you want to play a 'real' game with no undo, just close this window!" +
+                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
+        frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
+        JButton undoButton = new JButton("Undo");
+        undoButton.setBounds(50,100,100,50);
+        undoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (undo)");
+            }
+        });
+
+        JButton redoButton = new JButton("Redo");
+        redoButton.setBounds(50,100,100,50);
+        redoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (redo).");
+            }
+        });
+
+        frame2.getContentPane().add(undoButton);
+        frame2.getContentPane().add(redoButton);
+        frame2.setSize(500, 500);
+        frame2.pack();
+        frame2.setLocationRelativeTo(frame);
+        frame2.setVisible(true);
+
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while(!moveString.equals("end")) {
+        while(moveString != "end") {
             frame.moveMade = false;
             while (!frame.moveMade) {
                 moveString = frame.pieceOrigin + "," + frame.pieceDestination;
@@ -186,10 +222,28 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                 int moveResult = game.board.makePlayerMove(origin, destination);
                 if (moveResult == 2){
                     JOptionPane.showMessageDialog(frame,
-                            "Checkmate!",
+                            "Check!",
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(true);
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    //Restart
+                    if (n == 1){
+                        game = new Game("Standard", white, black);
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
+
                 }
                 else if (moveResult == 3){
                     JOptionPane.showMessageDialog(frame,
@@ -197,6 +251,24 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(false);
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    //Restart
+                    if (n == 1){
+                        game = new Game("Standard", white, black);
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
+
                 }
             }
             game.standardDisplay();
@@ -211,47 +283,120 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         Game game = new Game("Standard", white, black);
 
         GameGui frame = new GameGui(game);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
         frame.pack();
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo( null );
         clearGui(frame, frame.pieceDestination);
         updateGui(game, frame);
         frame.setVisible(true);
 
         game.standardDisplay();
 
+        JFrame frame2 = new JFrame("Chess");
+        frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        JPanel contentPanel = new JPanel();
+
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        frame2.setContentPane(contentPanel);
+
+        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
+                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
+                "you want to play a 'real' game with no undo, just close this window!" +
+                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
+        frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
+        JButton undoButton = new JButton("Undo");
+        undoButton.setBounds(50,100,100,50);
+        undoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (undo)");
+            }
+        });
+
+        JButton redoButton = new JButton("Redo");
+        redoButton.setBounds(50,100,100,50);
+        redoButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                System.out.println("The button is working (redo).");
+            }
+        });
+
+        frame2.getContentPane().add(undoButton);
+        frame2.getContentPane().add(redoButton);
+        frame2.setSize(500, 500);
+        frame2.pack();
+        frame2.setLocationRelativeTo(frame);
+        frame2.setVisible(true);
+
         String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while (!moveString.equals("end")) {
+        while(moveString != "end") {
             frame.moveMade = false;
             while (!frame.moveMade) {
                 moveString = frame.pieceOrigin + "," + frame.pieceDestination;
             }
             moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            String[] orDest = moveString.split(",");
+            String [] orDest = moveString.split(",");
             int origin = Integer.parseInt(orDest[0]);
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
                 int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 2) {
+                if (moveResult == 2){
                     JOptionPane.showMessageDialog(frame,
-                            "Checkmate!",
+                            "Check!",
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(true);
-                    // update users elo
+                    // update user elo
                     database.updateUserElo(white, white.getElo());
-                    database.updateUserElo(black, white.getElo());
+                    database.updateUserElo(white, white.getElo());
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    //Restart
+                    if (n == 1){
+                        game = new Game("Standard", white, black);
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
 
-                } else if (moveResult == 3) {
+                }
+                else if (moveResult == 3){
                     JOptionPane.showMessageDialog(frame,
                             "Stalemate!",
                             "Game End",
                             JOptionPane.PLAIN_MESSAGE);
                     game.endGame(false);
-                    // update users elo
+                    // update user elo
                     database.updateUserElo(white, white.getElo());
-                    database.updateUserElo(black, white.getElo());
+                    database.updateUserElo(white, white.getElo());
+                    Object[] choices = {"No", "Yes"};
+                    int n = JOptionPane.showOptionDialog(frame,
+                            "Would you like to play again?",
+                            "Play again?",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            choices,
+                            choices[0]);
+                    //Restart
+                    if (n == 1){
+                        game = new Game("Standard", white, black);
+                        clearGui(frame, frame.pieceDestination);
+                        updateGui(game, frame);
+                        frame.setVisible(false);
+                        frame.setVisible(true);
+                    }
+
                 }
             }
             game.standardDisplay();
@@ -260,5 +405,4 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             frame.setVisible(true);
         }
     }
-
 }
