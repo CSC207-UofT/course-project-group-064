@@ -100,7 +100,7 @@ public class UserInfoDB2 implements Database {
     }
 
     /**
-     * Checks if the specified player user is already in the database (by looking at their username specifically).
+     * Checks if the specified player user is already in the database (by looking at their username and password).
      *
      * @param user The player whose existence is being checked
      * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
@@ -211,6 +211,12 @@ public class UserInfoDB2 implements Database {
 
     }
 
+    /**
+     * Checks if the specified player user's username is already in the database.
+     *
+     * @param user The player whose username's existence is being checked
+     * @return A true or false value reflecting whether the username is in the database. True if it is, false if it isn't
+     */
     private boolean checkUserNameExistence(PlayerUser user) throws UsernameDoesNotExist {
         MongoCollection<Document> mongoCollection = getCollection();
         Document document = new Document();
