@@ -16,6 +16,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     int yAdjustment;
     String pieceOrigin = "null";
     String pieceDestination = "null";
+    final static int NUM_BOARD_ROWS = 8;
+    final static int NUM_BOARD_COLUMNS = 8;
     boolean moveMade = false;
     private static final Caretaker caretaker = new Caretaker();
     private static final Originator originator = new Originator();
@@ -33,8 +35,10 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         pane.add(board, JLayeredPane.DEFAULT_LAYER);
 
         //Create the chess board grid
-        //Set the size of the board on the screen, hopefully resizable in the future
-        board.setLayout( new GridLayout(8, 8) );
+        //Set the size of the board on the screen
+        board.setLayout( new GridLayout(NUM_BOARD_ROWS, NUM_BOARD_COLUMNS) );
+        //Board dimensions on the screen in pixels. 800x800 is chosen as it is 
+        //boardly compatible with most displays
         Dimension boardDimensions = new Dimension(800, 800);
         pane.setPreferredSize(boardDimensions);
         board.setPreferredSize( boardDimensions );
