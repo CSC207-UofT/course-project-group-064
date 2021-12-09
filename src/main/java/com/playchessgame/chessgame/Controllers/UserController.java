@@ -3,10 +3,8 @@ package com.playchessgame.chessgame.Controllers;
 import com.playchessgame.chessgame.ContextService.MyListener;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
-import com.playchessgame.chessgame.GameService.GameGui;
 import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +26,7 @@ public class UserController {
 
     /**
      * returns the "addUser" webpage when the get request "/register" is sent
-     * @param model
+     * @param model: Model from web
      * @return the "addUser" webpage for players to register into the system
      */
     @GetMapping("/register")
@@ -39,8 +37,8 @@ public class UserController {
 
     /**
      * register a playeruser into the database
-     * @param user
-     * @param model
+     * @param user: PlayerUser who is applying to register
+     * @param model: Model from web
      * @return the "addUser" webpage which varies by registration result
      */
     @PostMapping("/register")
@@ -62,7 +60,7 @@ public class UserController {
 
     /**
      * returns the loginPlayer webpage when the get request /login1 is sent
-     * @param model
+     * @param model: Model from web
      * @return the loginPlayer webpage for playeruser to login
      */
     @GetMapping("/login1")
@@ -75,8 +73,8 @@ public class UserController {
      * login the playeruser if the information provided matches it in the database and add the player into
      * MyListerner.onlineUsers map if the player successfully login
      * @param user: PlayerUser
-     * @param model
-     * @param request
+     * @param model: Model from web
+     * @param request: HttpServletRequest from web
      * @return the loginPlayer webpage which varies by the login result
      */
     @PostMapping("/login1")
@@ -100,7 +98,7 @@ public class UserController {
 
     /**
      * returns the resetpassword webpage when the get request /resetpassword is sent
-     * @param model
+     * @param model: Model from web
      * @return the resetpassword webpage for player to reset their passwords
      */
     @GetMapping("/resetpassword")
@@ -116,7 +114,7 @@ public class UserController {
      * send the resetpassword request to masteruser who is monitoring this issue
      * @param user: PlayerUser who is applying to reset password
      * @param email: the playeruser's email address
-     * @param model:
+     * @param model: Model from Web
      * @return the "resetpassword" webpage
      */
     @PostMapping("/resetpassword")
@@ -128,8 +126,8 @@ public class UserController {
 
     /**
      * remove the playeruser from the HttpSessions and from the MyListener.onlineUsers
-     * @param request
-     * @param model
+     * @param request: HttpServletRequest
+     * @param model: Model from web
      * @return the "logout" webpage
      */
     @PostMapping("/logout")
@@ -151,7 +149,7 @@ public class UserController {
 
     /**
      * returns the "playertochoose" webpage when the get request "/play" is sent from playeruser
-     * @param model
+     * @param model: Model from web
      * @return the "playertochoose" webpage
      */
     @GetMapping("/play")
@@ -159,7 +157,7 @@ public class UserController {
 
         Map<String, PlayerUser> onlineUsers = MyListener.onlineUsers;
 
-        Set usernames = onlineUsers.keySet();
+        Set<String> usernames = onlineUsers.keySet();
 
         model.addAttribute("users", usernames);
         model.addAttribute("userToPlay", null);
@@ -174,27 +172,19 @@ public class UserController {
      * the GameGui.
      * @param userName: the player's username the current playeruser wants to play wih
      * @param role: the role the current playeruser wants to play: white or black
-     * @param request
+     * @param request: HttpServletRequest
      * @return the "userinfo" webpage once the game is over
      */
     @PostMapping("/play")
-    public String playGame(@ModelAttribute(value="userToPlay") String userName, @ModelAttribute(value="roleToPlay") String role, HttpServletRequest request){
+    public String playGame(@ModelAttribute(value="userToPlay") String userName, @ModelAttribute(value="roleToPlay")
+            String role, HttpServletRequest request, Model model){
 
         HttpSession httpSession = request.getSession(true);
         PlayerUser user1 = (PlayerUser) httpSession.getAttribute("user");
 
         PlayerUser user2 = MyListener.onlineUsers.get(userName);
 
-        switch (role.toLowerCase()){
-            case "white":
-                // user1 is white and user2 is black
-                GameGui.run(user1, user2);
-                break;
-            case "black":
-                // user1 is black and user2 is white
-                GameGui.run(user2, user1);
-                break;
-        }
+        model.addAttribute("errorMsg", userService.play(user1, user2, role));
 
         return "userinfo";
     }

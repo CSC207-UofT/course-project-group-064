@@ -8,13 +8,14 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 /**
  * The initialization class of the project (spring boot)
  */
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @ServletComponentScan
 public class ChessGameApplication {
 
     /**
      * The starting point of the project
-     * @param args
+     *
+     * @param args: parameter to run the method
      */
     public static void main(String[] args) {
 

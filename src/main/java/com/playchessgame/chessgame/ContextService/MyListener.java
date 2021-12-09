@@ -4,7 +4,9 @@ import com.playchessgame.chessgame.Entities.PlayerUser;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +18,7 @@ public class MyListener implements HttpSessionListener {
     public static int online = 0;
     public static Map<String, PlayerUser> onlineUsers = new HashMap<String, PlayerUser>();
     public static Map<PlayerUser, String> usersToResetPW = new HashMap<>();
+    public static List<PlayerUser> players = new ArrayList<>();
 
     /**
      * Notify when a session is created and increase the online player by one

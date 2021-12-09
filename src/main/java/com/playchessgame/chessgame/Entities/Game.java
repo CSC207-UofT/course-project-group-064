@@ -13,16 +13,12 @@ public class Game {
 
     public Game(String gameMode, PlayerUser white, PlayerUser black){
         this.game_mode = gameMode;
-        //TODO implement initial game setup
-        //Temporary board display in text
-        String textBoardDisplay = "";
         this.board = new Board(game_mode);
         this.console = new Scanner(System.in);
         this.whitePlayer = white;
         this.blackPlayer = black;
     }
     public void initializeDisplay(){
-        //TODO displays image of board and pieces in default positions depending on gamemode
         if (this.game_mode.equals("Standard")){
             this.standardDisplay();
         }

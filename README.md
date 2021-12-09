@@ -3,4 +3,4 @@
 A chess program written in Java. 
 
 ## Requires 
-* SQLite. 
+* MongoDB 4.4.10

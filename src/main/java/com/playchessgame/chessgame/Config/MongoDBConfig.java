@@ -16,10 +16,11 @@ public class MongoDBConfig {
 
     /**
      * Returns a MongoCollection instance to the Spring LOC container
+     *
      * @return a MongoCollection instance
      */
-    @Bean(name="mongoclient")
-    public MongoClient getMongoClient(){
+    @Bean(name = "mongoclient")
+    public MongoClient getMongoClient() {
 
         MongoClientURI mongoClientURI = new MongoClientURI(uri);
         MongoClient mongoClient = new MongoClient(mongoClientURI);

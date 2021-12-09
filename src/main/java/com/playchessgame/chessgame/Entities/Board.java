@@ -41,7 +41,6 @@ public class Board {
     }
 
     /**
-     *
      * @param checkTurn boolean player whose moves we are looking at.
      * @return 2d int array of every move that can be made. [piece][piece's moves]. The first element of each sub-array
      * is the current position of the piece.
@@ -50,9 +49,9 @@ public class Board {
         int[][] moves = new int[16][];
         int index = 0;
         HashMap<Integer, Piece> tempPositions = new HashMap<>(piecePositions);
-        for(int key : tempPositions.keySet()){
+        for (int key : tempPositions.keySet()) {
             Piece piece = piecePositions.get(key);
-            if(piece.getColor() == checkTurn) {
+            if (piece.getColor() == checkTurn) {
                 moves[index] = pieceTypeMoves(piece, checkTurn);
                 index++;
             }
@@ -62,12 +61,13 @@ public class Board {
 
     /**
      * Checks if a given move is legal.
-     * @param origin the starting location of the piece being moved
+     *
+     * @param origin      the starting location of the piece being moved
      * @param destination the ending location of the piece being moved
      * @return boolean true if the move is legal, false if the move is illegal.
      */
     public boolean checkMoveLegal(int origin, int destination) {
-        if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn){
+        if (!piecePositions.containsKey(origin) || piecePositions.get(origin).getColor() != turn) {
             return false;
         }
         int[] moves = pieceTypeMoves(piecePositions.get(origin), turn);
@@ -77,45 +77,42 @@ public class Board {
     /**
      * Helper method to get list of legal moves for a specific piece by first filtering it by piece type and calling
      * relevant sub-methods.
-     * @param piece the piece whose moves are being checked.
+     *
+     * @param piece     the piece whose moves are being checked.
      * @param checkTurn the player we are checking moves for, or their opponent if we are looking for check mate.
      * @return int array of legal moves for a specific piece starting with that piece's current location.
      */
-    public int[] pieceTypeMoves(Piece piece, boolean checkTurn){
+    public int[] pieceTypeMoves(Piece piece, boolean checkTurn) {
         int[] pseudoMoves; //Pseudo legal moves before check and mate checks
         int position = piece.getPos();
-        if (piece instanceof Pawn){
+        if (piece instanceof Pawn) {
             pseudoMoves = getPawnMoves(position);
-        }
-        else if (piece instanceof King){
+        } else if (piece instanceof King) {
             pseudoMoves = getKingMoves(position);
-        }
-        else if (piece instanceof Knight){
+        } else if (piece instanceof Knight) {
             pseudoMoves = getKnightMoves(position);
-        }
-        else{
+        } else {
             pseudoMoves = getSlidingMoves(position);
         }
         return filterLegalMoves(piece, pseudoMoves, checkTurn);
     }
 
     /**
-     *
-     * @param piece the piece whose moves are being checked
+     * @param piece       the piece whose moves are being checked
      * @param pseudoMoves a list of pseudo legal moves for the piece. This method checks that those moves do not leave
      *                    the king attacked.
-     * @param checkTurn the player whose king is being checked for attacks.
+     * @param checkTurn   the player whose king is being checked for attacks.
      * @return int array of legal moves for piece beginning with its current location.
      */
-    public int[] filterLegalMoves(Piece piece, int[] pseudoMoves, boolean checkTurn){
+    public int[] filterLegalMoves(Piece piece, int[] pseudoMoves, boolean checkTurn) {
         ArrayList<Integer> moves = new ArrayList<>();
         int position = piece.getPos();
         moves.add(position);
-        for (int move : pseudoMoves){
+        for (int move : pseudoMoves) {
             Map<Integer, Piece> shallowPiecePositions = new HashMap<>(piecePositions);
             piecePositions.remove(move);
             piecePositions.put(move, piecePositions.remove(position));
-            if (!inCheck(checkTurn)){
+            if (!inCheck(checkTurn)) {
                 moves.add(move);
             }
             piecePositions = shallowPiecePositions;
@@ -144,7 +141,6 @@ public class Board {
     }
 
     /**
-     *
      * @param origin the pawn's current position
      * @return array of pseudo-legal moves and captures including en passant.
      */
@@ -183,8 +179,7 @@ public class Board {
     }
 
     /**
-     *
-     * @param origin pawn's current position
+     * @param origin     pawn's current position
      * @param left_right location of target piece. left = true, right = false
      * @return true if the pawn can capture en passant, false otherwise.
      */
@@ -196,7 +191,6 @@ public class Board {
     }
 
     /**
-     *
      * @param origin knight's current position
      * @return array of pseudo-legal knight moves.
      */
@@ -215,6 +209,7 @@ public class Board {
      * gets moves for long range sliding pieces: Queen, Rook Bishop
      * Sliding piece moves are all checked the same way, so we use preset piece movement indices and loop over them to
      * the edge of the board, stopping if we encounter a friendly piece or after capturing an unfriendly piece.
+     *
      * @param origin sliding piece starting position
      * @return int array of pseudo-legal moves
      */
@@ -240,6 +235,7 @@ public class Board {
 
     /**
      * Checks if the given player is in check by using inCheckHelper
+     *
      * @param player the given player
      * @return true if they are in check, false otherwise
      */
@@ -258,9 +254,10 @@ public class Board {
      * Helper method for inCheck that does most of the work. Declares temp pieces at the kings location and uses
      * the valid moves of those pieces to check the corresponding spaces. Uses helpers to check for each type of
      * attacking piece.
-     * @param key pos of King
-     * @param king_file King's file
-     * @param king_rank King's rank
+     *
+     * @param key        pos of King
+     * @param king_file  King's file
+     * @param king_rank  King's rank
      * @param king_color King's color
      * @return returns true if a check is detected, false otherwise.
      */
@@ -285,42 +282,43 @@ public class Board {
                 checkKing(king_color, king);
     }
 
-    /**checks if a position is checkmate or stalemate.
-     returns 0 if no mate
-     returns 2 if checkmate
-     returns 3 if stalemate or insufficient material**/
-    public int checkMate(){
+    /**
+     * checks if a position is checkmate or stalemate.
+     * returns 0 if no mate
+     * returns 2 if checkmate
+     * returns 3 if stalemate or insufficient material
+     **/
+    public int checkMate() {
         ArrayList<Piece> pieces = new ArrayList<>();
-        for(int key : piecePositions.keySet())
-        {
+        for (int key : piecePositions.keySet()) {
             pieces.add(piecePositions.get(key));
         }
-        if (pieces.size() < 3){
+        if (pieces.size() < 3) {
             return STALEMATE;
         }
         int[][] moves = getLegalMoves(!turn);
-        for (int[] piece : moves){
-            if (piece != null && piece.length > 1){
+        for (int[] piece : moves) {
+            if (piece != null && piece.length > 1) {
                 return LEGAL;
             }
         }
-        if (inCheck(!turn)){
+        if (inCheck(!turn)) {
             return CHECKMATE;
-        }
-        else {
+        } else {
             return STALEMATE;
         }
     }
 
-    /**Makes players move
+    /**
+     * Makes players move
      * returns 0 if the move was valid and the game continues
      * returns 1 if the move was illegal
      * returns 2 if the move was checkmate
      * returns 3 if the move was stalemate
-     * */
+     */
     public int makePlayerMove(int origin, int destination) {
         boolean move_valid = false;
-        if (origin == destination){
+        if (origin == destination) {
             return Board.ILLEGAL;
         }
         //Check that the origin is occupied
@@ -334,16 +332,15 @@ public class Board {
             lastMove[0] = origin;
             lastMove[1] = destination;
             move_valid = true;
-            if (piecePositions.get(origin) instanceof Pawn && (destination >= 56 || destination <= 7)){
+            if (piecePositions.get(origin) instanceof Pawn && (destination >= 56 || destination <= 7)) {
                 piecePositions.remove(destination);
                 piecePositions.put(destination, new Queen(turn, destination % 8, 7 -
                         ((destination - (destination % 8)) / 8)));
             }
         }
-        if (!move_valid){
+        if (!move_valid) {
             return ILLEGAL;
-        }
-        else {
+        } else {
             int result = checkMate();
             turn = !turn;
             return result;
@@ -388,6 +385,7 @@ public class Board {
 
     /**
      * Currently unused but relevant for implementation of fen string reader.
+     *
      * @param move square string in algebraic notation
      * @return integer location of that square
      */
@@ -408,8 +406,9 @@ public class Board {
 
     /**
      * A copy of getSlidingMoves with different arguments. Helper method for inCheck.
+     *
      * @param origin Origin of piece
-     * @param piece Piece to be checked for
+     * @param piece  Piece to be checked for
      * @return an int array of spaces to check for inCheck
      */
     public int[] inCheckSlidingMoves(int origin, Piece piece) {
@@ -433,13 +432,14 @@ public class Board {
 
     /**
      * Checks sliding moves by iterating through inCheckSlidingMoves for check. Helper for inCheck.
-     * @param color color of original king
+     *
+     * @param color    color of original king
      * @param king_pos king's position
-     * @param piece temporary piece (sliding pieces)
+     * @param piece    temporary piece (sliding pieces)
      * @return true if a check is detected, false otherwise.
      */
     private boolean checkSliding(boolean color, int king_pos, Piece piece) {
-        for (int move : inCheckSlidingMoves(king_pos, piece)){
+        for (int move : inCheckSlidingMoves(king_pos, piece)) {
             if (piecePositions.get(move) != null && piecePositions.get(move).getClass().getName().
                     equals(piece.getClass().getName()) && piecePositions.get(move).getColor() != color) {
                 return true;
@@ -450,8 +450,9 @@ public class Board {
 
     /**
      * Checks king moves for check. Helper for inCheck.
+     *
      * @param color color of original king
-     * @param king temporary piece (king)
+     * @param king  temporary piece (king)
      * @return true if a check is detected, false otherwise.
      */
     private boolean checkKing(boolean color, Piece king) {
@@ -465,9 +466,10 @@ public class Board {
 
     /**
      * Checks knights moves for check. Helper for inCheck.
+     *
      * @param color color of original king
-     * @param file file of king
-     * @param rank rank of king
+     * @param file  file of king
+     * @param rank  rank of king
      * @return true if a check is detected, false otherwise.
      */
     private boolean checkKnights(boolean color, int file, int rank) {
@@ -482,20 +484,20 @@ public class Board {
 
     /**
      * Finds the possible castling moves a King can make. Uses castleHelper to figure it out.
+     *
      * @param piece The original King
      * @return an integer array of positions the King can castle to.
      */
     private int[] castleMoves(Piece piece) {
         List<Integer> moves = new ArrayList<>();
-        if(turn) {
+        if (turn) {
             if (castleHelper(whiteCastleIndices[0], piece)) {
                 moves.add(58);
             }
             if (castleHelper(whiteCastleIndices[1], piece)) {
                 moves.add(62);
             }
-        }
-        else {
+        } else {
             if (castleHelper(blackCastleIndices[0], piece)) {
                 moves.add(2);
             }
@@ -508,12 +510,13 @@ public class Board {
 
     /**
      * Helper method for castleMoves. Checks the requirements for a King to castle.
+     *
      * @param indices the indices to check
-     * @param piece the original king
+     * @param piece   the original king
      * @return true if a castle is possible on a specific side.
      */
     private boolean castleHelper(int[] indices, Piece piece) {
-        if(piece.getNotMoved() && piecePositions.get(indices[0]) instanceof Rook &&
+        if (piece.getNotMoved() && piecePositions.get(indices[0]) instanceof Rook &&
                 piecePositions.get(indices[0]).getNotMoved() && !(piecePositions.containsKey(indices[1])) &&
                 !(piecePositions.containsKey(indices[2])) && !(piecePositions.containsKey(indices[3])) &&
                 !inCheck(turn)) {
@@ -526,7 +529,8 @@ public class Board {
 
     /**
      * Helper method to move the rook when a castle is made.
-     * @param origin Origin of King
+     *
+     * @param origin      Origin of King
      * @param destination destination of king
      */
     private void castleMoveHelper(int origin, int destination) {
@@ -539,8 +543,7 @@ public class Board {
                 piecePositions.put(59, piecePositions.remove(56));
                 piecePositions.get(59).updatePosition(59);
             }
-        }
-        else {
+        } else {
             if (destination == origin - 2) {
                 piecePositions.put(3, piecePositions.remove(0));
                 piecePositions.get(3).updatePosition(3);
@@ -549,6 +552,55 @@ public class Board {
                 piecePositions.put(5, piecePositions.remove(7));
                 piecePositions.get(5).updatePosition(5);
             }
+        }
+    }
+
+    /**
+     * Reinitializes the board class with a given board.
+     *
+     * @param board the given board that needs to be copied from
+     */
+    public void copy(Board board) {
+        this.piecePositions = new HashMap<>();
+        for (int key : board.getPiecePositions().keySet()) {
+            boolean color = board.getPiecePositions().get(key).getColor();
+            int file = key % 8;
+            int rank = 7 - ((key - file) / 8);
+            copyHelper(board, key, color, file, rank);
+        }
+        this.lastMove[0] = board.lastMove[0];
+        this.lastMove[1] = board.lastMove[1];
+        this.turn = board.turn;
+    }
+
+    /**
+     * helper method for copy. Creates and places the respective pieces at the locations that are in the other board.
+     *
+     * @param board the given board to be copied
+     * @param key   the given key in which the piece is to be placed
+     * @param color the color of the piece
+     * @param file  the file in which the piece should be placed
+     * @param rank  the rank in which the piece should be placed
+     */
+    private void copyHelper(Board board, int key, boolean color, int file, int rank) {
+        if (board.getPiecePositions().get(key) instanceof Pawn) {
+            Pawn pawn = new Pawn(color, file, rank);
+            this.piecePositions.put(key, pawn);
+        } else if (board.getPiecePositions().get(key) instanceof Bishop) {
+            Bishop bishop = new Bishop(color, file, rank);
+            this.piecePositions.put(key, bishop);
+        } else if (board.getPiecePositions().get(key) instanceof Rook) {
+            Rook rook = new Rook(color, file, rank);
+            this.piecePositions.put(key, rook);
+        } else if (board.getPiecePositions().get(key) instanceof Knight) {
+            Knight knight = new Knight(color, file, rank);
+            this.piecePositions.put(key, knight);
+        } else if (board.getPiecePositions().get(key) instanceof King) {
+            King king = new King(color, file, rank);
+            this.piecePositions.put(key, king);
+        } else if (board.getPiecePositions().get(key) instanceof Queen) {
+            Queen queen = new Queen(color, file, rank);
+            this.piecePositions.put(key, queen);
         }
     }
 }
