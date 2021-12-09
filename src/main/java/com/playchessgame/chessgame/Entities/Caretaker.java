@@ -1,4 +1,5 @@
 package com.playchessgame.chessgame.Entities;
+
 import java.util.Stack;
 
 /**
@@ -10,6 +11,7 @@ public class Caretaker {
 
     /**
      * Pushes a memento on the undo stack
+     *
      * @param m the memento
      */
     public void addMementoUndo(Memento m) {
@@ -18,6 +20,7 @@ public class Caretaker {
 
     /**
      * Pushes a memento on the redo stack
+     *
      * @param m the memento
      */
     public void addMementoRedo(Memento m) {
@@ -26,6 +29,7 @@ public class Caretaker {
 
     /**
      * Pops off the memento at the top of the undo stack
+     *
      * @return the memento at the top of the undo stack
      */
     public Memento getMementoUndo() {
@@ -34,6 +38,7 @@ public class Caretaker {
 
     /**
      * Pops off the memento at the top of the redo stack
+     *
      * @return the memento at the top of the redo stack
      */
     public Memento getMementoRedo() {
@@ -42,6 +47,7 @@ public class Caretaker {
 
     /**
      * returns undo Stack
+     *
      * @return savedBoardsUndo
      */
     public Stack<Memento> undoStack() {
@@ -50,6 +56,7 @@ public class Caretaker {
 
     /**
      * returns redo Stack
+     *
      * @return savedBoardsRedo
      */
     public Stack<Memento> redoStack() {

@@ -13,6 +13,7 @@ public interface UserService {
 
     /**
      * Check if the User exists in the database
+     *
      * @param user: a user of the game
      * @return true if the user exists or false if the user does not exist
      */

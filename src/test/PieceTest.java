@@ -8,8 +8,8 @@ import static org.junit.Assert.assertEquals;
 public class PieceTest {
 
     @Test(timeout = 50)
-    public void TestPositionCalculation(){
-        Piece piece = new Rook(true, 0, 0 );
+    public void TestPositionCalculation() {
+        Piece piece = new Rook(true, 0, 0);
         assertEquals(56, piece.getPos());
         piece.updatePosition(43);
         assertEquals(2, piece.getRank());
@@ -22,7 +22,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestKingValidMoves(){
+    public void TestKingValidMoves() {
         Piece king = new King(true, 4, 0);
         assertArrayEquals(new int[]{51, 52, 53, 59, 61, 58, 62}, king.getValidMoves());
         king.updatePosition(62);
@@ -34,7 +34,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestQueenValidMoves(){
+    public void TestQueenValidMoves() {
         Piece queen = new Queen(true, 3, 0);
         assertArrayEquals(new int[]{50, 41, 32, 51, 43, 35, 27, 19, 11, 3, 52, 45, 38, 31, 58, 57, 56, 60, 61, 62, 63},
                 queen.getValidMoves());
@@ -47,7 +47,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestRookValidMoves(){
+    public void TestRookValidMoves() {
         Piece rook = new Rook(true, 0, 0);
         assertArrayEquals(new int[]{48, 40, 32, 24, 16, 8, 0, 57, 58, 59, 60, 61, 62, 63}, rook.getValidMoves());
         rook.updatePosition(0);
@@ -59,7 +59,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestBishopValidMoves(){
+    public void TestBishopValidMoves() {
         Piece bishop = new Bishop(true, 2, 0);
         assertArrayEquals(new int[]{49, 40, 51, 44, 37, 30, 23}, bishop.getValidMoves());
         bishop.updatePosition(44);
@@ -67,7 +67,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestKnightValidMoves(){
+    public void TestKnightValidMoves() {
         Piece knight = new Knight(true, 1, 0);
         assertArrayEquals(new int[]{40, 42, 51}, knight.getValidMoves());
         knight.updatePosition(42);
@@ -75,7 +75,7 @@ public class PieceTest {
     }
 
     @Test(timeout = 50)
-    public void TestPawnValidMoves(){
+    public void TestPawnValidMoves() {
         Piece wPawn = new Pawn(true, 1, 1);
         Piece bPawn = new Pawn(false, 2, 6);
         assertArrayEquals(new int[]{40, 41, 42, 33}, wPawn.getValidMoves());

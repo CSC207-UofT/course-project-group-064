@@ -25,33 +25,33 @@ public class PlayerUser extends User {
         this.games = 0;
     }
 
-    public PlayerUser(String username){
+    public PlayerUser(String username) {
         this.name = username;
         this.kFactor = 50;
         this.games = 0;
         this.elo = 1000;
     }
 
-    public PlayerUser(String username, String password){
+    public PlayerUser(String username, String password) {
         super(username, password);
         this.kFactor = 50;
         this.games = 0;
         this.elo = 1000;
     }
 
-    public PlayerUser(String username, String password, int elo){
+    public PlayerUser(String username, String password, int elo) {
         super(username, password);
         this.elo = elo;
         this.kFactor = 50;
         this.games = 0;
     }
-  
+
     /**
      * Returns the player user's elo.
      *
      * @return the player user's elo
      */
-    public int getElo(){
+    public int getElo() {
         return this.elo;
     }
 
@@ -60,9 +60,9 @@ public class PlayerUser extends User {
      *
      * @param newElo The specified elo
      */
-     public void setElo(int newElo) {
+    public void setElo(int newElo) {
         this.elo = newElo;
-        if (this.games==10){
+        if (this.games == 10) {
             kFactor = 10;
         }
         this.games++;
@@ -73,7 +73,7 @@ public class PlayerUser extends User {
      *
      * @return the player user's K factor
      */
-    public int getkFactor(){
+    public int getkFactor() {
         return this.kFactor;
     }
 }

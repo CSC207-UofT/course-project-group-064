@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -25,26 +26,28 @@ public class MasterUserController {
 
     /**
      * returns the loginMaster webpage when the get request "/login2" is sent
+     *
      * @param model: Model from web
      * @return loginMaster webpage
      */
     @GetMapping("/login2")
-    public String getLoginMaster(Model model){
+    public String getLoginMaster(Model model) {
         model.addAttribute("user", new MasterUser());
         return "loginMaster";
     }
 
     /**
      * returns the loginMaster webpage when the post request "/login2" is sent
-     * @param user: MasterUser who is going to login
-     * @param model: Model from web
+     *
+     * @param user:    MasterUser who is going to login
+     * @param model:   Model from web
      * @param request: HttpServletRequest from web
      * @return loginMaster webpage
      */
     @PostMapping("/login2")
-    public String loginMaster(@ModelAttribute(value="user") MasterUser user, Model model, HttpServletRequest request) {
+    public String loginMaster(@ModelAttribute(value = "user") MasterUser user, Model model, HttpServletRequest request) {
 
-        if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")){
+        if (user.getName().equals("masterusername") && user.getPassword().equals("masteruserpassword")) {
             HttpSession httpSession = request.getSession(true);
             httpSession.setAttribute("masterUser", user);
             model.addAttribute("online", MyListener.online);
@@ -59,11 +62,12 @@ public class MasterUserController {
 
     /**
      * returns the resetpasswordmaster webpage when a get request "/resetPW" is sent
+     *
      * @param model from web
      * @return the resetpasswordmaster webpage
      */
     @GetMapping("/resetPW")
-    public String toResetPassword(Model model){
+    public String toResetPassword(Model model) {
 
         model.addAttribute("user", new PlayerUser());
 
@@ -71,7 +75,7 @@ public class MasterUserController {
         Set<PlayerUser> users = usersToResetPW.keySet();
 
         List<List<String>> res = new ArrayList<>();
-        for (PlayerUser user: users){
+        for (PlayerUser user : users) {
             List<String> component = new ArrayList<>();
             component.add(user.getName());
             component.add(user.getPassword());
@@ -79,7 +83,7 @@ public class MasterUserController {
             res.add(component);
         }
 
-        model.addAttribute("usersToResetPW",res);
+        model.addAttribute("usersToResetPW", res);
 
         return "resetpasswordmaster";
 
@@ -87,12 +91,13 @@ public class MasterUserController {
 
     /**
      * return the resetpasswordmaster webpage when a post request "/resetPW" is sent
+     *
      * @param user: a PlayerUser
      * @param model from web
      * @return the resetpasswordmaster webpage
      */
     @PostMapping("/resetpasswordmaster")
-    public String resetPassword(@ModelAttribute(value="user") PlayerUser user, Model model){
+    public String resetPassword(@ModelAttribute(value = "user") PlayerUser user, Model model) {
         String result = this.masterUserService.resetPassword(user);
         model.addAttribute("message", result);
         return "resetpasswordmaster";
@@ -100,23 +105,25 @@ public class MasterUserController {
 
     /**
      * return the deleteusermaster webpage when the get request /deleteUser is sent
+     *
      * @param model from web
      * @return the deleteusermaster webpage
      */
     @GetMapping("/deleteUser")
-    public String toDeleteUser(Model model){
+    public String toDeleteUser(Model model) {
         model.addAttribute("user", new PlayerUser());
         return "deleteusermaster";
     }
 
     /**
      * deleted the provided user(PlayerUser) when the post request /deleteUser is sent
-     * @param user: PlayerUser
+     *
+     * @param user:  PlayerUser
      * @param model: Model form web
      * @return the deleteusermaster webpage
      */
     @PostMapping("/deleteusermaster")
-    public String deleteUser(@ModelAttribute(value="user") PlayerUser user, Model model){
+    public String deleteUser(@ModelAttribute(value = "user") PlayerUser user, Model model) {
         String result = this.masterUserService.deleteUser(user);
         model.addAttribute("message", result);
         return "deleteusermaster";

@@ -4,10 +4,12 @@ import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.junit.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
     UserInfoDB2 database = new UserInfoDB2();
+
     @Test
     public void TestAddUserInfo() {
         PlayerUser player = new PlayerUser("testplayer");
@@ -41,7 +43,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void TestUpdateUserPassword() throws UsernameDoesNotExist{
+    public void TestUpdateUserPassword() throws UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer", "testpassword");
         assertDoesNotThrow(() -> database.addUserInfo(player));
         player.setPassword("newpassword");
@@ -52,7 +54,7 @@ public class DatabaseTest {
     }
 
     @Test
-    public void TestUpdateUserPasswordException()  {
+    public void TestUpdateUserPasswordException() {
         PlayerUser player = new PlayerUser("testplayer");
         player.setPassword("newpassword");
         assertThrows(UsernameDoesNotExist.class, () -> database.updateUserPassword(player)); //attempts to update a player not already in the database

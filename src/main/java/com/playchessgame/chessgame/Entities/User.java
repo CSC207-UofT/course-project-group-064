@@ -1,17 +1,20 @@
 package com.playchessgame.chessgame.Entities;
 
-public class User{
+public class User {
     private String name;
     private String password;
 
-    public User(){};
+    public User() {
+    }
 
-    public User(String username, String password){
+    ;
+
+    public User(String username, String password) {
         this.name = username;
         this.password = password;
     }
 
-    public User(String username){
+    public User(String username) {
         this.name = username;
     }
 
@@ -20,7 +23,7 @@ public class User{
      *
      * @return the user's username
      */
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -29,7 +32,7 @@ public class User{
      *
      * @return the user's password
      */
-    public String getPassword(){
+    public String getPassword() {
         return this.password;
     }
 
@@ -38,7 +41,7 @@ public class User{
      *
      * @param name The specified name
      */
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -47,7 +50,7 @@ public class User{
      *
      * @param password The specified password
      */
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 }

@@ -13,10 +13,11 @@ public class PageController {
 
     /**
      * shows the "masterUserPage" webpage when the request "/showMasterUserPage" is sent
+     *
      * @return the "masterUserPage" webpage
      */
     @RequestMapping("/showMasterUserPage")
-    public String showMasterUserPage(Model model){
+    public String showMasterUserPage(Model model) {
         model.addAttribute("online", MyListener.online);
         return "masterUserPage";
     }

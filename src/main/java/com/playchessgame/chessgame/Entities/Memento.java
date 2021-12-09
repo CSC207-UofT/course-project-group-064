@@ -1,4 +1,5 @@
 package com.playchessgame.chessgame.Entities;
+
 /**
  * Memento class to create and return board mementos.
  */
@@ -7,6 +8,7 @@ public class Memento {
 
     /**
      * Memento initializer
+     *
      * @param board1 the given board that needs to be a memento.
      */
     public Memento(Board board1) {
@@ -15,6 +17,7 @@ public class Memento {
 
     /**
      * Returns the board saved in this current memento
+     *
      * @return the board in this memento
      */
     public Board getSavedBoard() {

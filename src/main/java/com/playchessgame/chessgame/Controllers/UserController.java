@@ -114,7 +114,7 @@ public class UserController {
      * send the resetpassword request to masteruser who is monitoring this issue
      * @param user: PlayerUser who is applying to reset password
      * @param email: the playeruser's email address
-     * @param model:
+     * @param model: Model from Web
      * @return the "resetpassword" webpage
      */
     @PostMapping("/resetpassword")

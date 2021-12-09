@@ -2,22 +2,24 @@ package com.playchessgame.chessgame.Entities;
 
 import java.util.ArrayList;
 
-public class Queen extends Piece{
+public class Queen extends Piece {
     private final int[] offsets = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    public Queen(boolean color, int file, int rank){
+    public Queen(boolean color, int file, int rank) {
         super(color, file, rank);
     }
+
     /**
      * Loops over every direction to the edge of the board
+     *
      * @return array of valid queen moves
      */
 
     @Override
-    public int[] getValidMoves(){
+    public int[] getValidMoves() {
         ArrayList<Integer> temp = new ArrayList<Integer>();
-        for (int i = 0; i < offsets.length; i++){
-            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++){
+        for (int i = 0; i < offsets.length; i++) {
+            for (int j = 0; j < Utils.NUMSQUARESTOEDGE[getPos()][i]; j++) {
                 temp.add(getPos() + offsets[i] * (j + 1));
             }
         }

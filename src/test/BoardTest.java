@@ -8,14 +8,15 @@ import static org.junit.Assert.*;
 
 public class BoardTest {
     Board board = new Board("Standard");
+
     @Test(timeout = 50)
-    public void TestPieceMove(){
+    public void TestPieceMove() {
         board.makePlayerMove(52, 36);
         assertEquals(36, board.getPiecePositions().get(36).getPos());
     }
 
     @Test(timeout = 50)
-    public void TestCapture(){
+    public void TestCapture() {
         board.makePlayerMove(12, 28);
         board.makePlayerMove(62, 45);
         board.makePlayerMove(6, 21);
@@ -24,7 +25,7 @@ public class BoardTest {
     }
 
     @Test(timeout = 50)
-    public void TestGetMoves(){
+    public void TestGetMoves() {
         int[][] moves = board.getLegalMoves(true);
         int[][] equalArray = {{48, 40, 32}, {49, 41, 33}, {50, 42, 34}, {51, 43, 35}, {52, 44, 36}, {53, 45, 37},
                 {54, 46, 38}, {55, 47, 39}, {56}, {57, 40, 42}, {58}, {59}, {60}, {61}, {62, 45, 47}, {63}};
@@ -33,7 +34,7 @@ public class BoardTest {
     }
 
     @Test(timeout = 150)
-    public void TestLegal(){
+    public void TestLegal() {
         assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
         assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
         assertEquals(Board.LEGAL, board.makePlayerMove(62, 45));
@@ -56,12 +57,12 @@ public class BoardTest {
         assertEquals(Board.LEGAL, board.makePlayerMove(13, 6));
         assertEquals(Board.ILLEGAL, board.makePlayerMove(5, 26));
         assertEquals(Board.LEGAL, board.makePlayerMove(34, 27));
-        assertEquals(Board.LEGAL, board.makePlayerMove(2,20));
+        assertEquals(Board.LEGAL, board.makePlayerMove(2, 20));
         assertEquals(Board.CHECKMATE, board.makePlayerMove(27, 20));
     }
 
     @Test(timeout = 150)
-    public void TestGame(){
+    public void TestGame() {
         assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
         assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
         assertEquals(Board.LEGAL, board.makePlayerMove(62, 45));
@@ -84,12 +85,12 @@ public class BoardTest {
         assertEquals(Board.LEGAL, board.makePlayerMove(13, 6));
         assertEquals(Board.ILLEGAL, board.makePlayerMove(5, 26));
         assertEquals(Board.LEGAL, board.makePlayerMove(34, 27));
-        assertEquals(Board.LEGAL, board.makePlayerMove(2,20));
+        assertEquals(Board.LEGAL, board.makePlayerMove(2, 20));
         assertEquals(Board.CHECKMATE, board.makePlayerMove(27, 20));
     }
 
     @Test(timeout = 150)
-    public void TestCastle1(){
+    public void TestCastle1() {
         assertEquals(Board.LEGAL, board.makePlayerMove(52, 36));
         assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
         assertEquals(Board.LEGAL, board.makePlayerMove(53, 37));
@@ -110,7 +111,7 @@ public class BoardTest {
     }
 
     @Test(timeout = 150)
-    public void TestCastle2(){
+    public void TestCastle2() {
         assertEquals(Board.LEGAL, board.makePlayerMove(51, 35));
         assertEquals(Board.LEGAL, board.makePlayerMove(12, 28));
         assertEquals(Board.LEGAL, board.makePlayerMove(58, 44));
@@ -129,8 +130,8 @@ public class BoardTest {
     }
 
     @Test(timeout = 150)
-    public void TestStalemateGame(){
-        board.makePlayerMove(52,36);
+    public void TestStalemateGame() {
+        board.makePlayerMove(52, 36);
         board.makePlayerMove(12, 28);
         board.makePlayerMove(62, 45);
         board.makePlayerMove(1, 18);

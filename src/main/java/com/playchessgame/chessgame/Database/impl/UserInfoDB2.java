@@ -13,6 +13,7 @@ import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Repository;
+
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
@@ -22,11 +23,11 @@ public class UserInfoDB2 implements Database {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private MongoClient connect(){
+    private MongoClient connect() {
         return (MongoClient) applicationContext.getBean("mongoclient");
     }
 
-    private MongoCollection<Document> getCollection(){
+    private MongoCollection<Document> getCollection() {
         MongoClient mongoClient = connect();
         MongoDatabase mongoDatabase = mongoClient.getDatabase("MongoDB");
         return mongoDatabase.getCollection("ChessGameUsers");
@@ -54,10 +55,11 @@ public class UserInfoDB2 implements Database {
     @Override
     public void addUserInfo(PlayerUser user) throws UserAlreadyExistsException {
 
-        try {checkUserNameExistence(user);
+        try {
+            checkUserNameExistence(user);
             System.out.println("The Username Has Been Used!");
-            throw new UserAlreadyExistsException();}
-        catch(UsernameDoesNotExist e){
+            throw new UserAlreadyExistsException();
+        } catch (UsernameDoesNotExist e) {
             MongoCollection<Document> mongoCollection = getCollection();
 
             Document document = new Document();
@@ -79,11 +81,11 @@ public class UserInfoDB2 implements Database {
      * @param user The player whose information is being deleted from the database
      */
     @Override
-    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist{
+    public void deleteUserInfo(PlayerUser user) throws UsernameDoesNotExist {
 
         boolean res = checkUserNameExistence(user);
 
-        if (!res){
+        if (!res) {
             // the user with the username is not in the database
             throw new UsernameDoesNotExist();
         }
@@ -101,7 +103,6 @@ public class UserInfoDB2 implements Database {
      * Checks if the specified player user is already in the database (by looking at their username specifically).
      *
      * @param user The player whose existence is being checked
-     *
      * @return A true or false value reflecting whether the user is in the database. True if they are, false if they aren't
      */
     @Override
@@ -125,10 +126,10 @@ public class UserInfoDB2 implements Database {
      * @param user The player whose password is being updated
      */
     @Override
-    public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist{
+    public void updateUserPassword(PlayerUser user) throws UsernameDoesNotExist {
         boolean res = checkUserNameExistence(user);
 
-        if (!res){
+        if (!res) {
             // the user with the username is not in the database
             throw new UsernameDoesNotExist();
         }
@@ -146,14 +147,14 @@ public class UserInfoDB2 implements Database {
      * Updates the Elo rating of the specified player in the database to the specified new Elo rating. Throws a
      * UsernameDoesNotExist Exception if the user is not in the database.
      *
-     * @param user The player whose Elo rating is being updated
+     * @param user   The player whose Elo rating is being updated
      * @param newElo The player's new Elo rating
      */
     @Override
     public void updateUserElo(PlayerUser user, Integer newElo) throws UsernameDoesNotExist {
         boolean res = checkUserNameExistence(user);
 
-        if (!res){
+        if (!res) {
             // the user with the username is not in the database
             throw new UsernameDoesNotExist();
         }
@@ -168,6 +169,7 @@ public class UserInfoDB2 implements Database {
 
     /**
      * check if the given password matches the one of the given user
+     *
      * @param user: the PlayerUser whose password needs to be compared to the database
      * @return true if the given password matches th user's password stored in the MongoDB
      */
@@ -186,11 +188,12 @@ public class UserInfoDB2 implements Database {
 
     /**
      * return the PlayerUser matching the given username
+     *
      * @param username: the username of the PlayerUser
      * @return the PlayerUser matching the given username
      */
     @Override
-    public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist{
+    public PlayerUser getPlayerUserByName(String username) throws UsernameDoesNotExist {
 
         MongoCollection<Document> mongoCollection = getCollection();
 
@@ -202,19 +205,19 @@ public class UserInfoDB2 implements Database {
         }
 
         String password = (String) res.get("password");
-        int elo = (int)res.get("elo");
+        int elo = (int) res.get("elo");
 
         return new PlayerUser(username, password, elo);
 
     }
 
-    private boolean checkUserNameExistence(PlayerUser user) throws UsernameDoesNotExist{
+    private boolean checkUserNameExistence(PlayerUser user) throws UsernameDoesNotExist {
         MongoCollection<Document> mongoCollection = getCollection();
         Document document = new Document();
         document.append("name", user.getName());
         Object res = mongoCollection.find(document).first();
 
-        if (res != null){
+        if (res != null) {
             return true;
         }
 

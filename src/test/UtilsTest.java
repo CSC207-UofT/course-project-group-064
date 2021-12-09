@@ -1,15 +1,15 @@
 
 import com.playchessgame.chessgame.Entities.PlayerUser;
-import com.playchessgame.chessgame.Entities.User;
 import com.playchessgame.chessgame.Entities.Utils;
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 
 public class UtilsTest {
 
     @Test(timeout = 50)
-    public void TestSquaresToEdge(){
+    public void TestSquaresToEdge() {
         int[][] numSquares = Utils.fillNumSquares();
         assertArrayEquals(new int[]{0, 0, 0, 0, 7, 0, 7, 7}, numSquares[0]);
         assertArrayEquals(new int[]{0, 1, 1, 0, 7, 0, 6, 6}, numSquares[8]);
@@ -19,7 +19,7 @@ public class UtilsTest {
     }
 
     @Test(timeout = 50)
-    public void TestCalcElo(){
+    public void TestCalcElo() {
         PlayerUser white = new PlayerUser("testwhite", "1000");
         PlayerUser black = new PlayerUser("testblack", "1000");
         Utils.calculateElo(.5, white, black);
