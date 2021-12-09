@@ -86,7 +86,7 @@ In the Database package, we design an interface ``Database`` that provides servi
 
 ![Database package](https://i.pinimg.com/originals/25/e3/ff/25e3ffe5ce331c35b8380a2b0a112001.jpg)
 
-In the [Exceptions](https://github.com/CSC207-UofT/course-project-group-064/commit/defdfdd91b6962cb8c19b5e74487be7cc3330e03#diff-b59ec19f08323f3a6ba90163dfc0a5760ed103d7e7ad741193cfebad40219714) package, we defined a ``UserAlreadyExistsException`` and a by use cases. The exceptions provide a great communication way between database classes and user case classes.
+In the [Exceptions](https://github.com/CSC207-UofT/course-project-group-064/commit/defdfdd91b6962cb8c19b5e74487be7cc3330e03#diff-b59ec19f08323f3a6ba90163dfc0a5760ed103d7e7ad741193cfebad40219714) package, we defined ``UserAlreadyExistsException`` and ``UserAlreadyExistsException`` exceptions which are thrown from database and handled in use cases. Those exceptions provide a great communication way between Database layer and Service layer.
 
 ![Exceptions package](https://i.pinimg.com/564x/59/4a/26/594a2672367b81c528493f510e7b839c.jpg)
 
