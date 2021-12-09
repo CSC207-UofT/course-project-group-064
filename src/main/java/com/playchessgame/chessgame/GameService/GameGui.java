@@ -295,7 +295,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     }
 
     /**
-     *
+     * Run a GameGui when PlayerUser sends a request to play the chess game
      * @param white: PlayerUser who moves first
      * @param black: PlayerUser who moves next
      * @param database: Database

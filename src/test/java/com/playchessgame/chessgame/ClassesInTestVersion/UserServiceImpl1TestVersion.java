@@ -1,10 +1,9 @@
-package com.playchessgame.chessgame;
+package com.playchessgame.chessgame.ClassesInTestVersion;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
-import com.playchessgame.chessgame.UserService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,7 @@ public class UserServiceImpl1TestVersion{
 
     public String play(PlayerUser user1, PlayerUser user2, String role, int testMoveRes) {
 
-        String errorMsg = "";
+        String errorMsg = "elo have been updated for both players";
         switch (role.toLowerCase()){
             case "white":
                 // user1 is white and user2 is black
@@ -61,16 +60,8 @@ public class UserServiceImpl1TestVersion{
                 break;
         }
 
-        return "elo have been updated for both players";
+        return errorMsg;
 
-    }
-
-    public PlayerUser getPlayerByName(String username){
-        try {
-            return database.getPlayerUserByName(username);
-        } catch (UsernameDoesNotExist e){
-            return null;
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.playchessgame.chessgame;
 
+import com.playchessgame.chessgame.ClassesInTestVersion.UserServiceImpl1TestVersion;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.UserService.MasterUserService;
@@ -96,7 +97,7 @@ public class SpringBootTest {
 
     @Test
     public void getPlayerByNameSuccessFailure(){
-        assertEquals(null, masterUserService.getPlayerUserByName("lemonTree"));
+        assertNull(masterUserService.getPlayerUserByName("lemonTree"));
     }
 
 }

@@ -1,83 +1,93 @@
-import com.playchessgame.chessgame.Database.impl.UserInfoDB2;
+
+import ClassesInTestVersion.UserInfoDB2;
 import com.playchessgame.chessgame.Entities.PlayerUser;
 import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
     UserInfoDB2 database = new UserInfoDB2();
-    @Test(timeout = 50)
-    public void TestAddUserInfo() throws UserAlreadyExistsException, UsernameDoesNotExist {
+    @Test
+    public void TestAddUserInfo() {
         PlayerUser player = new PlayerUser("testplayer");
-        database.addUserInfo(player);
+        assertDoesNotThrow(() -> database.addUserInfo(player));
         assertTrue(database.checkUserExistence(player));
-        database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
-    }
-
-    @Test(expected = UserAlreadyExistsException.class, timeout = 50)
-    public void TestAddUserInfoException() throws UserAlreadyExistsException {
-        PlayerUser player = new PlayerUser("testplayer");
-        database.addUserInfo(player);
-        database.addUserInfo(player);
-    }
-
-    @Test(timeout = 50)
-    public void TestDeleteUserInfo() throws UserAlreadyExistsException, UsernameDoesNotExist {
-        PlayerUser player = new PlayerUser("testplayer");
-        database.addUserInfo(player);
-        database.deleteUserInfo(player);
+        assertDoesNotThrow(() -> database.deleteUserInfo(player)); //removes the player made for the purpose of the test from the database
         assertFalse(database.checkUserExistence(player));
     }
 
-    @Test(expected = UsernameDoesNotExist.class, timeout = 50)
-    public void TestDeleteUserInfoException() throws UsernameDoesNotExist {
+    @Test
+    public void TestAddUserInfoException() {
         PlayerUser player = new PlayerUser("testplayer");
-        database.deleteUserInfo(player); //attempts to delete a player not already in the database
+        assertDoesNotThrow(() -> database.addUserInfo(player));
+        assertThrows(UserAlreadyExistsException.class, () -> database.addUserInfo(player));
+        assertDoesNotThrow(() -> database.deleteUserInfo(player)); //removes the player made for the purpose of the test from the database
+        assertFalse(database.checkUserExistence(player));
     }
 
-    @Test(timeout = 50)
-    public void TestUpdateUserPassword() throws UserAlreadyExistsException, UsernameDoesNotExist {
+    @Test
+    public void TestDeleteUserInfo() {
+        PlayerUser player = new PlayerUser("testplayer");
+        assertDoesNotThrow(() -> database.addUserInfo(player));
+        assertDoesNotThrow(() -> database.deleteUserInfo(player));
+        assertFalse(database.checkUserExistence(player));
+    }
+
+    @Test
+    public void TestDeleteUserInfoException() {
+        PlayerUser player = new PlayerUser("testplayer");
+        assertThrows(UsernameDoesNotExist.class, () -> database.deleteUserInfo(player)); //attempts to delete a player not already in the database
+    }
+
+    @Test
+    public void TestUpdateUserPassword() throws UsernameDoesNotExist{
         PlayerUser player = new PlayerUser("testplayer", "testpassword");
-        database.addUserInfo(player);
+        assertDoesNotThrow(() -> database.addUserInfo(player));
         player.setPassword("newpassword");
-        database.updateUserPassword(player);
+        assertDoesNotThrow(() -> database.updateUserPassword(player));
         assertEquals("newpassword", database.getPlayerUserByName(player.getName()).getPassword());
-        database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
+        assertDoesNotThrow(() -> database.deleteUserInfo(player)); //removes the player made for the purpose of the test from the database
+        assertFalse(database.checkUserExistence(player));
     }
 
-    @Test(expected = UsernameDoesNotExist.class, timeout = 50)
-    public void TestUpdateUserPasswordException() throws UsernameDoesNotExist {
+    @Test
+    public void TestUpdateUserPasswordException()  {
         PlayerUser player = new PlayerUser("testplayer");
         player.setPassword("newpassword");
-        database.updateUserPassword(player); //attempts to update a player not already in the database
+        assertThrows(UsernameDoesNotExist.class, () -> database.updateUserPassword(player)); //attempts to update a player not already in the database
     }
 
-    @Test(timeout = 50)
+    @Test
     public void TestUpdateUserElo() throws UserAlreadyExistsException, UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer", "testpassword", 1000);
         database.addUserInfo(player);
         database.updateUserElo(player, 1500);
-        assertEquals(1500, database.getPlayerUserByName(player.getName()).getElo());
-        database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
+        PlayerUser playerFromDB = database.getPlayerUserByName(player.getName());
+        assertEquals(1500, playerFromDB.getElo());
+        assertDoesNotThrow(() -> database.deleteUserInfo(player)); //removes the player made for the purpose of the test from the database
+        assertFalse(database.checkUserExistence(player));
     }
 
-    @Test(expected = UsernameDoesNotExist.class, timeout = 50)
-    public void TestUpdateUserEloException() throws UsernameDoesNotExist {
+    //@Test(expected = UsernameDoesNotExist.class)
+    @Test
+    public void TestUpdateUserEloException() {
         PlayerUser player = new PlayerUser("testplayer", "testpassword", 1000);
-        database.updateUserElo(player, 1500); //attempts to update a player not already in the database
+        assertThrows(UsernameDoesNotExist.class, () -> database.updateUserElo(player, 1500)); //attempts to update a player not already in the database
     }
 
-    @Test(timeout = 50)
-    public void TestGetPlayerUserByName() throws UserAlreadyExistsException, UsernameDoesNotExist {
+    @Test
+    public void TestGetPlayerUserByName() throws UsernameDoesNotExist {
         PlayerUser player = new PlayerUser("testplayer", "testpassword", 1000);
-        database.addUserInfo(player);
-        assertEquals(player, database.getPlayerUserByName(player.getName()));
-        database.deleteUserInfo(player); //removes the player made for the purpose of the test from the database
+        assertDoesNotThrow(() -> database.addUserInfo(player));
+        PlayerUser playerFromDB = database.getPlayerUserByName(player.getName());
+        assertEquals(player.getName(), playerFromDB.getName());
+        assertDoesNotThrow(() -> database.deleteUserInfo(player));  //removes the player made for the purpose of the test from the database
+        assertFalse(database.checkUserExistence(player));
     }
 
-    @Test(expected = UsernameDoesNotExist.class, timeout = 50)
-    public void TestGetPlayerUserByNameException() throws UsernameDoesNotExist {
-        database.getPlayerUserByName("testplayer"); //attempts to get a player not in the database
+    @Test
+    public void TestGetPlayerUserByNameException() {
+        assertThrows(UsernameDoesNotExist.class, () -> database.getPlayerUserByName("testplayer")); //attempts to get a player not in the database
     }
 }

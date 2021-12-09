@@ -1,15 +1,13 @@
-package com.playchessgame.chessgame;
+package com.playchessgame.chessgame.ClassesInTestVersion;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.*;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
-import org.junit.jupiter.api.MethodOrderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * This is the GameGui class in test version

@@ -1,6 +1,7 @@
-package com.playchessgame.chessgame.Database.impl;
+package ClassesInTestVersion;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
@@ -10,20 +11,17 @@ import com.playchessgame.chessgame.Exceptions.UserAlreadyExistsException;
 import com.playchessgame.chessgame.Exceptions.UsernameDoesNotExist;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Repository;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 
-@Repository
 public class UserInfoDB2 implements Database {
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     private MongoClient connect(){
-        return (MongoClient) applicationContext.getBean("mongoclient");
+        String uri = "mongodb+srv://kaixinrongzi:kaixinrongzi123456@cluster0.c8qyn.mongodb.net";
+        MongoClientURI mongoClientURI = new MongoClientURI(uri);
+        MongoClient mongoClient = new MongoClient(mongoClientURI);
+        System.out.println("MongoDB connected");
+        return mongoClient;
     }
 
     private MongoCollection<Document> getCollection(){
@@ -64,6 +62,7 @@ public class UserInfoDB2 implements Database {
             document.append("name", user.getName());
             document.append("password", user.getPassword());
             document.append("elo", user.getElo());
+            document.append("master", 0);
 
             mongoCollection.insertOne(document);
 
@@ -222,3 +221,5 @@ public class UserInfoDB2 implements Database {
     }
 
 }
+
+
