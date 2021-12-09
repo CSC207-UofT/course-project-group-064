@@ -30,6 +30,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     
     /**
      * GameGui
+     * @param game Game to play
      */
     public GameGui(Game game){
         //Add the pane for the board and mouse listeners for player interaction
@@ -69,6 +70,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     
     /**
      * Removes all pieces from board
+     * @param gui GUI to use
+     * @param pieceDestination last piece destination to clear
      */
     public static void clearGui(GameGui gui, String pieceDestination){
         for (int j = 0; j < 64; j++) {
@@ -84,6 +87,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     /**
      * Updates the gui by adding pieces and piece images to the board
      * piece positions are determined by the hash map
+     * @param game Game to update
+     * @param gui GUI to use
      */
     public static void updateGui(Game game, GameGui gui) {
         Map currentBoard = game.board.getPiecePositions();
@@ -107,6 +112,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
     
     /**
      * if player presses mouse 1 (left button), move the piece through click and drag
+     * @param e when Clicked
      */
     public void mousePressed(MouseEvent e){
         if (e.getButton() == 1) {
@@ -129,14 +135,16 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     /**
      * sets piece location for mouse dragging action
+     * @param e Dragged
      */
-    public void mouseDragged(MouseEvent me) {
+    public void mouseDragged(MouseEvent e) {
         if (piece == null) return;
-        piece.setLocation(me.getX() + xAdjustment, me.getY() + yAdjustment);
+        piece.setLocation(e.getX() + xAdjustment, e.getY() + yAdjustment);
     }
 
     /**
      * adds piece to the new board position after mouse release and updates moveMade
+     * @param e Released mouse
      */
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == 1) {
