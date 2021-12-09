@@ -24,7 +24,7 @@ public class PieceTest {
     @Test(timeout = 50)
     public void TestKingValidMoves(){
         Piece king = new King(true, 4, 0);
-        assertArrayEquals(new int[]{51, 52, 53, 59, 61, 58, 62}, king.getValidMoves());
+        assertArrayEquals(new int[]{51, 52, 53, 59, 61}, king.getValidMoves());
         king.updatePosition(62);
         assertArrayEquals(new int[]{53, 54, 55, 61, 63}, king.getValidMoves());
         king.updatePosition(63);
