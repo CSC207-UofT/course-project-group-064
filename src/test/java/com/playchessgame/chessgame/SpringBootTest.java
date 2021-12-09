@@ -79,14 +79,23 @@ public class SpringBootTest {
     }
 
     @Test
-    public void updateUserEloTest() {
+    public void checkMateUpdateUserEloTest() {
         PlayerUser kaixinrongzi = new PlayerUser("kaixinrongzi", "123456");
         PlayerUser Mary = new PlayerUser("Mary", "999999");
 
         System.setProperty("java.awt.headless", "false");
 
-        assertEquals("elo have been updated for both players", userService.play(kaixinrongzi, Mary,"white", 2));
+        assertEquals("Checkmate! Both players are updated elo", userService.play(kaixinrongzi, Mary,"white", 2));
+    }
 
+    @Test
+    public void staleMateUpdateUserEloTest() {
+        PlayerUser kaixinrongzi = new PlayerUser("kaixinrongzi", "123456");
+        PlayerUser Mary = new PlayerUser("Mary", "999999");
+
+        System.setProperty("java.awt.headless", "false");
+
+        assertEquals("Stalemate! Both players are updated elo", userService.play(kaixinrongzi, Mary,"white", 3));
     }
 
     @Test

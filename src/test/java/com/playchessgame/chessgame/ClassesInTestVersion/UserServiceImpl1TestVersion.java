@@ -38,14 +38,15 @@ public class UserServiceImpl1TestVersion{
         return this.database.checkUserExistence(user);
     }
 
+    @Transactional
     public String play(PlayerUser user1, PlayerUser user2, String role, int testMoveRes) {
 
-        String errorMsg = "elo have been updated for both players";
+        String errorMsg = "";
         switch (role.toLowerCase()){
             case "white":
                 // user1 is white and user2 is black
                 try {
-                    GameGuiTestVersion.run(user1, user2, database, testMoveRes);
+                    errorMsg = GameGui.run(user1, user2, database, testMoveRes);
                 } catch (UsernameDoesNotExist e) {
                     errorMsg = user1.getName() + " is not in the system ><, we cannot update her elo";
                 }
@@ -53,7 +54,8 @@ public class UserServiceImpl1TestVersion{
 
             case "black":
                 // user1 is black and user2 is white
-                try {GameGuiTestVersion.run(user2, user1, database, testMoveRes);
+                try {
+                    errorMsg = GameGui.run(user2, user1, database, testMoveRes);
                 } catch (UsernameDoesNotExist e) {
                     errorMsg = user1.getName() + " is not in the system ><, we cannot update her elo";
                 }

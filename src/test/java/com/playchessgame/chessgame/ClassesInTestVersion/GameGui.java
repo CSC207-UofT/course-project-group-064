@@ -1,4 +1,4 @@
-package com.playchessgame.chessgame.GameService;
+package com.playchessgame.chessgame.ClassesInTestVersion;
 
 import com.playchessgame.chessgame.Database.Database;
 import com.playchessgame.chessgame.Entities.*;
@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.util.Map;
 
 /**
- * A GameGui class
+ * A GameGui Test class
  */
 public class GameGui extends JFrame implements MouseMotionListener, MouseListener {
     JLayeredPane pane;
@@ -40,7 +40,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
         //Create the chess board grid
         //Set the size of the board on the screen
         board.setLayout( new GridLayout(NUM_BOARD_ROWS, NUM_BOARD_COLUMNS) );
-        //Board dimensions on the screen in pixels. 800x800 is chosen as it is 
+        //Board dimensions on the screen in pixels. 800x800 is chosen as it is
         //boardly compatible with most displays
         Dimension boardDimensions = new Dimension(800, 800);
         pane.setPreferredSize(boardDimensions);
@@ -168,144 +168,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
     }
 
-    public static void main(String[] args) {
-        PlayerUser white = new PlayerUser("p1", "1000");
-        PlayerUser black = new PlayerUser("p2", "1000");
-        Game game = new Game("Standard", white, black);
-
-        GameGui frame = new GameGui(game);
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE );
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo( null );
-        clearGui(frame, frame.pieceDestination);
-        updateGui(game, frame);
-        frame.setVisible(true);
-
-        game.standardDisplay();
-        originator.set(game.board);
-        caretaker.addMementoUndo(originator.storeInMemento());
-
-        JFrame frame2 = new JFrame("Chess");
-        frame2.setDefaultCloseOperation(HIDE_ON_CLOSE);
-
-        JPanel contentPanel = new JPanel();
-
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
-        frame2.setContentPane(contentPanel);
-
-        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
-                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
-                "you want to play a 'real' game with no undo, just close this window!" +
-                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
-        frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
-        JButton undoButton = new JButton("Undo");
-        undoButton.setBounds(50,100,100,50);
-        JButton redoButton = new JButton("Redo");
-        redoButton.setBounds(50,100,100,50);
-        undoButton.setEnabled(false);
-        redoButton.setEnabled(false);
-        undoButton.addActionListener(new ActionListener(){
-            /**
-             * When clicked, the undo button will add a memento to the redo stack and revert the current board state
-             * to the last move.
-             * @param e when Clicked
-             */
-            public void actionPerformed(ActionEvent e){
-                if(caretaker.undoStack().size() > 1) {
-
-                    caretaker.addMementoRedo(caretaker.getMementoUndo());
-                    Memento tempMem = caretaker.undoStack().peek();
-                    game.board.copy(originator.restoreFromMemento(tempMem));
-
-                    redoButton.setEnabled(true);
-
-                    game.standardDisplay();
-                    clearGui(frame, frame.pieceDestination);
-                    updateGui(game, frame);
-                    frame.pieceDestination = frame.pieceOrigin;
-                    frame.setVisible(true);
-
-                }
-                if(caretaker.undoStack().size() <= 1) {
-                    undoButton.setEnabled(false);
-                }
-            }
-        });
-
-        redoButton.addActionListener(new ActionListener(){
-            /**
-             * When clicked, the redo button will revert the last undo to the board state before the undo.
-             * @param e Clicked.
-             */
-            public void actionPerformed(ActionEvent e){
-                if (!caretaker.redoStack().empty()){
-                    Memento tempMem = caretaker.getMementoRedo();
-                    game.board.copy(originator.restoreFromMemento(tempMem));
-                    caretaker.addMementoUndo(tempMem);
-
-                    game.standardDisplay();
-                    clearGui(frame, frame.pieceDestination);
-                    updateGui(game, frame);
-                    frame.pieceOrigin = frame.pieceDestination;
-                    frame.setVisible(true);
-                    undoButton.setEnabled(true);
-                }
-                if (caretaker.redoStack().empty()) {
-                    redoButton.setEnabled(false);
-                }
-            }
-        });
-
-        frame2.getContentPane().add(undoButton);
-        frame2.getContentPane().add(redoButton);
-        frame2.setSize(500, 500);
-        frame2.pack();
-        frame2.setLocationRelativeTo(frame);
-        frame2.setVisible(true);
-
-        String moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-        while(!moveString.equals("end")) {
-            frame.moveMade = false;
-            while (!frame.moveMade) {
-                moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            }
-            moveString = frame.pieceOrigin + "," + frame.pieceDestination;
-            String [] orDest = moveString.split(",");
-            int origin = Integer.parseInt(orDest[0]);
-            int destination = Integer.parseInt(orDest[1]);
-            if (game.board.checkMoveLegal(origin, destination)) {
-                int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 0) {
-                    undoButton.setEnabled(true);
-                    originator.set(game.board);
-                    caretaker.addMementoUndo(originator.storeInMemento());
-                    caretaker.clearRedo();
-
-                }
-                else if (moveResult == 2){
-                    JOptionPane.showMessageDialog(frame,
-                            "Checkmate!",
-                            "Game End",
-                            JOptionPane.PLAIN_MESSAGE);
-                    game.endGame(true);
-                }
-                else if (moveResult == 3){
-                    JOptionPane.showMessageDialog(frame,
-                            "Stalemate!",
-                            "Game End",
-                            JOptionPane.PLAIN_MESSAGE);
-                    game.endGame(false);
-                }
-            }
-            game.standardDisplay();
-            clearGui(frame, frame.pieceDestination);
-            updateGui(game, frame);
-            frame.setVisible(true);
-        }
-    }
-
     /**
      * Run a GameGui when PlayerUser sends a request to play the chess game
      * @param white: PlayerUser who moves first
@@ -313,7 +175,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
      * @param database: Database
      * @throws UsernameDoesNotExist
      */
-    public static void run(PlayerUser white, PlayerUser black, Database database) throws UsernameDoesNotExist {
+    public static String run(PlayerUser white, PlayerUser black, Database database, int testMoveRes) throws UsernameDoesNotExist {
 
         Game game = new Game("Standard", white, black);
 
@@ -339,10 +201,9 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
 
         frame2.setContentPane(contentPanel);
 
-        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess!</h1>" +
-                "<br>Drag and drop pieces to play and use the buttons to the right to undo or redo a move. <br> If " +
-                "you want to play a 'real' game with no undo, just close this window!" +
-                "<h4 style=\"text-align:center;\">Have fun!</h4></html>");
+        JLabel welcomeLabel = new JLabel("<html><br><h1 style=\"text-align:center;\">Welcome to Chess Test Version! </h1>" +
+                "<h2 style=\"text-align:center;\">It is just a GameGui to test if players can be updated their elo. " +
+                "So Please Just Make One LEGAL Move and the Game Will be Over!</h4></html>");
         frame2.getContentPane().add(welcomeLabel, BorderLayout.NORTH);
         JButton undoButton = new JButton("Undo");
         undoButton.setBounds(50, 100, 100, 50);
@@ -423,13 +284,13 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             int destination = Integer.parseInt(orDest[1]);
             if (game.board.checkMoveLegal(origin, destination)) {
                 int moveResult = game.board.makePlayerMove(origin, destination);
-                if (moveResult == 0) {
+                if (testMoveRes == 0) {
                     undoButton.setEnabled(true);
                     originator.set(game.board);
                     caretaker.addMementoUndo(originator.storeInMemento());
                     caretaker.clearRedo();
 
-                } else if (moveResult == 2) {
+                } else if (testMoveRes == 2) {
                     JOptionPane.showMessageDialog(frame,
                             "Checkmate!",
                             "Game End",
@@ -438,7 +299,8 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                     // Update players' elo
                     database.updateUserElo(white, white.getElo());
                     database.updateUserElo(black, black.getElo());
-                } else if (moveResult == 3) {
+                    return "Checkmate! Both players are updated elo";
+                } else if (testMoveRes == 3) {
                     JOptionPane.showMessageDialog(frame,
                             "Stalemate!",
                             "Game End",
@@ -447,6 +309,7 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
                     // Update players' elo
                     database.updateUserElo(white, white.getElo());
                     database.updateUserElo(black, black.getElo());
+                    return "Stalemate! Both players are updated elo";
                 }
             }
             game.standardDisplay();
@@ -454,5 +317,6 @@ public class GameGui extends JFrame implements MouseMotionListener, MouseListene
             updateGui(game, frame);
             frame.setVisible(true);
         }
+        return "";
     }
 }
